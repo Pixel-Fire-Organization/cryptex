@@ -3,6 +3,19 @@
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
+[Bb]uild/
+[Bb]uild/Engine
+[Bb]uild/SDK
+[Bb]uild/Shared
+[Bb]in/
+
+obj/
+
+*.user
+*.DotSettings
+.vs/
+.vscode/
+
 # Node artifact files
 node_modules/
 dist/
@@ -18,6 +31,9 @@ dist/
 
 # Package files
 *.jar
+
+# Markdown Linter (Vscode extension) settings
+.markdownlint.json
 
 # Maven
 target/
