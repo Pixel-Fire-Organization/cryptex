@@ -35,42 +35,57 @@ internal sealed class IncrementDecrementInstruction : IInstruction
                 break;
         }
 
-        string[] args = c.Args.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-
-        if (args.Length != 1) // this instruction takes only 1 argument!
-            ErrorList.WriteError(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction, fatal: true);
+        var args = CryptexDataConverter.SplitInstructionArguments(c.Args, 1);
+        if (args is null)
+            return null;
 
         string argument = args[0];
         if (!argument.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX))
             ErrorList.WriteError(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction, fatal: true);
 
-        if (!int.TryParse(argument.Remove(0, 1), out int location))
-            ErrorList.WriteError(ErrorCodes.VM2004_MemoryArgumentIsNotANumber, fatal: true);
+        int location = CryptexDataConverter.ParseArgumentToMemoryLocation(argument);
+        if (!CryptexDataConverter.IsValidMemoryLocation(memory, location))
+            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
 
-        string? slotValue = memory.GetSlot(location);
-        if (!CryptexDataConverter.IsIntegerNumber(slotValue) && !CryptexDataConverter.IsDecimalNumber(slotValue))
+        if (!CryptexDataConverter.IsValueAtMemoryLocationNumber(memory, location))
             ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
 
         string result = m_expectedType == ExpectedType.Integer
-                            ? CalculateInteger(slotValue!)
-                            : CalculateDecimal(slotValue!);
+                            ? CalculateInteger(memory, location)
+                            : CalculateDecimal(memory, location);
 
         memory.SetSlot(location, result);
 
         return null;
     }
 
-    string CalculateInteger(string slotValue)
+    string CalculateInteger(ExecutorMemory memory, int slot)
     {
-        BigInteger val = CryptexDataConverter.GetIntegerNumber(slotValue);
-        return m_function == InstructionFunction.Increment ? (val + 1).ToString() : (val - 1).ToString();
+        BigInteger? val = CryptexDataConverter.GetMemoryValueAsInteger(memory, slot);
+
+        if (val is null)
+        {
+            ErrorList.WriteError(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation, fatal: true);
+            return string.Empty;
+        }
+
+        return m_function == InstructionFunction.Increment
+                   ? (val.Value + 1).ToString(CultureInfo.InvariantCulture)
+                   : (val.Value - 1).ToString(CultureInfo.InvariantCulture);
     }
 
-    string CalculateDecimal(string slotValue)
+    string CalculateDecimal(ExecutorMemory memory, int slot)
     {
-        decimal val = CryptexDataConverter.GetDecimalNumber(slotValue);
+        decimal? val = CryptexDataConverter.GetMemoryValueAsFloating(memory, slot);
+
+        if (val is null)
+        {
+            ErrorList.WriteError(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation, fatal: true);
+            return string.Empty;
+        }
+
         return m_function == InstructionFunction.Increment
-                   ? (val + 1).ToString(CultureInfo.InvariantCulture)
-                   : (val - 1).ToString(CultureInfo.InvariantCulture);
+                   ? (val.Value + 1).ToString(CultureInfo.InvariantCulture)
+                   : (val.Value - 1).ToString(CultureInfo.InvariantCulture);
     }
 }

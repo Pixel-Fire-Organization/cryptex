@@ -23,6 +23,8 @@ internal static class ErrorList
         { ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, "Instruction was supplied with an argument that isn't a valid memory location!" },
         { ErrorCodes.VM2008_InvalidInstructionFoundInScriptChunk, "Invalid instruction was found in a script chunk!" },
         { ErrorCodes.VM2009_ArgumentsWithMismatchedTypesSpecified, "Arguments with mismatched types supplied to an instruction!" },
+        { ErrorCodes.VM2010_HexArgumentCannotBeAFloatingPointNumber, "Floating numbers cannot be in hex format!" },
+        { ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation, "Data at memory location is not valid or not in the specified format!" },
     }.ToFrozenDictionary();
 
     public static void WriteError(ErrorCodes code, ErrorCodes? extra = null, bool fatal = false)

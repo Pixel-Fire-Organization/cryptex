@@ -16,5 +16,6 @@ public enum ErrorCodes
     VM2007_InvalidMemoryLocationSpecifiedAsArgument,
     VM2008_InvalidInstructionFoundInScriptChunk,
     VM2009_ArgumentsWithMismatchedTypesSpecified,
-    VM2010_HexArgumentCannotBeAFloatingPointNumber
+    VM2010_HexArgumentCannotBeAFloatingPointNumber,
+    VM2011_InvalidDataTypeAtSpecifiedLocation
 }
