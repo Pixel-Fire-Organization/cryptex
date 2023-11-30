@@ -9,7 +9,7 @@ internal static class ErrorList
 {
     private static FrozenDictionary<ErrorCodes, string> ErrorMessages { get; } = new Dictionary<ErrorCodes, string>
     {
-        { ErrorCodes.SYS1000_ErrorCodeNotFound, "Error code is not found! Maybe the error code is not included with the other error messages? Code: " },
+        { ErrorCodes.SYS0000_ErrorCodeNotFound, "Error code is not found! Maybe the error code is not included with the other error messages? Code: " },
         
         { ErrorCodes.VM1000_NullEmptyStringForExternalFunction, "Tried to invoke an external function, but provided name that is null or empty!" },
         
@@ -29,16 +29,16 @@ internal static class ErrorList
 
     public static void WriteError(ErrorCodes code, ErrorCodes? extra = null, bool fatal = false)
     {
-        if (!ErrorMessages.TryGetValue(ErrorCodes.SYS1000_ErrorCodeNotFound, out string? sys1000Message))
-            throw new RequiredMessageNotFoundException(ErrorCodes.SYS1000_ErrorCodeNotFound);
+        if (!ErrorMessages.TryGetValue(ErrorCodes.SYS0000_ErrorCodeNotFound, out string? sys1000Message))
+            throw new RequiredMessageNotFoundException(ErrorCodes.SYS0000_ErrorCodeNotFound);
 
         if (!ErrorMessages.ContainsKey(code))
         {
-            WriteError(ErrorCodes.SYS1000_ErrorCodeNotFound, code, true);
+            WriteError(ErrorCodes.SYS0000_ErrorCodeNotFound, code, true);
             return;
         }
 
-        ErrorHandler.WriteError(code == ErrorCodes.SYS1000_ErrorCodeNotFound
+        ErrorHandler.WriteError(code == ErrorCodes.SYS0000_ErrorCodeNotFound
                                     ? $"{sys1000Message}{(extra is null ? "<Extra is null>" : extra.ToString())}"
                                     : ErrorMessages[code]);
         if (fatal)

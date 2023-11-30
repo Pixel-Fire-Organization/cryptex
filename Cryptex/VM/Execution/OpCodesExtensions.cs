@@ -1,4 +1,7 @@
 ﻿using Cryptex.VM.Execution.OpCodeLogic;
+using Cryptex.VM.Execution.OpCodeLogic.MathInstructions;
+using Cryptex.VM.Execution.OpCodeLogic.MemoryInstructions;
+using Cryptex.VM.Execution.OpCodeLogic.VMControlInstructions;
 
 namespace Cryptex.VM.Execution;
 
@@ -19,15 +22,15 @@ internal static class OpCodesExtensions
             case OpCodes.Load:
                 return new LoadInstruction();
             case OpCodes.Free:
-                break;
+                return new FreeInstruction();
             case OpCodes.Arg:
                 break;
             case OpCodes.Nop:
-                break;
+                return new NopInstruction();
             case OpCodes.Exit:
-                break;
+                return new ExitInstruction();
             case OpCodes.Crash:
-                break;
+                return new CrashInstruction();
             case OpCodes.Dec:
                 return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Decrement, IncrementDecrementInstruction.ExpectedType.Integer);
             case OpCodes.Call:

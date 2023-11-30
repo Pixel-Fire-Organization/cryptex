@@ -2,7 +2,7 @@
 
 using Cryptex.VM.Execution.DataTypes;
 
-namespace Cryptex.VM.Execution.OpCodeLogic;
+namespace Cryptex.VM.Execution.OpCodeLogic.MemoryInstructions;
 
 internal sealed class LoadInstruction : IInstruction
 {
