@@ -3,7 +3,7 @@ using System.Numerics;
 
 using Cryptex.VM.Execution.DataTypes;
 
-namespace Cryptex.VM.Execution.OpCodeLogic;
+namespace Cryptex.VM.Execution.OpCodeLogic.MathInstructions;
 
 internal sealed class IncrementDecrementInstruction : IInstruction
 {
