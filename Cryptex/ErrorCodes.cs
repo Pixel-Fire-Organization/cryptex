@@ -2,11 +2,11 @@
 
 public enum ErrorCodes
 {
-    SYS1000_ErrorCodeNotFound,
+    SYS0000_ErrorCodeNotFound = 0,
     
-    VM1000_NullEmptyStringForExternalFunction,
+    VM1000_NullEmptyStringForExternalFunction = 1000,
     
-    VM2000_NoChunkFoundToExecute,
+    VM2000_NoChunkFoundToExecute = 2000,
     VM2001_WrongOpCodePassedForScriptOpCode,
     VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction,
     VM2003_InvalidArgumentTypeSpecifiedForInstruction,
@@ -17,5 +17,6 @@ public enum ErrorCodes
     VM2008_InvalidInstructionFoundInScriptChunk,
     VM2009_ArgumentsWithMismatchedTypesSpecified,
     VM2010_HexArgumentCannotBeAFloatingPointNumber,
-    VM2011_InvalidDataTypeAtSpecifiedLocation
+    VM2011_InvalidDataTypeAtSpecifiedLocation,
+    VM2012_InstructionArgumentIsOutOfRange
 }
