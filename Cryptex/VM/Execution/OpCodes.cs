@@ -12,10 +12,10 @@ public enum OpCodes
     Add, //[add $1, $2 | $1 = $1 + $2]      Adds two (decimal/hex) values at memory location1 & location2 and stores the result into location1.
     Sub, //[sub $1, $2 | $1 = $1 - $2]      Subtracts two (decimal/hex) values at memory location1 & location2 and stores the result into location1.
     Dec, //[dec $1 | $1 = $1 - 1]           Decrements a (decimal/hex) value at memory location.
-    IncD, //[inc $1 | $1 = $1 + 1]          Increments a (floating point) value at memory location.
-    AddD, //[add $1, $2 | $1 = $1 + $2]     Adds two (floating point) values at memory location1 & location2 and stores the result into location1.
-    SubD, //[sub $1, $2 | $1 = $1 - $2]     Subtracts two (floating point) values at memory location1 & location2 and stores the result into location1.
-    DecD, //[dec $1 | $1 = $1 - 1]          Decrements a (floating point) value at memory location.
+    IncF, //[inc $1 | $1 = $1 + 1]          Increments a (floating point) value at memory location.
+    AddF, //[add $1, $2 | $1 = $1 + $2]     Adds two (floating point) values at memory location1 & location2 and stores the result into location1.
+    SubF, //[sub $1, $2 | $1 = $1 - $2]     Subtracts two (floating point) values at memory location1 & location2 and stores the result into location1.
+    DecF, //[dec $1 | $1 = $1 - 1]          Decrements a (floating point) value at memory location.
 
     //Function opcodes.
     Arg,  //WIP, idea: use this opcode to load the arguments of a function in memory before calling it.

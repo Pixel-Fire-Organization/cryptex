@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Numerics;
 
+using Cryptex.Exceptions;
 using Cryptex.VM.Execution.DataTypes;
 
 namespace Cryptex.VM.Execution.OpCodeLogic.MathInstructions;
@@ -9,8 +10,8 @@ internal sealed class IncrementDecrementInstruction : IInstruction
 {
     public OpCodes OpCode     => OpCodes.Inc;
     public OpCodes OpCodeDec  => OpCodes.Dec;
-    public OpCodes OpCodeIncD => OpCodes.IncD;
-    public OpCodes OpCodeDecD => OpCodes.DecD;
+    public OpCodes OpCodeIncF => OpCodes.IncF;
+    public OpCodes OpCodeDecF => OpCodes.DecF;
 
     public enum InstructionFunction { Increment, Decrement }
 
@@ -25,38 +26,31 @@ internal sealed class IncrementDecrementInstruction : IInstruction
         m_expectedType = expectedType;
     }
 
-    public object? Execute(ScriptChunkOpCode c, ExecutorMemory memory)
+    public void Execute(ScriptChunkOpCode c, Executor vm)
     {
         switch (m_function)
         {
-            case InstructionFunction.Increment when (c.Code != OpCode && c.Code != OpCodeIncD):
-            case InstructionFunction.Decrement when (c.Code != OpCodeDec && c.Code != OpCodeDecD):
-                ErrorList.WriteError(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode, fatal: true);
-                break;
+            case InstructionFunction.Increment when (c.Code != OpCode && c.Code != OpCodeIncF):
+            case InstructionFunction.Decrement when (c.Code != OpCodeDec && c.Code != OpCodeDecF):
+                throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
         }
 
         var args = CryptexDataConverter.SplitInstructionArguments(c.Args, 1);
-        if (args is null)
-            return null;
 
         string argument = args[0];
         if (!argument.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX))
-            ErrorList.WriteError(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction, fatal: true);
+            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         int location = CryptexDataConverter.ParseArgumentToMemoryLocation(argument);
-        if (!CryptexDataConverter.IsValidMemoryLocation(memory, location))
-            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
-
-        if (!CryptexDataConverter.IsValueAtMemoryLocationNumber(memory, location))
-            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
+        if (!CryptexDataConverter.IsValidMemoryLocation(vm.GetMemory(), location) || 
+            CryptexDataConverter.GetDataTypeAtMemoryLocation(vm.GetMemory(), location) != DataTypes.DataTypes.Number)
+            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
 
         string result = m_expectedType == ExpectedType.Integer
-                            ? CalculateInteger(memory, location)
-                            : CalculateDecimal(memory, location);
+                            ? CalculateInteger(vm.GetMemory(), location)
+                            : CalculateDecimal(vm.GetMemory(), location);
 
-        memory.SetSlot(location, result);
-
-        return null;
+        vm.GetMemory().SetSlot(location, result);
     }
 
     string CalculateInteger(ExecutorMemory memory, int slot)
@@ -64,10 +58,7 @@ internal sealed class IncrementDecrementInstruction : IInstruction
         BigInteger? val = CryptexDataConverter.GetMemoryValueAsInteger(memory, slot);
 
         if (val is null)
-        {
-            ErrorList.WriteError(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation, fatal: true);
-            return string.Empty;
-        }
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
         return m_function == InstructionFunction.Increment
                    ? (val.Value + 1).ToString(CultureInfo.InvariantCulture)
@@ -79,10 +70,7 @@ internal sealed class IncrementDecrementInstruction : IInstruction
         decimal? val = CryptexDataConverter.GetMemoryValueAsFloating(memory, slot);
 
         if (val is null)
-        {
-            ErrorList.WriteError(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation, fatal: true);
-            return string.Empty;
-        }
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
         return m_function == InstructionFunction.Increment
                    ? (val.Value + 1).ToString(CultureInfo.InvariantCulture)
