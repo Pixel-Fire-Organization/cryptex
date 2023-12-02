@@ -8,5 +8,5 @@ internal interface IInstruction
 
     OpCodes OpCode { get; }
 
-    object? Execute(ScriptChunkOpCode c, ExecutorMemory memory);
+    void Execute(ScriptChunkOpCode c, Executor vm);
 }

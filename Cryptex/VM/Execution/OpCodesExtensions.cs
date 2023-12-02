@@ -85,13 +85,13 @@ internal static class OpCodesExtensions
                 break;
             case OpCodes.StrChar:
                 break;
-            case OpCodes.IncD:
+            case OpCodes.IncF:
                 return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Increment, IncrementDecrementInstruction.ExpectedType.Floating);
-            case OpCodes.AddD:
+            case OpCodes.AddF:
                 return new AddSubInstruction(AddSubInstruction.InstructionFunction.Add, AddSubInstruction.ExpectedType.Floating);
-            case OpCodes.SubD:
+            case OpCodes.SubF:
                 return new AddSubInstruction(AddSubInstruction.InstructionFunction.Subtract, AddSubInstruction.ExpectedType.Floating);
-            case OpCodes.DecD:
+            case OpCodes.DecF:
                 return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Decrement, IncrementDecrementInstruction.ExpectedType.Floating);
             default:
                 throw new ArgumentOutOfRangeException(nameof(code), code, "Invalid opcode specified or it wasn't added!");

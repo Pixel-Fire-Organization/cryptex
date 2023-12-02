@@ -2,7 +2,7 @@
 
 namespace Cryptex.VM.Execution;
 
-internal sealed class ExecutorMemory
+public sealed class ExecutorMemory
 {
     private readonly Dictionary<int, string> m_memory = new();
 
