@@ -1,4 +1,6 @@
-﻿namespace Cryptex.VM.Execution;
+﻿using Cryptex.Exceptions;
+
+namespace Cryptex.VM.Execution;
 
 public sealed class Script
 {
@@ -23,12 +25,12 @@ public sealed class Script
         return null;
     }
 
-    internal void Execute(ExecutorMemory memory, string chunkName = "main")
+    internal void Execute(Executor vm, string chunkName = "main")
     {
         ScriptChunk? chunk = GetChunk(chunkName);
         if (chunk is not null)
-            chunk.Execute(memory);
+            chunk.Execute(vm);
         else
-            ErrorList.WriteError(ErrorCodes.VM2000_NoChunkFoundToExecute);
+            throw new VMRuntimeException(ErrorCodes.VM2000_NoChunkFoundToExecute);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 
+using Cryptex.Exceptions;
 using Cryptex.VM.Execution.DataTypes;
 
 namespace Cryptex.VM.Execution.OpCodeLogic.MathInstructions;
@@ -8,8 +9,8 @@ internal sealed class AddSubInstruction : IInstruction
 {
     public OpCodes OpCode     => OpCodes.Add;
     public OpCodes OpCodeSub  => OpCodes.Sub;
-    public OpCodes OpCodeAddD => OpCodes.AddD;
-    public OpCodes OpCodeSubD => OpCodes.SubD;
+    public OpCodes OpCodeAddF => OpCodes.AddF;
+    public OpCodes OpCodeSubF => OpCodes.SubF;
 
     public enum InstructionFunction { Add, Subtract }
 
@@ -24,58 +25,49 @@ internal sealed class AddSubInstruction : IInstruction
         m_expectedType = expectedType;
     }
 
-    public object? Execute(ScriptChunkOpCode c, ExecutorMemory memory)
+    public void Execute(ScriptChunkOpCode c, Executor vm)
     {
         switch (m_function)
         {
-            case InstructionFunction.Add when (c.Code != OpCode && c.Code != OpCodeAddD):
-            case InstructionFunction.Subtract when (c.Code != OpCodeSub && c.Code != OpCodeSubD):
-                ErrorList.WriteError(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode, fatal: true);
-                break;
+            case InstructionFunction.Add when (c.Code != OpCode && c.Code != OpCodeAddF):
+            case InstructionFunction.Subtract when (c.Code != OpCodeSub && c.Code != OpCodeSubF):
+                throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
         }
 
         var args = CryptexDataConverter.SplitInstructionArguments(c.Args, 2);
-        if (args is null)
-            return null;
 
         //ARG1
 
         string argument1 = args[0];
         if (!argument1.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX))
-            ErrorList.WriteError(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction, fatal: true);
+            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         int location1 = CryptexDataConverter.ParseArgumentToMemoryLocation(argument1);
-        if (!CryptexDataConverter.IsValidMemoryLocation(memory, location1))
-            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
-
-        if (!CryptexDataConverter.IsValueAtMemoryLocationNumber(memory, location1))
-            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
+        if (!CryptexDataConverter.IsValidMemoryLocation(vm.GetMemory(), location1) || 
+            CryptexDataConverter.GetDataTypeAtMemoryLocation(vm.GetMemory(), location1) != DataTypes.DataTypes.Number)
+            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
 
         //ARG2
 
         string argument2 = args[1];
         if (!argument2.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX))
-            ErrorList.WriteError(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction, fatal: true);
+            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         int location2 = CryptexDataConverter.ParseArgumentToMemoryLocation(argument2);
-        if (!CryptexDataConverter.IsValidMemoryLocation(memory, location2))
-            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
-
-        if (!CryptexDataConverter.IsValueAtMemoryLocationNumber(memory, location2))
-            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
+        if (!CryptexDataConverter.IsValidMemoryLocation(vm.GetMemory(), location2) || 
+            CryptexDataConverter.GetDataTypeAtMemoryLocation(vm.GetMemory(), location2) != DataTypes.DataTypes.Number)
+            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
 
         //Check for mismatched arguments. INT+INT or FLT+FLT allowed!
 
-        if (!CryptexDataConverter.AreMemoryValuesOneTypeNumbers(memory, location1, location2))
-            ErrorList.WriteError(ErrorCodes.VM2009_ArgumentsWithMismatchedTypesSpecified, fatal: true);
+        if (!CryptexDataConverter.AreMemoryValuesOneTypeNumbers(vm.GetMemory(), location1, location2))
+            throw new VMRuntimeException(ErrorCodes.VM2009_ArgumentsWithMismatchedTypesSpecified);
 
         string result = m_expectedType == ExpectedType.Integer
-                            ? CalculateInteger(memory, location1, location2)
-                            : CalculateFloating(memory, location1, location2);
+                            ? CalculateInteger(vm.GetMemory(), location1, location2)
+                            : CalculateFloating(vm.GetMemory(), location1, location2);
 
-        memory.SetSlot(location1, result);
-
-        return null;
+        vm.GetMemory().SetSlot(location1, result);
     }
 
     private string CalculateFloating(ExecutorMemory memory, int slot1, int slot2)
@@ -84,10 +76,7 @@ internal sealed class AddSubInstruction : IInstruction
         var vd2 = CryptexDataConverter.GetMemoryValueAsFloating(memory, slot2);
 
         if (vd1 is null || vd2 is null)
-        {
-            ErrorList.WriteError(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation, fatal: true);
-            return string.Empty;
-        }
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
         return m_function == InstructionFunction.Add
                    ? (vd1.Value + vd2.Value).ToString(CultureInfo.InvariantCulture)
@@ -100,10 +89,7 @@ internal sealed class AddSubInstruction : IInstruction
         var vi2 = CryptexDataConverter.GetMemoryValueAsInteger(memory, slot2);
 
         if (vi1 is null || vi2 is null)
-        {
-            ErrorList.WriteError(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation, fatal: true);
-            return string.Empty;
-        }
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
         return m_function == InstructionFunction.Add
                    ? (vi1.Value + vi2.Value).ToString(CultureInfo.InvariantCulture)

@@ -8,31 +8,29 @@ namespace Cryptex.VM.Execution.DataTypes;
 
 internal static class CryptexDataConverter
 {
-    public static string[]? SplitInstructionArguments(string arguments, int argumentLimit)
+    public static string[] SplitInstructionArguments(string arguments, int argumentLimit)
     {
+        if (string.IsNullOrEmpty(arguments) && argumentLimit != 0)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+        
         string[] args = arguments.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
         if (args.Length != argumentLimit)
-        {
-            ErrorList.WriteError(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction, fatal: true);
-            return null;
-        }
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         return args;
     }
-    
+
     public static bool IsIntegerNumber(string? value, NumberStyles style = NumberStyles.Integer)
     {
-        try { GetIntegerNumber(value, style); }
-        catch { return false; }
+        try { GetIntegerNumber(value, style); } catch { return false; }
         return true;
     }
 
-    public static bool IsDecimalNumber(string? value, NumberStyles style = NumberStyles.Float)
+    public static bool IsFloatingNumber(string? value, NumberStyles style = NumberStyles.Float)
     {
         decimal d;
-        try { d = GetDecimalNumber(value, style); }
-        catch { return false; }
+        try { d = GetFloatingNumber(value, style); } catch { return false; }
         return d.Scale > 0;
     }
 
@@ -44,7 +42,7 @@ internal static class CryptexDataConverter
         return BigInteger.Parse(value, style);
     }
 
-    public static decimal GetDecimalNumber(string? value, NumberStyles style = NumberStyles.Float)
+    public static decimal GetFloatingNumber(string? value, NumberStyles style = NumberStyles.Float)
     {
         if (string.IsNullOrEmpty(value))
             throw new InvalidDataType("Tried to parse integer but value wasn't an integer.");
@@ -56,24 +54,8 @@ internal static class CryptexDataConverter
 
     public static int ParseArgumentToMemoryLocation(string arg)
     {
-        if (string.IsNullOrEmpty(arg))
-        {
-            ErrorList.WriteError(ErrorCodes.VM2004_MemoryArgumentIsNotANumber, fatal: true);
-            return 0;
-        }
-
-        if (!arg.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX))
-        {
-            ErrorList.WriteError(ErrorCodes.VM2004_MemoryArgumentIsNotANumber, fatal: true);
-            return 0;
-        }
-
-        string contents = arg.Remove(0, 1);
-        if (!int.TryParse(contents, out int location))
-        {
-            ErrorList.WriteError(ErrorCodes.VM2004_MemoryArgumentIsNotANumber, fatal: true);
-            return 0;
-        }
+        if (string.IsNullOrEmpty(arg) || !arg.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX) || !int.TryParse(arg.Remove(0, 1), out int location))
+            throw new VMRuntimeException(ErrorCodes.VM2004_MemoryArgumentIsNotANumber);
 
         return location;
     }
@@ -81,10 +63,7 @@ internal static class CryptexDataConverter
     public static string GetMemoryValue(ExecutorMemory memory, int slot)
     {
         if (!IsValidMemoryLocation(memory, slot))
-        {
-            ErrorList.WriteError(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument, fatal: true);
-            return string.Empty;
-        }
+            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
 
         return memory.GetSlot(slot) ?? string.Empty;
     }
@@ -104,16 +83,19 @@ internal static class CryptexDataConverter
         if (string.IsNullOrEmpty(value))
             return null;
 
-        return IsDecimalNumber(value) ? GetDecimalNumber(value) : null;
+        return IsFloatingNumber(value) ? GetFloatingNumber(value) : null;
     }
 
-    public static bool IsValueAtMemoryLocationNumber(ExecutorMemory memory, int slot)
+    public static DataTypes GetDataTypeAtMemoryLocation(ExecutorMemory memory, int slot)
     {
         string value = GetMemoryValue(memory, slot);
         if (string.IsNullOrEmpty(value))
-            return false;
+            return DataTypes.Null;
 
-        return IsIntegerNumber(value) || IsDecimalNumber(value);
+        if (IsIntegerNumber(value) || IsFloatingNumber(value))
+            return DataTypes.Number;
+
+        return DataTypes.Null;
     }
 
     public static bool AreMemoryValuesOneTypeNumbers(ExecutorMemory memory, params int[] slots)
@@ -121,14 +103,14 @@ internal static class CryptexDataConverter
         if (slots.Length == 0)
             return true;
 
-        bool lastFloating = IsDecimalNumber(memory.GetSlot(slots[0]));
+        bool lastFloating = IsFloatingNumber(memory.GetSlot(slots[0]));
         for (int i = 1; i < slots.Length; i++)
         {
-            if ((lastFloating && !IsDecimalNumber(memory.GetSlot(slots[i]))) || 
-                (!lastFloating && IsDecimalNumber(memory.GetSlot(slots[i]))))
+            if ((lastFloating && !IsFloatingNumber(memory.GetSlot(slots[i]))) ||
+                (!lastFloating && IsFloatingNumber(memory.GetSlot(slots[i]))))
                 return false;
 
-            lastFloating = IsDecimalNumber(memory.GetSlot(slots[i]));
+            lastFloating = IsFloatingNumber(memory.GetSlot(slots[i]));
         }
 
         return true;
