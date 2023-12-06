@@ -3,7 +3,7 @@
 using Cryptex.Exceptions;
 using Cryptex.VM.Execution.DataTypes;
 
-namespace Cryptex.VM.Execution.OpCodeLogic.MemoryInstructions;
+namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class LoadInstruction : IInstruction
 {

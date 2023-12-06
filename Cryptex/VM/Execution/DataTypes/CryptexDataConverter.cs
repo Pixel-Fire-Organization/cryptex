@@ -2,7 +2,7 @@
 using System.Numerics;
 
 using Cryptex.Exceptions;
-using Cryptex.VM.Execution.OpCodeLogic;
+using Cryptex.VM.Execution.Instructions;
 
 namespace Cryptex.VM.Execution.DataTypes;
 

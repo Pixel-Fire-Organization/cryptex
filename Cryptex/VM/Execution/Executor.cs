@@ -1,4 +1,6 @@
-﻿using Cryptex.Exceptions;
+﻿using System.Numerics;
+
+using Cryptex.Exceptions;
 
 namespace Cryptex.VM.Execution;
 
@@ -8,6 +10,7 @@ public sealed class Executor
     private readonly Script         m_script;
     private          ExecutorMemory m_memory;
     private          bool           m_VMExited = false;
+    private          BigInteger     m_exitCode = 0;
 
     public Executor(Script script)
     {
@@ -27,7 +30,8 @@ public sealed class Executor
             m_script.Execute(this);
         } catch(VMRuntimeException ex)
         {
-            ErrorHandler.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
+            PrintingDelegates.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
+            m_exitCode = -1;
             return false;
         }
 
@@ -41,7 +45,7 @@ public sealed class Executor
 
         try { m_script.Execute(this, chunkName); } catch(VMRuntimeException ex)
         {
-            ErrorHandler.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
+            PrintingDelegates.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
             return false;
         }
 
@@ -49,12 +53,18 @@ public sealed class Executor
     }
 
     internal ExecutorMemory GetMemory() => m_memory;
-    
+
     public string DumpMemory() => m_memory.DumpMemory();
+
+    public BigInteger GetExitCode() => m_exitCode;
 
     public string? GetValueInMemory(int location) => m_memory.GetSlot(location);
 
-    internal void ExitInstructionCall() { m_VMExited = true; }
+    internal void ExitInstructionCall(BigInteger code)
+    {
+        m_VMExited = true;
+        m_exitCode = code;
+    }
 
     internal bool HasExitBeenCalled() { return m_VMExited; }
 }

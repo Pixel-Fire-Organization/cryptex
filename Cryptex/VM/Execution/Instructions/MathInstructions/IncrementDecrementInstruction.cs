@@ -4,7 +4,7 @@ using System.Numerics;
 using Cryptex.Exceptions;
 using Cryptex.VM.Execution.DataTypes;
 
-namespace Cryptex.VM.Execution.OpCodeLogic.MathInstructions;
+namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class IncrementDecrementInstruction : IInstruction
 {
