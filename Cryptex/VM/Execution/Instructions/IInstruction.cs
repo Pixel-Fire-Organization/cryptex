@@ -1,4 +1,4 @@
-﻿namespace Cryptex.VM.Execution.OpCodeLogic;
+﻿namespace Cryptex.VM.Execution.Instructions;
 
 internal interface IInstruction
 {

@@ -1,7 +1,8 @@
-﻿using Cryptex.VM.Execution.OpCodeLogic;
-using Cryptex.VM.Execution.OpCodeLogic.MathInstructions;
-using Cryptex.VM.Execution.OpCodeLogic.MemoryInstructions;
-using Cryptex.VM.Execution.OpCodeLogic.VMControlInstructions;
+﻿using Cryptex.VM.Execution.Instructions;
+using Cryptex.VM.Execution.Instructions.BitwiseInstructions;
+using Cryptex.VM.Execution.Instructions.MathInstructions;
+using Cryptex.VM.Execution.Instructions.MemoryInstructions;
+using Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 namespace Cryptex.VM.Execution;
 
@@ -14,9 +15,13 @@ internal static class OpCodesExtensions
             case OpCodes.Inc:
                 return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Increment, IncrementDecrementInstruction.ExpectedType.Integer);
             case OpCodes.Add:
-                return new AddSubInstruction(AddSubInstruction.InstructionFunction.Add, AddSubInstruction.ExpectedType.Integer);
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Add, AddSubMulDivInstruction.ExpectedType.Integer);
             case OpCodes.Sub:
-                return new AddSubInstruction(AddSubInstruction.InstructionFunction.Subtract, AddSubInstruction.ExpectedType.Integer);
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Subtract, AddSubMulDivInstruction.ExpectedType.Integer);
+            case OpCodes.Mul:
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Multiply, AddSubMulDivInstruction.ExpectedType.Integer);
+            case OpCodes.Div:
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Divide, AddSubMulDivInstruction.ExpectedType.Integer);
             case OpCodes.Exec:
                 break;
             case OpCodes.Load:
@@ -56,17 +61,17 @@ internal static class OpCodesExtensions
             case OpCodes.Jle:
                 break;
             case OpCodes.Shl:
-                break;
+                return new ShiftLeftRightInstruction(ShiftLeftRightInstruction.Orientation.Left);
             case OpCodes.Shr:
-                break;
+                return new ShiftLeftRightInstruction(ShiftLeftRightInstruction.Orientation.Right);
             case OpCodes.And:
-                break;
+                return new AndOrXorInstruction(AndOrXorInstruction.Mode.And);
             case OpCodes.Or:
-                break;
-            case OpCodes.Not:
-                break;
+                return new AndOrXorInstruction(AndOrXorInstruction.Mode.Or);
             case OpCodes.Xor:
-                break;
+                return new AndOrXorInstruction(AndOrXorInstruction.Mode.Xor);
+            case OpCodes.Not:
+                return new NotInstruction();
             case OpCodes.ArrAccess:
                 break;
             case OpCodes.ArrCreate:
@@ -88,9 +93,13 @@ internal static class OpCodesExtensions
             case OpCodes.IncF:
                 return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Increment, IncrementDecrementInstruction.ExpectedType.Floating);
             case OpCodes.AddF:
-                return new AddSubInstruction(AddSubInstruction.InstructionFunction.Add, AddSubInstruction.ExpectedType.Floating);
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Add, AddSubMulDivInstruction.ExpectedType.Floating);
             case OpCodes.SubF:
-                return new AddSubInstruction(AddSubInstruction.InstructionFunction.Subtract, AddSubInstruction.ExpectedType.Floating);
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Subtract, AddSubMulDivInstruction.ExpectedType.Floating);
+            case OpCodes.MulF:
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Multiply, AddSubMulDivInstruction.ExpectedType.Floating);
+            case OpCodes.DivF:
+                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Divide, AddSubMulDivInstruction.ExpectedType.Floating);
             case OpCodes.DecF:
                 return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Decrement, IncrementDecrementInstruction.ExpectedType.Floating);
             default:

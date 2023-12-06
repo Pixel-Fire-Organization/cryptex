@@ -1,6 +1,6 @@
-﻿namespace Cryptex.VM;
+﻿namespace Cryptex;
 
-public static class ErrorHandler
+public static class PrintingDelegates
 {
     public static Action<string> WriteMessage { get; set; } = s =>
     {

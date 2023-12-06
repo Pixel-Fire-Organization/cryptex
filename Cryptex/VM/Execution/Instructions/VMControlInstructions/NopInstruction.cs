@@ -3,11 +3,11 @@
 using Cryptex.Exceptions;
 using Cryptex.VM.Execution.DataTypes;
 
-namespace Cryptex.VM.Execution.OpCodeLogic.VMControlInstructions;
+namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
-internal sealed class ExitInstruction : IInstruction
+internal sealed class NopInstruction : IInstruction
 {
-    public OpCodes OpCode => OpCodes.Exit;
+    public OpCodes OpCode => OpCodes.Nop;
 
     public void Execute(ScriptChunkOpCode c, Executor vm)
     {
@@ -26,9 +26,16 @@ internal sealed class ExitInstruction : IInstruction
         if (!CryptexDataConverter.IsIntegerNumber(arg))
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        BigInteger exitCode = CryptexDataConverter.GetIntegerNumber(arg);
+        BigInteger time = CryptexDataConverter.GetIntegerNumber(arg);
+        
+        if (time < int.MinValue)
+            time = int.MinValue;
+        else if (time > int.MaxValue)
+            time = int.MaxValue;
 
-        //TODO: rework the IInstruction::Execute to include the VM that is the executor of this script, so it can tell it that the script requested an exit.
-        vm.ExitInstructionCall();
+        if (time < 0)
+            time = BigInteger.Abs(time);
+
+        Thread.Sleep((int)time);
     }
 }
