@@ -1,4 +1,4 @@
-﻿namespace Cryptex.VM;
+﻿namespace Cryptex.VM.ExternalExecutor;
 
 public static class ExternalRegister
 {

@@ -1,4 +1,4 @@
-﻿namespace Cryptex.VM.ExternalExecutorFunctions;
+﻿namespace Cryptex.VM.ExternalExecutor;
 
 public interface IExecutorFunctionDelegate
 {

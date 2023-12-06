@@ -5,13 +5,13 @@ namespace Cryptex.Test.InstructionsTests;
 public sealed class LoadInstructionTest
 {
     [Fact]
-    public void TestVmExecute_LoadInstruction_ValueToMemoryLocation()
+    public void TestLoad_ValueToMemoryLocation()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
-        executor.BeginExecution();
+        Assert.True(executor.BeginExecution());
 
         string? memoryValue = executor.GetValueInMemory(1);
         Assert.NotNull(memoryValue);
@@ -19,13 +19,13 @@ public sealed class LoadInstructionTest
     }
 
     [Fact]
-    public void TestVmExecute_LoadInstruction_HexValueToMemoryLocation()
+    public void TestLoad_HexValueToMemoryLocation()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, %10") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
-        executor.BeginExecution();
+        Assert.True(executor.BeginExecution());
 
         string? memoryValue = executor.GetValueInMemory(1);
         Assert.NotNull(memoryValue);
@@ -33,13 +33,13 @@ public sealed class LoadInstructionTest
     }
 
     [Fact]
-    public void TestVmExecute_LoadInstruction_SetMemoryLocation1ToMemoryLocation2Value()
+    public void TestLoad_SetMemoryLocation1ToMemoryLocation2Value()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Load, "$2, #6"), new ScriptChunkOpCode(OpCodes.Load, "$1, $2") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
-        executor.BeginExecution();
+        Assert.True(executor.BeginExecution());
 
         string? memoryValue1 = executor.GetValueInMemory(1);
         string? memoryValue2 = executor.GetValueInMemory(2);

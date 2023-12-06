@@ -18,7 +18,8 @@ public enum ErrorCodes
     VM2009_ArgumentsWithMismatchedTypesSpecified,
     VM2010_HexArgumentCannotBeAFloatingPointNumber,
     VM2011_InvalidDataTypeAtSpecifiedLocation,
-    VM2012_InstructionArgumentIsOutOfRange
+    VM2012_InstructionArgumentIsOutOfRange,
+    VM2013_UnknownInstructionOverloadSpecified,
 }
 
 public static class ErrorCodesExtensions
@@ -59,6 +60,8 @@ public static class ErrorCodesExtensions
                 return "Data at memory location is not valid or not in the specified format!";
             case ErrorCodes.VM2012_InstructionArgumentIsOutOfRange:
                 return "An argument of an instruction is out of it's range!";
+            case ErrorCodes.VM2013_UnknownInstructionOverloadSpecified:
+                return "An unknown instruction overload is specified in an instruction!";
         }
 
         return string.Empty;

@@ -5,7 +5,7 @@ namespace Cryptex.Test;
 public sealed class VmExecutorTest
 {
     [Fact]
-    public void TestExecutorShouldReturnFalseOnErrorInScript()
+    public void TestBeginExecution_OnErrorInScript()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Load, "$2, #6.25"), new ScriptChunkOpCode(OpCodes.Add, "$1, $2") });
         Script      script    = new Script("script", new[] { mainChunk });
@@ -15,7 +15,7 @@ public sealed class VmExecutorTest
     }
     
     [Fact]
-    public void TestExecutorShouldReturnTrueOnNoErrorInScript()
+    public void TestBeginExecution_OnNoErrorInScript()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Load, "$2, #6"), new ScriptChunkOpCode(OpCodes.Add, "$1, $2") });
         Script      script    = new Script("script", new[] { mainChunk });
@@ -25,7 +25,7 @@ public sealed class VmExecutorTest
     }
     
     [Fact]
-    public void TestExecutorShouldReturnFalseOnErrorInScript_ExecuteChunk()
+    public void TestExecuteChunk_OnErrorInScript()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Load, "$2, #6.25"), new ScriptChunkOpCode(OpCodes.Add, "$1, $2") });
         Script      script    = new Script("script", new[] { mainChunk });
@@ -35,7 +35,7 @@ public sealed class VmExecutorTest
     }
     
     [Fact]
-    public void TestExecutorShouldReturnTrueOnNoErrorInScript_ExecuteChunk()
+    public void TestExecuteChunk_OnNoErrorInScript()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Load, "$2, #6"), new ScriptChunkOpCode(OpCodes.Add, "$1, $2") });
         Script      script    = new Script("script", new[] { mainChunk });
@@ -45,7 +45,7 @@ public sealed class VmExecutorTest
     }
     
     [Fact]
-    public void TestExecutorShouldReturnFalseOnNonExistentScriptChunk_ExecuteChunk()
+    public void TestExecuteChunk_OnNonExistentScriptChunk()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Load, "$2, #6"), new ScriptChunkOpCode(OpCodes.Add, "$1, $2") });
         Script      script    = new Script("script", new[] { mainChunk });

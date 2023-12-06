@@ -3,11 +3,11 @@
 using Cryptex.Exceptions;
 using Cryptex.VM.Execution.DataTypes;
 
-namespace Cryptex.VM.Execution.OpCodeLogic.VMControlInstructions;
+namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
-internal sealed class NopInstruction : IInstruction
+internal sealed class CrashInstruction : IInstruction
 {
-    public OpCodes OpCode => OpCodes.Nop;
+    public OpCodes OpCode => OpCodes.Crash;
 
     public void Execute(ScriptChunkOpCode c, Executor vm)
     {
@@ -26,15 +26,11 @@ internal sealed class NopInstruction : IInstruction
         if (!CryptexDataConverter.IsIntegerNumber(arg))
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        BigInteger time = CryptexDataConverter.GetIntegerNumber(arg);
-        if (time < 0)
-            time = BigInteger.Abs(time);
+        BigInteger code = CryptexDataConverter.GetIntegerNumber(arg);
 
-        if (time < int.MinValue)
-            time = int.MinValue;
-        else if (time > int.MaxValue)
-            time = int.MaxValue;
+        if (!Enum.TryParse(code.ToString(), true, out ErrorCodes eCode))
+            throw new VMRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
 
-        Thread.Sleep((int)time);
+        throw new VMRuntimeException(eCode);
     }
 }

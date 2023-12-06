@@ -5,13 +5,13 @@ namespace Cryptex.Test.InstructionsTests;
 public sealed class IncInstructionTest
 {
     [Fact]
-    public void TestVmExecute_IncrementInstruction()
+    public void TestInc_CorrectValue()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Inc, "$1") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
-        executor.BeginExecution();
+        Assert.True(executor.BeginExecution());
 
         string? memoryValue = executor.GetValueInMemory(1);
         Assert.NotNull(memoryValue);
@@ -19,13 +19,13 @@ public sealed class IncInstructionTest
     }
     
     [Fact]
-    public void TestVmExecute_IncrementInstruction_Floating()
+    public void TestInc_Floating()
     {
         ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5.5"), new ScriptChunkOpCode(OpCodes.IncF, "$1") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
-        executor.BeginExecution();
+        Assert.True(executor.BeginExecution());
 
         string? memoryValue = executor.GetValueInMemory(1);
         Assert.NotNull(memoryValue);

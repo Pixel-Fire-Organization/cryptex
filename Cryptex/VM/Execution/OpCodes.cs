@@ -8,14 +8,18 @@ public enum OpCodes
     Crash, //[crash #2000]  Tells the VM to error with error code: X. X must be a valid error code.
 
     //Math opcodes.
-    Inc, //[inc $1 | $1 = $1 + 1]           Increments a (decimal/hex) value at memory location.
-    Add, //[add $1, $2 | $1 = $1 + $2]      Adds two (decimal/hex) values at memory location1 & location2 and stores the result into location1.
-    Sub, //[sub $1, $2 | $1 = $1 - $2]      Subtracts two (decimal/hex) values at memory location1 & location2 and stores the result into location1.
-    Dec, //[dec $1 | $1 = $1 - 1]           Decrements a (decimal/hex) value at memory location.
-    IncF, //[inc $1 | $1 = $1 + 1]          Increments a (floating point) value at memory location.
-    AddF, //[add $1, $2 | $1 = $1 + $2]     Adds two (floating point) values at memory location1 & location2 and stores the result into location1.
-    SubF, //[sub $1, $2 | $1 = $1 - $2]     Subtracts two (floating point) values at memory location1 & location2 and stores the result into location1.
-    DecF, //[dec $1 | $1 = $1 - 1]          Decrements a (floating point) value at memory location.
+    Inc,  //[inc $1 | $1 = $1 + 1]          Increments an integer value at a memory location.
+    Add,  //[add $1, $2 | $1 = $1 + $2]     Adds two integer values at memory location1 & location2 and stores the result in location1.
+    Sub,  //[sub $1, $2 | $1 = $1 - $2]     Subtracts two integer values at memory location1 & location2 and stores the result in location1.
+    Dec,  //[dec $1 | $1 = $1 - 1]          Decrements an integer at a memory location.
+    Mul,  //[mul $1, $2 | $1 = $1 * $2]     Multiplies two integer values at memory location1 & location2 and stores the result in location1.
+    Div,  //[div $1, $2 | $1 = $1 / $2]     Divides two integer values at memory location1 & location2 and stores the result in location1.
+    IncF, //[incf $1 | $1 = $1 + 1]         Increments a floating value at memory location.
+    AddF, //[addf $1, $2 | $1 = $1 + $2]    Adds two floating values at memory location1 & location2 and stores the result into location1.
+    SubF, //[subf $1, $2 | $1 = $1 - $2]    Subtracts two floating values at memory location1 & location2 and stores the result into location1.
+    DecF, //[decf $1 | $1 = $1 - 1]         Decrements a floating value at memory location.
+    MulF, //[mulf $1, $2 | $1 = $1 * $2]    Multiplies two floating values at memory location1 & location2 and stores the result in location1.
+    DivF, //[divf $1, $2 | $1 = $1 / $2]    Divides two floating values at memory location1 & location2 and stores the result in location1.
 
     //Function opcodes.
     Arg,  //WIP, idea: use this opcode to load the arguments of a function in memory before calling it.
@@ -50,6 +54,8 @@ public enum OpCodes
     ArrAccess, //[arraccess $1, $2, #3] Gets the element at position `arg3` of array at location `arg2` and stores it in location `arg1`. 
     ArrCreate, //[arrcreate $1, #10]    Creates an array at location `arg1` with the size of `arg2`.
     ArrFree,   //[arrfree $1]           Deletes array in location `arg1`
+    ArrLen,    //[arrlen $1, $2]        Sets the value at `arg1` with the length of the array in `arg2`.
+    ArrSet,    //[arrset $1, $2, #3]    Sets the element at position `arg3` of the array at `arg2` to the value at `arg1`.
 
     //String opcodes.
     StrCreate, //[strcreate $1, #20]        Creates a string with `arg2` length at location `arg1`.
