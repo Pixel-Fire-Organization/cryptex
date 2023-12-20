@@ -1,8 +1,9 @@
 ﻿namespace Cryptex.VM.Execution;
 
-public enum OpCodes
+public enum OpCodes : byte
 {
     //VM opcodes.
+    Term,  //[term]         Terminates the execution of the VM. This opcode must be never used by a programmer. It is used as a fail safe of the VM when the chunk has invalid data.
     Nop,   //[nop #10]      Tells the VM to wait for X ms. X = [0; (2^32) - 1]
     Exit,  //[exit #0]      Stops the execution of the VM with exit code: X. X = 0 -> exited successfully; X != 0 -> error occured.
     Crash, //[crash #2000]  Tells the VM to error with error code: X. X must be a valid error code.
@@ -20,6 +21,7 @@ public enum OpCodes
     DecF, //[decf $1 | $1 = $1 - 1]         Decrements a floating value at memory location.
     MulF, //[mulf $1, $2 | $1 = $1 * $2]    Multiplies two floating values at memory location1 & location2 and stores the result in location1.
     DivF, //[divf $1, $2 | $1 = $1 / $2]    Divides two floating values at memory location1 & location2 and stores the result in location1.
+    Mod,  //[mod $1, $2 | $1 = $1 % $2]     Performs the modulo operation on the location1 with the location2 and stores it in location1. Both must be integer.
 
     //Function opcodes.
     Arg,  //WIP, idea: use this opcode to load the arguments of a function in memory before calling it.
@@ -43,12 +45,14 @@ public enum OpCodes
     Shr, //[shr $2, #2 | $2 = $2 >> 2]  Shits the value at memory location to the right X amount of times.
     And, //[and $2, $3 | $2 = $2 & $3]  Does `And` operation to the values at memory location1 & location2 and stores the result in memory location1.
     Or,  //[or $2, $3 | $2 = $2 | $3]   Does `Or` operation to the value at memory location1 & location2 and stores the result in memory location1.
+    Xor, //[xor $2, $3 | $2 = $2 ^ $3]  Does `Xor` operation to the value at memory location1 & location2 and stores the result in memory location1.
     Not, //[not $2 | $2 = ~$2]          Does `Not` operation to the value at memory location and stores the result in the same memory location.
-    Xor, //[xor $2, $3 | $2 = $2 ^ $3]  Does `Not` operation to the value at memory location1 & location2 and stores the result in memory location1.
 
     //Memory opcodes.
-    Load, //[load $1, #1 | $1 = #1 | load $1, $2 | if: $2 = #5 -> $1 = #5] Sets a memory location's value.
-    Free, //[free $1 | $1 = null] Deletes a memory location's value.
+    Load,  //[load $1, #1 | $1 = #1 | load $1, $2 | if: $2 = #5 -> $1 = #5] Sets a memory location's value.
+    Free,  //[free $1 | $1 = null]                                          Deletes a memory location's value.
+    Reg,   //[reg $1, $10]                                                  Sets the current chunk's memory region to the specified addresses. arg1 must be the low bound and arg2 must be the upper bound. Every read/write to other regions(when this instruction is executed) will throw an error.
+    UnReg, //[unreg]                                                        Removes the region that is bound th the current chunk. If no is bound, nothing happens.
 
     //Array opcodes.
     ArrAccess, //[arraccess $1, $2, #3] Gets the element at position `arg3` of array at location `arg2` and stores it in location `arg1`. 
@@ -63,6 +67,12 @@ public enum OpCodes
     StrAppend, //[strappend $1, $2]         Appends the string in location `arg2` to the end of the string in location `arg1`.
     StrFree,   //[strfree $1]               Deletes string in location `arg1`.
     StrNum,    //[strnum $2, $1]            Converts the string in location `arg2` to a number and places it in location `arg1`.
-    StrChar,   //[strchar $2, $1, #3]       Gets the character at position `arg3` of the string located in `arg2` and places it in location `arg2`. 
+    StrChar,   //[strchar $2, $1, #3]       Gets the character at position `arg3` of the string located in `arg2` and places it in location `arg2`.
 
+    //Integrated functions.
+    Print,    // [print $1]     Prints the contents in the specified memory location in a readable format.
+    Read,     // [read $1]      Reads a char from the console and saves it in the specified memory location as an integer.
+    ReadLine, // [readline $1]  Reads a string from the console (every character until enter is pressed) and saves it in the specified memory location.
+    Random,   // [random $1]    Saves an integer random number in the specified memory location.
+    RandomF,  // [randomf $1]   Saves a floating random number [0.0, 1.0] in the specified memory location.
 }

@@ -1,0 +1,123 @@
+﻿<Window x:Class="CryptexScriptInspector.Dialogs.AddInstructionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:CryptexScriptInspector.Dialogs"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:controls="clr-namespace:CryptexScriptInspector.Controls"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        Title="AddInstructionDialog" Height="600" Width="1200">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*" />
+            <ColumnDefinition Width="5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Column="0" Margin="2 5 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <ComboBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedComboBox}" IsReadOnly="True"
+                      SelectedIndex="0" x:Name="cbFilterInstructions"
+                      SelectionChanged="cbFilterInstructions_OnSelectionChanged">
+                <ComboBoxItem x:Name="cbiAllInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="TickAll" Margin="0 0 5 0" />
+                        <TextBlock Text="All Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiVMInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="StateMachine" Margin="0 0 5 0" />
+                        <TextBlock Text="VM Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiMathInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="MathsCompass" Margin="0 0 5 0" />
+                        <TextBlock Text="Math Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiBitwiseInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="GateXor" Margin="0 0 5 0" />
+                        <TextBlock Text="Bitwise Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiCallInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CallMade" Margin="0 0 5 0" />
+                        <TextBlock Text="Call Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiBranchInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="SourceBranch" Margin="0 0 5 0" />
+                        <TextBlock Text="Branching Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiMemoryInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Memory" Margin="0 0 5 0" />
+                        <TextBlock Text="Memory Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiArrayInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CodeArray" Margin="0 0 5 0" />
+                        <TextBlock Text="Array Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiStringInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CursorText" Margin="0 0 5 0" />
+                        <TextBlock Text="String Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem x:Name="cbiFunctionInstructions">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FunctionVariant" Margin="0 0 5 0" />
+                        <TextBlock Text="Function Instructions" />
+                    </StackPanel>
+                </ComboBoxItem>
+            </ComboBox>
+
+            <Separator Grid.Row="1" Margin="0 5 0 0"></Separator>
+
+            <ListBox Grid.Row="2" x:Name="listBoxInstructions"
+                     SelectionChanged="ListBoxInstructions_OnSelectionChanged" />
+        </Grid>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5 5 2 0">
+            <StackPanel x:Name="spInstructionArguments" Orientation="Horizontal">
+                <controls:InstructionArgumentControl Title="Argument 1"
+                                                     ControlEdit="InstructionArgumentControl_OnControlEdit" />
+                <controls:InstructionArgumentControl Title="Argument 2"
+                                                     ControlEdit="InstructionArgumentControl_OnControlEdit" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="2 15 2 2">
+                <Button Content="Validate" Margin="2" Click="BtnValidate_OnClick" />
+                <Button Content="Submit" Margin="2" Click="BtnSubmit_OnClick" />
+                <Button Content="Clear" Margin="2" Click="BtnClear_OnClick" />
+                <TextBlock x:Name="tbFinalResult" Margin="5 2 2 2" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <TextBlock x:Name="tbValidInstruction" Text="Valid!" />
+            <Separator />
+            <TextBlock>Instruction info:</TextBlock>
+            <TextBlock x:Name="tblInstructionInfo" />
+        </StackPanel>
+    </Grid>
+</Window>
