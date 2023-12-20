@@ -8,7 +8,7 @@ public sealed class Executor
 {
     internal const   int            MAX_FUNCTION_ARGS = 16;
     private readonly Script         m_script;
-    private          ExecutorMemory m_memory;
+    private readonly ExecutorMemory m_memory;
     private          bool           m_VMExited = false;
     private          BigInteger     m_exitCode = 0;
 
@@ -28,10 +28,17 @@ public sealed class Executor
         {
             //Will start to execute at the chunk with name "main" -- will error if it is not present.
             m_script.Execute(this);
-        } catch(VMRuntimeException ex)
+        }
+        catch(VMRuntimeException ex)
         {
             PrintingDelegates.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
             m_exitCode = -1;
+            return false;
+        }
+        catch(TerminateInstructionFoundException tEx)
+        {
+            PrintingDelegates.WriteError.Invoke("Critical error - a `term` instruction found in the current script chunk! Recovering from this might be impossible.");
+            m_exitCode = -2;
             return false;
         }
 
@@ -43,7 +50,8 @@ public sealed class Executor
         if (m_script.GetChunk(chunkName) is null)
             return false;
 
-        try { m_script.Execute(this, chunkName); } catch(VMRuntimeException ex)
+        try { m_script.Execute(this, chunkName); }
+        catch(VMRuntimeException ex)
         {
             PrintingDelegates.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
             return false;

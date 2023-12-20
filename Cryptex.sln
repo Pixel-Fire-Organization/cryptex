@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptexTester", "CryptexTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptex.Test", "Cryptex.Test\Cryptex.Test.csproj", "{B4A0A894-6A07-4488-8144-E1AB798345E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptexScriptInspector", "CryptexScriptInspector\CryptexScriptInspector.csproj", "{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{B4A0A894-6A07-4488-8144-E1AB798345E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4A0A894-6A07-4488-8144-E1AB798345E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4A0A894-6A07-4488-8144-E1AB798345E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
