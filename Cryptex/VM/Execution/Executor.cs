@@ -74,5 +74,5 @@ public sealed class Executor
         m_exitCode = code;
     }
 
-    internal bool HasExitBeenCalled() { return m_VMExited; }
+    internal bool HasExitBeenCalled() => m_VMExited;
 }

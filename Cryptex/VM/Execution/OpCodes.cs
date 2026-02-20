@@ -5,7 +5,7 @@ public enum OpCodes : byte
     //VM opcodes.
     Term,  //[term]         Terminates the execution of the VM. This opcode must be never used by a programmer. It is used as a fail safe of the VM when the chunk has invalid data.
     Nop,   //[nop #10]      Tells the VM to wait for X ms. X = [0; (2^32) - 1]
-    Exit,  //[exit #0]      Stops the execution of the VM with exit code: X. X = 0 -> exited successfully; X != 0 -> error occured.
+    Exit,  //[exit #0]      Stops the execution of the VM with exit code: X. X = 0 -> exited successfully; X != 0 -> error occurred.
     Crash, //[crash #2000]  Tells the VM to error with error code: X. X must be a valid error code.
 
     //Math opcodes.

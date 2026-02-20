@@ -16,10 +16,7 @@ internal static class ArrayTypeHelper
         };
     }
 
-    public static string? CreateArray(DataTypes arrayType, int length)
-    {
-        return string.Empty;
-    }
+    public static string? CreateArray(DataTypes arrayType, int length) => string.Empty;
 
     public static int GetLength(ExecutorMemory memory, int slot)
     {
