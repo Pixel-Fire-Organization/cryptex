@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptex.Test", "Cryptex.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptexScriptInspector", "CryptexScriptInspector\CryptexScriptInspector.csproj", "{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transpilers", "Transpilers", "{467CFC24-EF09-43E5-902D-414D59838FF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScriptTranspiler", "JavaScriptTranspiler\JavaScriptTranspiler.csproj", "{CAD6DD47-D5DC-4E8E-B75B-69512C95BC3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,12 @@ Global
 		{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C9C740E-BAFC-4C32-93CA-89C1A3A6D535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD6DD47-D5DC-4E8E-B75B-69512C95BC3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD6DD47-D5DC-4E8E-B75B-69512C95BC3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD6DD47-D5DC-4E8E-B75B-69512C95BC3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD6DD47-D5DC-4E8E-B75B-69512C95BC3B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CAD6DD47-D5DC-4E8E-B75B-69512C95BC3B} = {467CFC24-EF09-43E5-902D-414D59838FF4}
 	EndGlobalSection
 EndGlobal

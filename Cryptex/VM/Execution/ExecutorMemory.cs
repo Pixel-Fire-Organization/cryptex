@@ -8,7 +8,7 @@ public sealed class ExecutorMemory
 
     public void SetSlot(int slot, string value) { m_memory[slot] = value; }
 
-    public string? GetSlot(int slot) { return m_memory.TryGetValue(slot, out var val) ? val : null; }
+    public string? GetSlot(int slot) => m_memory.TryGetValue(slot, out var val) ? val : null;
 
     public string? RemoveSlot(int slot)
     {
