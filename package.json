@@ -1,0 +1,17 @@
+{
+  "name": "cryptex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:pixel-fire/cryptex.git"
+  },
+  "private": true,
+  "dependencies": {
+    "acorn": "^8.14.0"
+  }
+}
