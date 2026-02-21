@@ -3,6 +3,11 @@ name: .NET Core Build
 # Triggers on all pushes, mimicking Bitbucket's 'default' pipeline behavior
 on:
   push:
+    
+permissions:
+  contents: read
+  security-events: write
+  actions: read
 
 jobs:
   # Job 1: Maps to the first parallel step
