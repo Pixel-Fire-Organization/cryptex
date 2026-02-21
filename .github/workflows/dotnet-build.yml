@@ -60,9 +60,9 @@ jobs:
           dotnet jb inspectcode ${SOLUTION_NAME}.sln --output="${REPORTS_PATH}/jb-${{ github.run_number }}.sarif" --format=Sarif
 
       - name: Upload Report to GitHub
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: linter-reports\jb-${{ github.run_number }}.sarif
+          sarif_file: linter-reports/jb-${{ github.run_number }}.sarif
           category: resharper
 
       - name: Upload linter artifacts
