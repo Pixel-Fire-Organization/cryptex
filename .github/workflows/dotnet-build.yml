@@ -59,11 +59,11 @@ jobs:
           dotnet tool restore
           dotnet jb inspectcode ${SOLUTION_NAME}.sln --output="${REPORTS_PATH}/jb-${{ github.run_number }}.sarif" --format=Sarif
 
-    - name: Upload Report to GitHub
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: linter-reports\jb-${{ github.run_number }}.sarif
-        category: resharper
+      - name: Upload Report to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: linter-reports\jb-${{ github.run_number }}.sarif
+          category: resharper
 
       - name: Upload linter artifacts
         uses: actions/upload-artifact@v4
