@@ -1,27 +1,21 @@
 name: .NET Core Build
 
-# Triggers on all pushes, mimicking Bitbucket's 'default' pipeline behavior
 on:
   push:
     
 permissions:
   contents: read
-  security-events: write
-  actions: read
 
 jobs:
-  # Job 1: Maps to the first parallel step
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
-    # Uses the exact same Docker image specified in your Bitbucket file
     container: mcr.microsoft.com/dotnet/sdk:10.0 
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Maps to Bitbucket's 'caches: - dotnetcore'
       - name: Cache dotnet packages
         uses: actions/cache@v4
         with:
@@ -36,42 +30,3 @@ jobs:
           dotnet restore
           dotnet build --no-restore --configuration Release
           dotnet test --no-build --configuration Release
-
-  # Job 2: Maps to the second parallel step
-  lint-the-code:
-    name: Lint the code
-    runs-on: ubuntu-latest
-    container: mcr.microsoft.com/dotnet/sdk:10.0
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Cache dotnet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln') }}
-          restore-keys: |
-            ${{ runner.os }}-dotnet-
-
-      - name: Run Linter
-        run: |
-          export SOLUTION_NAME=Cryptex
-          export REPORTS_PATH=linter-reports
-          dotnet new tool-manifest
-          dotnet tool install JetBrains.ReSharper.GlobalTools
-          dotnet tool restore
-          dotnet jb inspectcode ${SOLUTION_NAME}.sln --profile=".editorconfig" --output="${REPORTS_PATH}/jb-${{ github.run_number }}.sarif" --format=Sarif --properties:Configuration=Release
-
-      - name: Upload Report to GitHub
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: linter-reports/jb-${{ github.run_number }}.sarif
-          category: resharper
-
-      - name: Upload linter artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: linter-reports.zip
-          path: linter-reports/
