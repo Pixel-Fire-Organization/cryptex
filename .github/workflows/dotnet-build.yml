@@ -58,11 +58,11 @@ jobs:
           dotnet tool install JetBrains.ReSharper.GlobalTools
           dotnet tool restore
           # Replaces $BITBUCKET_BUILD_NUMBER with ${{ github.run_number }}
-          dotnet jb inspectcode ${SOLUTION_NAME}.sln --output="${REPORTS_PATH}/jb-${{ github.run_number }}.xml"
+          dotnet jb inspectcode ${SOLUTION_NAME}.sln --output="${REPORTS_PATH}/jb-${{ github.run_number }}.html --format=Html"
 
       # Maps to Bitbucket's 'artifacts:' configuration
       - name: Upload linter artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: linter-reports
+          name: linter-reports.zip
           path: linter-reports/
