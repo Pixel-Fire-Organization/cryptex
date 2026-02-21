@@ -62,7 +62,7 @@ jobs:
           dotnet new tool-manifest
           dotnet tool install JetBrains.ReSharper.GlobalTools
           dotnet tool restore
-          dotnet jb inspectcode ${SOLUTION_NAME}.sln --profile=".editorconfig" --output="${REPORTS_PATH}/jb-${{ github.run_number }}.sarif" --format=Sarif
+          dotnet jb inspectcode ${SOLUTION_NAME}.sln --profile=".editorconfig" --output="${REPORTS_PATH}/jb-${{ github.run_number }}.sarif" --format=Sarif --properties:Configuration=Release
 
       - name: Upload Report to GitHub
         uses: github/codeql-action/upload-sarif@v4
