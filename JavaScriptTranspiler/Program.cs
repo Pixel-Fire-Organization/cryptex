@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-
 using JavaScriptTranspiler.Data;
+using JavaScriptTranspiler.Data.Declarations;
 
 namespace JavaScriptTranspiler;
 
@@ -8,12 +8,13 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        Transpiler.Transpile(
-            """var a = 'abc' + 25; var b = a + 0.3;""", out Data.Program? program, out Function? function);
+        string fileContents =
+            File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Files", "functionEcma2022.js"));
+
+        Transpiler.Transpile(fileContents, out ProgramNode? program);
 
         var json = JsonSerializer.Serialize(program);
 
         Console.WriteLine(json);
-        Console.ReadLine();
     }
 }

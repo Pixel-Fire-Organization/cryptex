@@ -4,9 +4,10 @@ namespace JavaScriptTranspiler.Data.Statements;
 
 public class BlockStatement : IStatement
 {
-    [JsonPropertyName("type")] public string Type { get; }
-    public long Start { get; }
-    public long End { get; }
-    //[JsonPropertyName("loc")] public SourceLocation Loc { get; }
-    [JsonPropertyName("body")] public IStatement[] Body { get; }
+    public string Type => "BlockStatement";
+    public int Start { get; set; }
+    public int End { get; set; }
+
+    [JsonPropertyName("body")]
+    public List<IStatement> Body { get; set; }
 }

@@ -3,14 +3,14 @@ using JavaScriptTranspiler.Data.Expressions;
 
 namespace JavaScriptTranspiler.Data.Statements;
 
-public class LabeledStatement : IStatement
+public class WhileStatement : IStatement
 {
-    public string Type => "LabeledStatement";
+    public string Type => "WhileStatement";
     public int Start { get; set; }
     public int End { get; set; }
 
-    [JsonPropertyName("label")]
-    public Identifier Label { get; set; }
+    [JsonPropertyName("test")]
+    public IExpression Test { get; set; }
 
     [JsonPropertyName("body")]
     public IStatement Body { get; set; }

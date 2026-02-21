@@ -1,11 +1,8 @@
-﻿using System.Text.Json.Serialization;
-
-namespace JavaScriptTranspiler.Data.Statements;
+﻿namespace JavaScriptTranspiler.Data.Statements;
 
 public class EmptyStatement : IStatement
 {
-    [JsonPropertyName("type")] public string Type { get; }
-    public long Start { get; }
-    public long End { get; }
-    //[JsonPropertyName("loc")] public SourceLocation Loc { get; }
+    public string Type => "EmptyStatement";
+    public int Start { get; set; }
+    public int End { get; set; }
 }

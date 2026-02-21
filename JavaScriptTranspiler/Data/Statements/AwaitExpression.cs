@@ -3,9 +3,9 @@ using JavaScriptTranspiler.Data.Expressions;
 
 namespace JavaScriptTranspiler.Data.Statements;
 
-public class ThrowStatement : IStatement
+public class AwaitExpression : IExpression
 {
-    public string Type => "ThrowStatement";
+    public string Type => "AwaitExpression";
     public int Start { get; set; }
     public int End { get; set; }
 

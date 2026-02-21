@@ -1,23 +1,21 @@
 ﻿using System.Text.Json;
-
 using JavaScriptTranspiler.Data;
-
+using JavaScriptTranspiler.Exceptions;
 using Jint;
 
 namespace JavaScriptTranspiler;
 
 public static class Transpiler
 {
-    public static void Transpile(string fileContents, out Data.Program? program, out Function? function)
+    private const string EXCEPTION_TOKEN = "__exception: ";
+    
+    public static void Transpile(string fileContents, out ProgramNode? program)
     {
-        function = null;
         program = null;
 
-        fileContents = fileContents.ReplaceLineEndings("");
-        
         var engine = new Engine();
 
-        var acornScriptPath = Path.Combine(Directory.GetCurrentDirectory(), "acorn.js");
+        var acornScriptPath = Path.Combine(Directory.GetCurrentDirectory(), "Dependencies", "acorn.js");
         if (!File.Exists(acornScriptPath))
         {
             Console.WriteLine("Acorn.js file not found.");
@@ -31,38 +29,37 @@ public static class Transpiler
         engine.Execute(acornCode); // Preload Acorn library
         engine.SetValue("astJson", "");
 
+        var escapedJs = JsonSerializer.Serialize(fileContents);
+
         var json = engine.Execute($$"""
-                                    const code = "{{fileContents}}";
+                                    const code = {{escapedJs}}; 
+
                                     try {
-                                        const ast = acorn.parse(code, { ecmaVersion: 6 });
-                                        astJson = JSON.stringify(ast);
+                                        const ast = acorn.parse(code, { 
+                                            ecmaVersion: 2022,
+                                            allowReturnOutsideFunction: true 
+                                        });
+                                        
+                                        astJson = JSON.stringify(ast, (key, value) => {
+                                           return typeof value === 'bigint' ? value.toString() : value;
+                                        }, 2);
+                                       
                                     } catch(e) {
-                                        astJson = "__exception: " + e.message;   
+                                        astJson = "{{EXCEPTION_TOKEN}}" + e.message;
                                     }
                                     """).GetValue("astJson").ToString();
 
-        program = JsonSerializer.Deserialize<Data.Program>(json);
-        function = JsonSerializer.Deserialize<Function>(json);
-    }
-
-    public static object GetTypeFromINode(INode node)
-    {
-        switch (node.Type)
+        if (json.StartsWith(EXCEPTION_TOKEN))
+            throw new JavaScriptASTParseException(json.Remove(0, EXCEPTION_TOKEN.Length));
+        
+        try
         {
-            case "Identifier":
-                return (Identifier) node;
-
-            case "Literal":
-                return (Literal) node;
-
-            case "Program":
-                return (Data.Program) node;
-
-            default:
-            case "" or null:
-                return node;
+            program = JsonSerializer.Deserialize<ProgramNode>(json);
         }
-
-        return node;
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            program = null;
+        }
     }
 }
