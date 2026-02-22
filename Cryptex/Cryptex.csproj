@@ -7,4 +7,14 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Docs\OpCodes\Array\" />
+      <Folder Include="Docs\OpCodes\Bitwise\" />
+      <Folder Include="Docs\OpCodes\Function\" />
+      <Folder Include="Docs\OpCodes\IntegratedFunctions\" />
+      <Folder Include="Docs\OpCodes\Logic\" />
+      <Folder Include="Docs\OpCodes\Memory\" />
+      <Folder Include="Docs\OpCodes\String\" />
+    </ItemGroup>
+
 </Project>
