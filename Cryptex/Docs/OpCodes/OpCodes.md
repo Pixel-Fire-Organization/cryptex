@@ -4,6 +4,7 @@
 
 - `X, Y, Z` - numeric arguments, fetched from the `Constants Block`
 - `$A, $B, $C` - memory location arguments
+- `[X]` - value of constant in location `X`
 - `[$A]` - value of memory location `$A`
 - `label1` - label, fetched from the `Jump Block`
 - `Foo::Bar` - external function, fetched from the `External Executor`
@@ -21,23 +22,26 @@
 
 ### Math opcodes.
 
-    Inc,    //[inc $1 | $1 = $1 + 1]          
-    Dec,    //[dec $1 | $1 = $1 - 1]          
-    Add,    //[add $1, $2 | $1 = $1 + $2]     
-    Sub,    //[sub $1, $2 | $1 = $1 - $2]    
-    Div,    //[div $1, $2 | $1 = $1 / $2]     
-    AddImm, //[add $1, 2 | $1 = $1 + 2]       Adds integer value at memory location1 & immediate value in argument2 and stores the result in location1.
-    SubImm, //[sub $1, 2 | $1 = $1 - 2]       Subtracts integer value at memory location1 & immediate value in argument2 and stores the result in location1.
-    MulImm, //[mul $1, 2 | $1 = $1 * 2]       Multiplies integer value at memory location1 & immediate value in argument2 and stores the result in location1.
-    DivImm, //[div $1, 2 | $1 = $1 / 2]       Divides integer value at memory location1 & immediate value in argument2 and stores the result in location1.
-    IncF,   //[incf $1 | $1 = $1 + 1]         Increments a floating value at memory location.
-    DecF,   //[decf $1 | $1 = $1 - 1]         Decrements a floating value at memory location.
-    AddF,   //[addf $1, $2 | $1 = $1 + $2]    Adds two floating values at memory location1 & location2 and stores the result into location1.
-    SubF,   //[subf $1, $2 | $1 = $1 - $2]    Subtracts two floating values at memory location1 & location2 and stores the result into location1.
-    MulF,   //[mulf $1, $2 | $1 = $1 * $2]    Multiplies two floating values at memory location1 & location2 and stores the result in location1.
-    DivF,   //[divf $1, $2 | $1 = $1 / $2]    Divides two floating values at memory location1 & location2 and stores the result in location1.
-    Mod,    //[mod $1, $2 | $1 = $1 % $2]     Performs the modulo operation on the location1 with the location2 and stores it in location1. Both must be integer.
-    ModImm, //[mod $1, 2 | $1 = $1 % 2]       Performs the modulo operation on the location1 with the argument2 and stores it in location1. Both must be integer.
+|       OpCode Name        | Implemented | Since (VM Version) |
+|:------------------------:|:-----------:|:------------------:|
+|    [Inc](Math/Inc.md)    |      ✔      |       1.0.0        |
+|    [Dec](Math/Dec.md)    |      ✔      |       1.0.0        |
+|    [Add](Math/Add.md)    |      ✔      |       1.0.0        |
+|    [Sub](Math/Sub.md)    |      ✔      |       1.0.0        |
+|    [Mul](Math/Mul.md)    |      ✔      |       1.0.0        |
+|    [Div](Math/Div.md)    |      ✔      |       1.0.0        |
+| [AddImm](Math/AddImm.md) |      ✕      |       1.0.0        |
+| [SubImm](Math/SubImm.md) |      ✕      |       1.0.0        |
+| [MulImm](Math/MulImm.md) |      ✕      |       1.0.0        |
+| [DivImm](Math/DivImm.md) |      ✕      |       1.0.0        |
+|   [IncF](Math/IncF.md)   |      ✔      |       1.0.0        |
+|   [DecF](Math/DecF.md)   |      ✔      |       1.0.0        |
+|   [AddF](Math/AddF.md)   |      ✔      |       1.0.0        |
+|   [SubF](Math/SubF.md)   |      ✔      |       1.0.0        |
+|   [MulF](Math/MulF.md)   |      ✔      |       1.0.0        |
+|   [DivF](Math/DivF.md)   |      ✔      |       1.0.0        |
+|    [Mod](Math/Mod.md)    |      ✔      |       1.0.0        |
+| [ModImm](Math/ModImm.md) |      ✕      |       1.0.0        |
 
 ### Function opcodes.
 
