@@ -8,7 +8,7 @@ add $A, $B
 
 ## Description
 
-Adds two integer values at $A and $B. Stores the result in $A.
+Adds two integer values at `$A` and `$B`. Stores the result in `$A`.
 
 ### Remarks
 `$A = [$A] + [$B]`

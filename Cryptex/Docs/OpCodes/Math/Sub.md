@@ -8,7 +8,7 @@ sub $A, $B
 
 ## Description
 
-Subtracts two integer values at $A and $B. Stores the result in $A.
+Subtracts two integer values at `$A` and `$B`. Stores the result in `$A`.
 
 ### Remarks
 `$A = [$A] - [$B]`

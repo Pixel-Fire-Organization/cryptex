@@ -8,7 +8,7 @@ dec $A
 
 ## Description
 
-Decrements an integer at a memory location.
+Decrements an integer at `$A`.
 
 ### Remarks
 `$A = [$A] - 1`

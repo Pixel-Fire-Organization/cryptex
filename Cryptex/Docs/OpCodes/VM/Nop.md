@@ -8,7 +8,7 @@ nop X
 
 ## Description
 
-Tells the VM to wait for X ms.
+Tells the VM to wait for `X` ms.
 
 ### Remarks
 X = [0; (2^32) - 1]

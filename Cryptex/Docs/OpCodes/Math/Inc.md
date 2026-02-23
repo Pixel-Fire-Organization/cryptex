@@ -8,7 +8,7 @@ inc $A
 
 ## Description
 
-Increments an integer value at a memory location.
+Increments an integer value at `$A`.
 
 ### Remarks
 `$A = [$A] + 1`

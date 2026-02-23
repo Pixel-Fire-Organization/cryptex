@@ -8,7 +8,7 @@ divF $A, $B
 
 ## Description
 
-Divides two floating values at $A and $B. Stores the result in $A.
+Divides two floating values at `$A` and `$B`. Stores the result in `$A`.
 
 ### Remarks
 `$A = [$A] / [$B]`

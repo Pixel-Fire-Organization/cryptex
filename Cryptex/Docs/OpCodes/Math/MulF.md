@@ -8,7 +8,7 @@ mulF $A, $B
 
 ## Description
 
-Multiplies two floating values at $A and $B. Stores the result in $A.
+Multiplies two floating values at `$A` and `$B`. Stores the result in `$A`.
 
 ### Remarks
 `$A = [$A] * [$B]`

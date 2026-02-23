@@ -8,7 +8,7 @@ decF $A
 
 ## Description
 
-Decrements a floating value at a memory location.
+Decrements a floating value at `$A`.
 
 ### Remarks
 `$A = [$A] - 1`

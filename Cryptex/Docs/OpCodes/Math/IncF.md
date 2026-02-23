@@ -8,7 +8,7 @@ incF $A
 
 ## Description
 
-Increments a floating value at a memory location.
+Increments a floating value at `$A`.
 
 ### Remarks
 `$A = [$A] + 1`
