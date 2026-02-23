@@ -6,8 +6,8 @@
 - `$A, $B, $C` - memory location arguments
 - `[X]` - value of constant in location `X`
 - `[$A]` - value of memory location `$A`
-- `label1` - label, fetched from the `Jump Block`
-- `Foo::Bar` - external function, fetched from the `External Executor`
+- `L` - label, fetched from the `Jump Block`
+- `E` - external function, fetched from the `External Executor`
 
 ## OP Codes by categories
 
@@ -45,11 +45,13 @@
 
 ### Function opcodes.
 
-    Arg,  //WIP, idea: use this opcode to load the arguments of a function in memory before calling it.
-    Exec, //[exec $1, Foo::Bar | Calls `Bar` in `Foo`]  Executes a function from a registered external class. If the function returns a value it will be saved in location `arg1`.
-    Call, //[call $1, fun1 | $1 = fun1()]               Stops the execution of the current chunk, and starts execution of another. If the new chunk has a return value, the return value is pushed in memory specified by the instruction.
-    Ret,  //[ret]                                       Stops the execution of the current chunk, and returns to the previous. If this is the last chunk, then the execution stops. Clears all memory locations used in this chunk.
-    Res,  //[res #27 | If call address is $1, $1 = #27] Sets the return value. When ret is called, this value is passed to the location of the `Call` instruction.
+|       OpCode Name        | Implemented | Since (VM Version) |
+|:------------------------:|:-----------:|:------------------:|
+|  [Arg](Function/Arg.md)  |      ✕      |       1.0.0        |
+| [Exec](Function/Exec.md) |      ✕      |       1.0.0        |
+| [Call](Function/Call.md) |      ✕      |       1.0.0        |
+|  [Ret](Function/Ret.md)  |      ✕      |       1.0.0        |
+|  [Res](Function/Res.md)  |      ✕      |       1.0.0        |
 
 ### Logic opcodes.
 
