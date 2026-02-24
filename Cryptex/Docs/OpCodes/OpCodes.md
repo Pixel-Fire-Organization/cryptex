@@ -89,11 +89,13 @@
 
 ### Array opcodes.
 
-    ArrAccess, //[arraccess $1, $2, #3] Gets the element at position `arg3` of array at location `arg2` and stores it in location `arg1`. 
-    ArrCreate, //[arrcreate $1, #10]    Creates an array at location `arg1` with the size of `arg2`.
-    ArrFree,   //[arrfree $1]           Deletes array in location `arg1`
-    ArrLen,    //[arrlen $1, $2]        Sets the value at `arg1` with the length of the array in `arg2`.
-    ArrSet,    //[arrset $1, $2, #3]    Sets the element at position `arg3` of the array at `arg2` to the value at `arg1`.
+|           OpCode Name           | Implemented | Since (VM Version) |
+|:-------------------------------:|:-----------:|:------------------:|
+| [ArrCreate](Array/ArrCreate.md) |      ✕      |         -          |
+|   [ArrFree](Array/ArrFree.md)   |      ✕      |         -          |
+|    [ArrLen](Array/ArrLen.md)    |      ✕      |         -          |
+|    [ArrGet](Array/ArrGet.md)    |      ✕      |         -          |
+|    [ArrSet](Array/ArrSet.md)    |      ✕      |         -          |
 
 ### String opcodes.
 
