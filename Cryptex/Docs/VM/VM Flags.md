@@ -10,7 +10,7 @@ The `cmp` instruction sets the flag (write-only) depending on the outcome of the
 
 ### Clear Condition
 
-- All [Jump Instruction](../OpCodes/Logic/JumpInstructions.md) read the `Compare` flag. 
+- All [Jump Instruction](../OpCodes/Logic/JumpInstructions.md) read the `Compare` flag.
 - If the `Required Condition` is met, the jump is executed.
 - After the flag is read, the flag is cleared -- set to value `None`.
 - ***The `Jmp` instruction doesn't read the compare flag. Other actions are still performed.***
@@ -26,3 +26,24 @@ The `cmp` instruction sets the flag (write-only) depending on the outcome of the
 |     Less      |        Left value is less then the right.        |
 | GreaterEquals |   Left value is greater or equal to the right.   |
 |  LessEquals   |    Left value is less or equal to the right.     |
+
+## Error
+
+Used to indicate an error occurred during runtime.
+
+### Set Condition
+
+Any instruction can set the flag.
+
+Generally, it is set if the data used in the instruction is invalid.
+
+### Clear Condition
+
+The instruction `GetError` clears the flag and transfers the error into work memory. This is the only way to recover from errors while running.
+
+### Values
+
+| Name  |                     Description                     |
+|:-----:|:---------------------------------------------------:|
+| True  |                An error has occured.                |
+| False | Initial and default value. No errors have occurred. |

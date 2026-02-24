@@ -102,12 +102,17 @@
 
 ### String opcodes.
 
-    StrCreate, //[strcreate $1, #20]        Creates a string with `arg2` length at location `arg1`.
-    StrSub,    //[strsub $2, $1, #0, #5]    Runs function substring on the string in location `arg2` and places the result in location `arg1`. `arg3` is start, `arg4` is end.
-    StrAppend, //[strappend $1, $2]         Appends the string in location `arg2` to the end of the string in location `arg1`.
-    StrFree,   //[strfree $1]               Deletes string in location `arg1`.
-    StrNum,    //[strnum $2, $1]            Converts the string in location `arg2` to a number and places it in location `arg1`.
-    StrChar,   //[strchar $2, $1, #3]       Gets the character at position `arg3` of the string located in `arg2` and places it in location `arg1`.
+> [!IMPORTANT]
+> This API is still in the planning phase and may change in the future.
+
+| OpCode Name | Implemented | Since (VM Version) |
+|:-----------:|:-----------:|:------------------:|
+|  StrCreate  |      ✕      |         -          |
+|   StrSub    |      ✕      |         -          |
+|  StrAppend  |      ✕      |         -          |
+|   StrFree   |      ✕      |         -          |
+|   StrNum    |      ✕      |         -          |
+|   StrChar   |      ✕      |         -          |
 
 ### Integrated functions.
 
