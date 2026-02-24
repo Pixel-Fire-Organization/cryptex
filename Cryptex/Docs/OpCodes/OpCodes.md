@@ -55,14 +55,16 @@
 
 ### Logic opcodes.
 
-    Cmp, //[cmp $1, $2] Compares the values in memory location1 & location2. Sets a flag in the VM. Next instruction must be a jump.
-    Jmp, //[jmp label1] Moves to the label specified in `arg1`. `arg1` must be in the current code chunk.
-    Jeq, //[jeq label1] Moves to the label specified in `arg1` if the condition(equals) is true. `arg1` must be in the current code chunk.
-    Jnq, //[jnq label1] Moves to the label specified in `arg1` if the condition(not equals) is true. `arg1` must be in the current code chunk.
-    Jls, //[jls label1] Moves to the label specified in `arg1` if the condition(less) is true. `arg1` must be in the current code chunk.
-    Jgr, //[jgr label1] Moves to the label specified in `arg1` if the condition(greater) is true. `arg1` must be in the current code chunk.
-    Jge, //[jge label1] Moves to the label specified in `arg1` if the condition(greater or equal) is true. `arg1` must be in the current code chunk.
-    Jle, //[jle label1] Moves to the label specified in `arg1` if the condition(less or equal) is true. `arg1` must be in the current code chunk.
+|       OpCode Name        | Implemented | Since (VM Version) |
+|:------------------------:|:-----------:|:------------------:|
+|   [Cmp](Logic/Cmp.md)    |      ✕      |       1.0.0        | 
+| [Jmp](Logic/Jump/Jmp.md) |      ✕      |       1.0.0        | 
+| [Jeq](Logic/Jump/Jeq.md) |      ✕      |       1.0.0        | 
+| [Jnq](Logic/Jump/Jnq.md) |      ✕      |       1.0.0        | 
+| [Jls](Logic/Jump/Jls.md) |      ✕      |       1.0.0        | 
+| [Jgr](Logic/Jump/Jgr.md) |      ✕      |       1.0.0        | 
+| [Jge](Logic/Jump/Jge.md) |      ✕      |       1.0.0        | 
+| [Jle](Logic/Jump/Jle.md) |      ✕      |       1.0.0        | 
 
 ### Bitwise opcodes.
 
