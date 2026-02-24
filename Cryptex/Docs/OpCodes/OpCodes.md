@@ -89,6 +89,9 @@
 
 ### Array opcodes.
 
+> [!IMPORTANT]
+> This API is still in the planning phase and may change in the future.
+
 |           OpCode Name           | Implemented | Since (VM Version) |
 |:-------------------------------:|:-----------:|:------------------:|
 | [ArrCreate](Array/ArrCreate.md) |      ✕      |         -          |
