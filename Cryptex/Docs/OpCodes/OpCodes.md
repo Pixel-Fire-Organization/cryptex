@@ -79,10 +79,13 @@
 
 ### Memory opcodes.
 
-    Load,  //[load $1, #1 | $1 = #1 | load $1, $2 | if: $2 = #5 -> $1 = #5] Sets a memory location's value.
-    Free,  //[free $1 | $1 = null]                                          Deletes a memory location's value.
-    Reg,   //[reg $1, $10]                                                  Sets the current chunk's memory region to the specified addresses. arg1 must be the low bound and arg2 must be the upper bound. Every read/write to other regions(when this instruction is executed) will throw an error.
-    UnReg, //[unreg]                                                        Removes the region that is bound to the current chunk. If nothing is bound, nothing happens.
+|         OpCode Name          | Implemented | Since (VM Version) |
+|:----------------------------:|:-----------:|:------------------:|
+|    [Load](Memory/Load.md)    |      ✔      |       1.0.0        |
+| [LoadImm](Memory/LoadImm.md) |      ✕      |       1.0.0        |
+|    [Free](Memory/Free.md)    |      ✔      |       1.0.0        |
+|     [Reg](Memory/Reg.md)     |      ✕      |       1.0.0        |
+|   [UnReg](Memory/UnReg.md)   |      ✕      |       1.0.0        |
 
 ### Array opcodes.
 
