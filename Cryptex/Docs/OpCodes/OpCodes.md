@@ -64,16 +64,18 @@
 | [Jls](Logic/Jump/Jls.md) |      ✕      |       1.0.0        | 
 | [Jgr](Logic/Jump/Jgr.md) |      ✕      |       1.0.0        | 
 | [Jge](Logic/Jump/Jge.md) |      ✕      |       1.0.0        | 
-| [Jle](Logic/Jump/Jle.md) |      ✕      |       1.0.0        | 
+| [Jle](Logic/Jump/Jle.md) |      ✕      |       1.0.0        |
 
 ### Bitwise opcodes.
 
-    Shl, //[shl $2, #2 | $2 = $2 << 2]  Shits the value at memory location to the left X amount of times.
-    Shr, //[shr $2, #2 | $2 = $2 >> 2]  Shits the value at memory location to the right X amount of times.
-    And, //[and $2, $3 | $2 = $2 & $3]  Does `And` operation to the values at memory location1 & location2 and stores the result in memory location1.
-    Or,  //[or $2, $3 | $2 = $2 | $3]   Does `Or` operation to the value at memory location1 & location2 and stores the result in memory location1.
-    Xor, //[xor $2, $3 | $2 = $2 ^ $3]  Does `Xor` operation to the value at memory location1 & location2 and stores the result in memory location1.
-    Not, //[not $2 | $2 = ~$2]          Does `Not` operation to the value at memory location and stores the result in the same memory location.
+|      OpCode Name      | Implemented | Since (VM Version) |
+|:---------------------:|:-----------:|:------------------:|
+| [Shl](Bitwise/Shl.md) |      ✕      |       1.0.0        |
+| [Shr](Bitwise/Shr.md) |      ✕      |       1.0.0        |
+| [And](Bitwise/And.md) |      ✕      |       1.0.0        |
+|  [Or](Bitwise/Or.md)  |      ✕      |       1.0.0        | 
+| [Xor](Bitwise/Xor.md) |      ✕      |       1.0.0        |
+| [Not](Bitwise/Not.md) |      ✕      |       1.0.0        |
 
 ### Memory opcodes.
 
