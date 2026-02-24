@@ -105,14 +105,14 @@
 > [!IMPORTANT]
 > This API is still in the planning phase and may change in the future.
 
-| OpCode Name | Implemented | Since (VM Version) |
-|:-----------:|:-----------:|:------------------:|
-|  StrCreate  |      ✕      |         -          |
-|   StrSub    |      ✕      |         -          |
-|  StrAppend  |      ✕      |         -          |
-|   StrFree   |      ✕      |         -          |
-|   StrNum    |      ✕      |         -          |
-|   StrChar   |      ✕      |         -          |
+|           OpCode Name            | Implemented | Since (VM Version) |
+|:--------------------------------:|:-----------:|:------------------:|
+| [StrCreate](String/StrCreate.md) |      ✕      |         -          |
+|    [StrSub](String/StrSub.md)    |      ✕      |         -          |
+| [StrAppend](String/StrAppend.md) |      ✕      |         -          |
+|   [StrFree](String/StrFree.md)   |      ✕      |         -          |
+|    [StrNum](String/StrNum.md)    |      ✕      |         -          |
+|   [StrChar](String/StrChar.md)   |      ✕      |         -          |
 
 ### Integrated functions.
 
