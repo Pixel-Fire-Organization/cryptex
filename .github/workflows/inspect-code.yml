@@ -1,0 +1,25 @@
+﻿name: Inspect Code
+
+on:
+  push:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  lint-the-code:
+    name: Lint the code
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run ReSharper Inspection
+        uses: ./.github/actions/resharper-inspect
+        with:
+          solution_name: 'Cryptex'
+          reports_path: 'linter-reports'

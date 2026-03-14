@@ -53,7 +53,7 @@ internal sealed class IncrementDecrementInstruction : IInstruction
         vm.GetMemory().SetSlot(location, result);
     }
 
-    string CalculateInteger(ExecutorMemory memory, int slot)
+    private string CalculateInteger(ExecutorMemory memory, int slot)
     {
         BigInteger? val = CryptexDataConverter.GetMemoryValueAsInteger(memory, slot);
 
@@ -65,7 +65,7 @@ internal sealed class IncrementDecrementInstruction : IInstruction
                    : (val.Value - 1).ToString(CultureInfo.InvariantCulture);
     }
 
-    string CalculateDecimal(ExecutorMemory memory, int slot)
+    private string CalculateDecimal(ExecutorMemory memory, int slot)
     {
         decimal? val = CryptexDataConverter.GetMemoryValueAsFloating(memory, slot);
 
