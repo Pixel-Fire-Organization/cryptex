@@ -1,8 +1,4 @@
 ﻿using Cryptex.VM.Execution.Instructions;
-using Cryptex.VM.Execution.Instructions.BitwiseInstructions;
-using Cryptex.VM.Execution.Instructions.MathInstructions;
-using Cryptex.VM.Execution.Instructions.MemoryInstructions;
-using Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 namespace Cryptex.VM.Execution;
 
@@ -13,49 +9,49 @@ internal static class OpCodesExtensions
         switch (code)
         {
             case OpCodes.Term:
-                return new TermInstruction();
+                break;
             case OpCodes.Nop:
-                return new NopInstruction();
+                break;
             case OpCodes.Exit:
-                return new ExitInstruction();
+                break;
             case OpCodes.Crash:
-                return new CrashInstruction();
+                break;
             
             case OpCodes.Inc:
-                return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Increment, IncrementDecrementInstruction.ExpectedType.Integer);
+                break;
             case OpCodes.Dec:
-                return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Decrement, IncrementDecrementInstruction.ExpectedType.Integer);
+                break;
             
             case OpCodes.IncF:
-                return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Increment, IncrementDecrementInstruction.ExpectedType.Floating);
+                break;
             case OpCodes.DecF:
-                return new IncrementDecrementInstruction(IncrementDecrementInstruction.InstructionFunction.Decrement, IncrementDecrementInstruction.ExpectedType.Floating);
+                break;
             
             case OpCodes.Add:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Add, AddSubMulDivInstruction.ExpectedType.Integer);
+                break;
             case OpCodes.Sub:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Subtract, AddSubMulDivInstruction.ExpectedType.Integer);
+                break;
             case OpCodes.Mul:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Multiply, AddSubMulDivInstruction.ExpectedType.Integer);
+                break;
             case OpCodes.Div:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Divide, AddSubMulDivInstruction.ExpectedType.Integer);
+                break;
             
             case OpCodes.AddF:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Add, AddSubMulDivInstruction.ExpectedType.Floating);
+                break;
             case OpCodes.SubF:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Subtract, AddSubMulDivInstruction.ExpectedType.Floating);
+                break;
             case OpCodes.MulF:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Multiply, AddSubMulDivInstruction.ExpectedType.Floating);
+                break;
             case OpCodes.DivF:
-                return new AddSubMulDivInstruction(AddSubMulDivInstruction.InstructionFunction.Divide, AddSubMulDivInstruction.ExpectedType.Floating);
+                break;
 
             case OpCodes.Mod:
                 break;
             
             case OpCodes.Load:
-                return new LoadInstruction();
+                break;
             case OpCodes.Free:
-                return new FreeInstruction();
+                break;
             case OpCodes.Reg:
                 break;
             case OpCodes.UnReg:
@@ -90,17 +86,17 @@ internal static class OpCodesExtensions
                 break;
             
             case OpCodes.Shl:
-                return new ShiftLeftRightInstruction(ShiftLeftRightInstruction.Orientation.Left);
+                break;
             case OpCodes.Shr:
-                return new ShiftLeftRightInstruction(ShiftLeftRightInstruction.Orientation.Right);
+                break;
             case OpCodes.And:
-                return new AndOrXorInstruction(AndOrXorInstruction.Mode.And);
+                break;
             case OpCodes.Or:
-                return new AndOrXorInstruction(AndOrXorInstruction.Mode.Or);
+                break;
             case OpCodes.Xor:
-                return new AndOrXorInstruction(AndOrXorInstruction.Mode.Xor);
+                break;
             case OpCodes.Not:
-                return new NotInstruction();
+                break;
             
             case OpCodes.ArrAccess:
                 break;
