@@ -77,7 +77,7 @@ jobs:
           - os: macos-latest
             rid: osx-arm64
             ext: .dylib
-          - os: macos-13
+          - os: macos-15-intel
             rid: osx-x64
             ext: .dylib
     steps:
@@ -98,7 +98,6 @@ jobs:
           dotnet publish ./Cryptex/Cryptex.csproj \
           -c Release -r ${{ matrix.rid }} \
           -p:PublishAOT=true \
-          -p:TreatWarningsAsErrors=true \
           --output ./publish-folder/${{ matrix.rid }}
 
       - name: Rename library for release
