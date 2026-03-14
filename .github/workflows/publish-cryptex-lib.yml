@@ -38,7 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Create release tag
     needs: pre-publish
-    # Map the step output to a job output so the cleanup job can read it
     outputs:
       release_created: ${{ steps.create_release.outputs.created_new }}
     
