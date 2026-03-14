@@ -1,4 +1,4 @@
-﻿namespace Cryptex.VM.Execution.OpCodeLogic;
+﻿namespace Cryptex.VM.Execution.Instructions;
 
 internal interface IInstruction
 {
@@ -8,5 +8,5 @@ internal interface IInstruction
 
     OpCodes OpCode { get; }
 
-    object? Execute(ScriptChunkOpCode c, ExecutorMemory memory);
+    void Execute(ScriptChunkOpCode c, Executor vm);
 }

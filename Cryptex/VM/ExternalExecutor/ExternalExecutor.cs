@@ -1,8 +1,4 @@
-﻿using System.Reflection;
-
-using Cryptex.VM.ExternalExecutorFunctions;
-
-namespace Cryptex.VM;
+﻿namespace Cryptex.VM.ExternalExecutor;
 
 public sealed class ExternalExecutorFunction
 {
@@ -52,7 +48,7 @@ public sealed class ExternalExecutor
     public void Invoke(string functionName, object?[]? @params = null)
     {
         if (string.IsNullOrEmpty(functionName))
-            ErrorHandler.WriteError("VM1000: ");
+            PrintingDelegates.WriteError("VM1000: ");
 
         foreach (var fn in m_registeredFunctions)
         {

@@ -1,0 +1,50 @@
+﻿name: 'ReSharper InspectCode'
+description: 'Runs JetBrains ReSharper InspectCode, caches packages, and uploads SARIF reports'
+
+inputs:
+  solution_name:
+    description: 'Name of the solution file (without .sln)'
+    required: true
+    default: 'Cryptex'
+  reports_path:
+    description: 'Directory to store the reports'
+    required: false
+    default: 'linter-reports'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache dotnet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln') }}
+        restore-keys: |
+          ${{ runner.os }}-dotnet-
+
+    - name: Run Linter
+      shell: bash
+      run: |
+        # Use the inputs provided to the action
+        dotnet new tool-manifest --force || true # Added --force/|| true in case manifest already exists
+        dotnet tool install JetBrains.ReSharper.GlobalTools
+        dotnet tool restore
+        
+        # Run inspectcode using inputs
+        dotnet jb inspectcode ${{ inputs.solution_name }}.sln \
+          --profile=".editorconfig" \
+          --output="${{ inputs.reports_path }}/jb-${{ github.run_number }}.sarif" \
+          --format=Sarif \
+          --properties:Configuration=Release
+
+    - name: Upload Report to GitHub Security Tab
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        sarif_file: ${{ inputs.reports_path }}/jb-${{ github.run_number }}.sarif
+        category: resharper
+
+    - name: Upload linter artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: linter-reports.zip
+        path: ${{ inputs.reports_path }}/

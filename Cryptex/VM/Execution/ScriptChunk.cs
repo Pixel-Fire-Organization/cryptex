@@ -1,4 +1,6 @@
-﻿namespace Cryptex.VM.Execution;
+﻿using Cryptex.Exceptions;
+
+namespace Cryptex.VM.Execution;
 
 public sealed class ScriptChunk
 {
@@ -17,15 +19,18 @@ public sealed class ScriptChunk
         }
     }
 
-    internal void Execute(ExecutorMemory memory)
+    internal void Execute(Executor vm)
     {
         foreach (var instruction in m_instructions)
         {
+            if(vm.HasExitBeenCalled()) 
+                return;
+            
             var inst = instruction.Code.GetByCode();
             if (inst is null)
-                ErrorList.WriteError(ErrorCodes.VM2008_InvalidInstructionFoundInScriptChunk, fatal: true);
+                throw new VMRuntimeException(ErrorCodes.VM2008_InvalidInstructionFoundInScriptChunk);
 
-            inst?.Execute(instruction, memory);
+            inst?.Execute(instruction, vm);
         }
     }
 }
