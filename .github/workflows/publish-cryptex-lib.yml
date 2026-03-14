@@ -69,7 +69,6 @@ jobs:
                 --title "Release ${{ inputs.release-tag-name }}" \
                 --generate-notes
             fi
-            # Flag that we actually created it during this run
             echo "created_new=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -78,7 +77,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: create-release-tag
     strategy:
-      # If one matrix job fails, cancel the rest to speed up cleanup
       fail-fast: true
       matrix:
         include:
@@ -91,7 +89,7 @@ jobs:
           - os: macos-latest
             rid: osx-arm64
             ext: .dylib
-          - os: macos-13
+          - os: macos-15-intel
             rid: osx-x64
             ext: .dylib
     steps:
@@ -122,16 +120,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         shell: bash
-        # Added --clobber to overwrite the file if uploading to a pre-existing release
         run: |
           gh release upload ${{ inputs.release-tag-name }} "./publish-folder/out/MyLibrary-${{ matrix.rid }}${{ matrix.ext }}" --clobber
 
   cleanup-failed-release:
     runs-on: ubuntu-latest
     name: Cleanup on Failure
-    # Needs both to run after they are done, but evaluates success/failure logic in the `if` statement
     needs: [ create-release-tag, publish-aot ]
-    # Only run if a previous job failed, AND the create-release-tag job was successful, AND we actually created a new release
     if: ${{ failure() && needs.create-release-tag.result == 'success' && needs.create-release-tag.outputs.release_created == 'true' }}
     
     steps:
