@@ -1,4 +1,4 @@
-﻿name: publish-cryptex-lib.yml
+﻿name: Publish Cryptex Lib
 
 on:
   workflow_dispatch:
@@ -7,13 +7,21 @@ on:
         description: 'Tag name for the release (e.g., v1.0.0)'
         required: true
         type: string
+      is-prerelease:
+        description: 'Mark as pre-release? (e.g. beta, rc)'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+  security-events: write
+  actions: read
 
 jobs:
   pre-publish:
     runs-on: ubuntu-latest
+    name: Pre-publish
     container: mcr.microsoft.com/dotnet/sdk:10.0
 
     steps:
@@ -26,19 +34,49 @@ jobs:
           solution_name: 'Cryptex'
           reports_path: 'linter-reports'
 
-      - name: Create GitHub Release using Official GitHub CLI
+  create-release-tag:
+    runs-on: ubuntu-latest
+    name: Create release tag
+    needs: pre-publish
+    outputs:
+      release_created: ${{ steps.create_release.outputs.created_new }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create or Skip GitHub Release
+        id: create_release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
         run: |
-          gh release create ${{ inputs.release-tag-name }} \
-            --title "Release ${{ inputs.release-tag-name }}" \
-            --generate-notes
+          # Check if the release already exists
+          if gh release view "${{ inputs.release-tag-name }}" > /dev/null 2>&1; then
+            echo "Release ${{ inputs.release-tag-name }} already exists. Skipping creation."
+            echo "created_new=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Release does not exist. Creating..."
+            if [ "${{ inputs.is-prerelease }}" = "true" ]; then
+              gh release create ${{ inputs.release-tag-name }} \
+                --title "Release ${{ inputs.release-tag-name }}" \
+                --generate-notes \
+                --prerelease
+            else
+              gh release create ${{ inputs.release-tag-name }} \
+                --title "Release ${{ inputs.release-tag-name }}" \
+                --generate-notes
+            fi
+            echo "created_new=true" >> "$GITHUB_OUTPUT"
+          fi
 
   publish-aot:
     name: Publish for ${{ matrix.os }} (${{ matrix.rid }})
     runs-on: ${{ matrix.os }}
-    needs: pre-publish
+    needs: create-release-tag
     strategy:
+      fail-fast: true
       matrix:
         include:
           - os: windows-latest
@@ -50,7 +88,7 @@ jobs:
           - os: macos-latest
             rid: osx-arm64
             ext: .dylib
-          - os: macos-13
+          - os: macos-15-intel
             rid: osx-x64
             ext: .dylib
     steps:
@@ -68,16 +106,34 @@ jobs:
 
       - name: Publish Cryptex
         run: |
-          dotnet publish Cryptex/Cryptex.csproj -c Release -r ${{ matrix.rid }} -p:PublishAOT=true -p:TreatWarningsAsErrors:true --output ./publish-folder/${{ matrix.rid }}
+          dotnet publish Cryptex/Cryptex.csproj -c Release -r ${{ matrix.rid }} -p:PublishAOT=true -p:TreatWarningsAsErrors=true --output ./publish-folder/${{ matrix.rid }}
 
       - name: Rename library for release
         shell: bash
         run: |
-          mv "./publish-folder/${{ matrix.rid }}/Cryptex${{ matrix.ext }}" "./publish-folder/out/MyLibrary-${{ matrix.rid }}${ext}"
+          mkdir -p ./publish-folder/out
+          mv "./publish-folder/${{ matrix.rid }}/Cryptex${{ matrix.ext }}" "./publish-folder/out/MyLibrary-${{ matrix.rid }}${{ matrix.ext }}"
 
       - name: Upload to GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         shell: bash
         run: |
-          gh release upload ${{ inputs.release-tag-name }} "./publish-folder/MyLibrary-${{ matrix.rid }}${{ matrix.ext }}"
+          gh release upload ${{ inputs.release-tag-name }} "./publish-folder/out/MyLibrary-${{ matrix.rid }}${{ matrix.ext }}" --clobber
+
+  cleanup-failed-release:
+    runs-on: ubuntu-latest
+    name: Cleanup on Failure
+    needs: [ create-release-tag, publish-aot ]
+    if: ${{ failure() && needs.create-release-tag.result == 'success' && needs.create-release-tag.outputs.release_created == 'true' }}
+    
+    steps:
+      - name: Delete Failed Release and Tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          echo "Workflow failed during matrix publish. Rolling back release ${{ inputs.release-tag-name }}..."
+          gh release delete "${{ inputs.release-tag-name }}" --cleanup-tag --yes
