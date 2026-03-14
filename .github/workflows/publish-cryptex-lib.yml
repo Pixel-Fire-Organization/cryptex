@@ -60,7 +60,7 @@ jobs:
   publish-aot:
     name: Publish for ${{ matrix.os }} (${{ matrix.rid }})
     runs-on: ${{ matrix.os }}
-    needs: pre-publish
+    needs: create-release-tag
     strategy:
       matrix:
         include:
