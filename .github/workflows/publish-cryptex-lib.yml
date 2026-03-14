@@ -21,6 +21,7 @@ permissions:
 jobs:
   pre-publish:
     runs-on: ubuntu-latest
+    name: Pre-publish
     container: mcr.microsoft.com/dotnet/sdk:10.0
 
     steps:
@@ -33,14 +34,28 @@ jobs:
           solution_name: 'Cryptex'
           reports_path: 'linter-reports'
 
+  create-release-tag:
+    runs-on: ubuntu-latest
+    name: Create release tag
+    needs: pre-publish
+    
+    steps:
       - name: Create GitHub Release using Official GitHub CLI
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
         run: |
-          gh release create ${{ inputs.release-tag-name }} \
-            --title "Release ${{ inputs.release-tag-name }}" \
-            --generate-notes \
-            ${{ inputs.is-prerelease && '--prerelease' || '' }}
+            if[ "${{ inputs.is-prerelease }}" = "true" ]; then
+              gh release create ${{ inputs.release-tag-name }} \
+                --title "Release ${{ inputs.release-tag-name }}" \
+                --generate-notes \
+                --prerelease
+            else
+              gh release create ${{ inputs.release-tag-name }} \
+                --title "Release ${{ inputs.release-tag-name }}" \
+                --generate-notes
+            fi
 
   publish-aot:
     name: Publish for ${{ matrix.os }} (${{ matrix.rid }})
@@ -62,9 +77,6 @@ jobs:
             rid: osx-x64
             ext: .dylib
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Setup .NET 10
         uses: actions/setup-dotnet@v4
         with:
@@ -86,6 +98,7 @@ jobs:
       - name: Upload to GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         shell: bash
         run: |
           gh release upload ${{ inputs.release-tag-name }} "./publish-folder/MyLibrary-${{ matrix.rid }}${{ matrix.ext }}"
