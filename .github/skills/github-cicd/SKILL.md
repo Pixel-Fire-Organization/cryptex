@@ -1,8 +1,12 @@
 ---
-applyTo: ".github/workflows/**,.github/actions/**"
+name: github-cicd
+description: Guides creating and modifying GitHub Actions workflows and composite actions for the Cryptex repository. Use when adding new CI/CD pipelines, updating existing workflows, or authoring reusable composite actions.
+metadata:
+  author: Pixel-Fire-Organization
+  version: "1.0"
 ---
 
-# Skill: GitHub CI/CD for Cryptex
+# GitHub CI/CD for Cryptex
 
 Follow this guide when creating or modifying GitHub Actions workflows and composite actions in this repository.
 

@@ -1,8 +1,12 @@
 ---
-applyTo: "**/*.cs"
+name: write-csharp-code
+description: Provides C# coding conventions and standards for the Cryptex repository. Use when writing, modifying, or reviewing C# source files to ensure consistency with the established style, naming, and architectural rules.
+metadata:
+  author: Pixel-Fire-Organization
+  version: "1.0"
 ---
 
-# Skill: Write C# Code for Cryptex
+# Write C# Code for Cryptex
 
 Follow these conventions precisely when writing or modifying C# code in this repository.
 

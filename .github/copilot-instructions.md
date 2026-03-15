@@ -94,10 +94,10 @@ dotnet publish Cryptex/Cryptex.csproj -c Release -r linux-x64 -p:PublishAOT=true
 
 | File | Purpose |
 |------|---------|
-| `.github/instructions/create-new-instruction.instructions.md` | How to add a new VM instruction |
-| `.github/instructions/write-csharp-code.instructions.md` | C# coding standards for this repo |
-| `.github/instructions/write-unit-tests.instructions.md` | How to write xUnit tests for instructions |
-| `.github/instructions/github-cicd.instructions.md` | CI/CD workflow authoring guidance |
+| `.github/skills/create-new-instruction/SKILL.md` | How to add a new VM instruction |
+| `.github/skills/write-csharp-code/SKILL.md` | C# coding standards for this repo |
+| `.github/skills/write-unit-tests/SKILL.md` | How to write xUnit tests for instructions |
+| `.github/skills/github-cicd/SKILL.md` | CI/CD workflow authoring guidance |
 | `.github/prompts/build-project.prompt.md` | Prompt to build the project |
 | `.github/prompts/test-project.prompt.md` | Prompt to run all tests |
 | `.github/prompts/code-review.prompt.md` | Prompt to perform a code review |

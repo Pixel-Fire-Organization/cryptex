@@ -1,8 +1,12 @@
 ---
-applyTo: "**/*.Test/**,**/*Test.cs,**/*Tests.cs"
+name: write-unit-tests
+description: Guides writing xUnit unit tests for Cryptex VM instructions. Use when creating or updating test files in the Cryptex.Test project, or when asked to add tests for an instruction.
+metadata:
+  author: Pixel-Fire-Organization
+  version: "1.0"
 ---
 
-# Skill: Write Unit Tests for Cryptex
+# Write Unit Tests for Cryptex
 
 Follow this guide when writing or updating xUnit tests in the `Cryptex.Test` project.
 

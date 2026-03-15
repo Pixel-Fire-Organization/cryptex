@@ -1,8 +1,12 @@
 ---
-applyTo: "**"
+name: create-new-instruction
+description: Guides adding a brand-new opcode/instruction to the Cryptex VM. Use when the user asks to add, implement, or create a new VM instruction, opcode, or operation.
+metadata:
+  author: Pixel-Fire-Organization
+  version: "1.0"
 ---
 
-# Skill: Create a New Instruction
+# Create a New Instruction
 
 Use this skill when adding a brand-new opcode/instruction to the Cryptex VM.
 
