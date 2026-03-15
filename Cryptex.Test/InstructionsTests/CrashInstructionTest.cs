@@ -1,4 +1,5 @@
 ﻿using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
 
@@ -7,7 +8,7 @@ public sealed class CrashInstructionTest
     [Fact]
     public void TestCrash_MemoryAddress()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Crash, "$1") });
+        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Crash, "$1") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
@@ -17,7 +18,7 @@ public sealed class CrashInstructionTest
     [Fact]
     public void TestCrash_HexValue()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Crash, "%7f") });
+        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Crash, "%7f") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
@@ -27,7 +28,7 @@ public sealed class CrashInstructionTest
     [Fact]
     public void TestCrash_IntegerAddress()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Crash, "#2000") });
+        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Crash, "#2000") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
@@ -37,7 +38,7 @@ public sealed class CrashInstructionTest
     [Fact]
     public void TestCrash_InvalidErrorCode()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Crash, "#80000") });
+        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Crash, "#80000") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);

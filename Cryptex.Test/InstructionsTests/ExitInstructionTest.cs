@@ -1,4 +1,5 @@
 ﻿using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
 
@@ -7,7 +8,7 @@ public sealed class ExitInstructionTest
     [Fact]
     public void TestExit_IntegerExitCode()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Exit, "#0") });
+        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Exit, "#0") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
@@ -18,7 +19,7 @@ public sealed class ExitInstructionTest
     [Fact]
     public void TestExit_HexExitCode()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Exit, "%7f") });
+        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Exit, "%7f") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);
@@ -29,7 +30,7 @@ public sealed class ExitInstructionTest
     [Fact]
     public void TestExit_ExitCodeInMemory()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Exit, "$25") });
+        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Exit, "$25") });
         Script      script    = new Script("script", new[] { mainChunk });
 
         Executor executor = new Executor(script);

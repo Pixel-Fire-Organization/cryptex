@@ -11,6 +11,7 @@ modImm $A, X
 Performs the modulo operation on `$A` with the constant `X`. Stores the result in `$A`.
 
 ### Remarks
+
 Both must be integer.
 
 `$A = [$A] % [X]`

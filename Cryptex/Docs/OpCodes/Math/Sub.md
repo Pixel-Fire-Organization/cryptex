@@ -11,6 +11,7 @@ sub $A, $B
 Subtracts two integer values at `$A` and `$B`. Stores the result in `$A`.
 
 ### Remarks
+
 `$A = [$A] - [$B]`
 
 ## Example

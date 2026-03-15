@@ -11,6 +11,7 @@ mulImm $A, X
 Multiplies integer value at `$A` and constant `X`. Stores the result in `$A`.
 
 ### Remarks
+
 `$A = [$A] * [X]`
 
 ## Example

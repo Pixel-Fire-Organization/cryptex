@@ -74,5 +74,5 @@ public enum OpCodes : byte
     Read,
     ReadLine,
     Random,
-    RandomF,
+    RandomF
 }

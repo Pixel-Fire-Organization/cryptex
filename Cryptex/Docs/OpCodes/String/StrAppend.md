@@ -1,7 +1,7 @@
 ﻿# StrAppend
 
 > [!IMPORTANT]
-> This API is still in the planning phase and may change in the future. 
+> This API is still in the planning phase and may change in the future.
 
 ## Signature
 
@@ -16,6 +16,7 @@ Appends the string in `$B` to the end of the string in `$A`.
 ### Remarks
 
 Valid operation:
+
 - `$A` - must be a string.
 - `$B` - must be a string.
 

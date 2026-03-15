@@ -3,22 +3,22 @@ using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts;
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject(true)]
 public sealed class ScriptChunk
 {
-    public ScriptInstruction[] Instructions { get; set; }
-    public string ChunkName { get; set; }
-
     public ScriptChunk(string chunkName, ScriptInstruction[] instructions)
     {
         ChunkName = chunkName;
 
         Instructions = new ScriptInstruction[instructions.Length];
-        for (int i = 0; i < instructions.Length; i++)
+        for (var i = 0; i < instructions.Length; i++)
         {
             Instructions[i] = instructions[i];
         }
     }
+
+    public ScriptInstruction[] Instructions { get; set; }
+    public string ChunkName { get; set; }
 
     internal void Execute(Executor vm)
     {

@@ -1,4 +1,8 @@
 ﻿using Cryptex.VM.Execution.Instructions;
+using Cryptex.VM.Execution.Instructions.BitwiseInstructions;
+using Cryptex.VM.Execution.Instructions.MathInstructions;
+using Cryptex.VM.Execution.Instructions.MemoryInstructions;
+using Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 namespace Cryptex.VM.Execution;
 
@@ -9,54 +13,54 @@ internal static class OpCodesExtensions
         switch (code)
         {
             case OpCodes.Term:
-                break;
+                return new TermInstruction();
             case OpCodes.Nop:
-                break;
+                return new NopInstruction();
             case OpCodes.Exit:
-                break;
+                return new ExitInstruction();
             case OpCodes.Crash:
-                break;
-            
+                return new CrashInstruction();
+
             case OpCodes.Inc:
-                break;
+                return new IncInstruction();
             case OpCodes.Dec:
-                break;
-            
+                return new DecInstruction();
+
             case OpCodes.IncF:
-                break;
+                return new IncFInstruction();
             case OpCodes.DecF:
-                break;
-            
+                return new DecFInstruction();
+
             case OpCodes.Add:
-                break;
+                return new AddInstruction();
             case OpCodes.Sub:
-                break;
+                return new SubInstruction();
             case OpCodes.Mul:
-                break;
+                return new MulInstruction();
             case OpCodes.Div:
-                break;
-            
+                return new DivInstruction();
+
             case OpCodes.AddF:
-                break;
+                return new AddFInstruction();
             case OpCodes.SubF:
-                break;
+                return new SubFInstruction();
             case OpCodes.MulF:
-                break;
+                return new MulFInstruction();
             case OpCodes.DivF:
-                break;
+                return new DivFInstruction();
 
             case OpCodes.Mod:
-                break;
-            
+                return new ModInstruction();
+
             case OpCodes.Load:
-                break;
+                return new LoadInstruction();
             case OpCodes.Free:
-                break;
+                return new FreeInstruction();
             case OpCodes.Reg:
                 break;
             case OpCodes.UnReg:
                 break;
-            
+
             case OpCodes.Arg:
                 break;
             case OpCodes.Exec:
@@ -67,7 +71,7 @@ internal static class OpCodesExtensions
                 break;
             case OpCodes.Res:
                 break;
-            
+
             case OpCodes.Cmp:
                 break;
             case OpCodes.Jmp:
@@ -84,20 +88,20 @@ internal static class OpCodesExtensions
                 break;
             case OpCodes.Jle:
                 break;
-            
+
             case OpCodes.Shl:
-                break;
+                return new ShlInstruction();
             case OpCodes.Shr:
-                break;
+                return new ShrInstruction();
             case OpCodes.And:
-                break;
+                return new AndInstruction();
             case OpCodes.Or:
-                break;
+                return new OrInstruction();
             case OpCodes.Xor:
-                break;
+                return new XorInstruction();
             case OpCodes.Not:
-                break;
-            
+                return new NotInstruction();
+
             case OpCodes.ArrAccess:
                 break;
             case OpCodes.ArrCreate:
@@ -108,7 +112,7 @@ internal static class OpCodesExtensions
                 break;
             case OpCodes.ArrSet:
                 break;
-            
+
             case OpCodes.StrCreate:
                 break;
             case OpCodes.StrSub:
@@ -121,7 +125,7 @@ internal static class OpCodesExtensions
                 break;
             case OpCodes.StrChar:
                 break;
-            
+
             case OpCodes.Print:
                 break;
             case OpCodes.Read:
@@ -132,7 +136,7 @@ internal static class OpCodesExtensions
                 break;
             case OpCodes.RandomF:
                 break;
-            
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(code), code, "Invalid opcode specified or it wasn't added!");
         }

@@ -3,9 +3,9 @@
 public enum ErrorCodes
 {
     SYS0000_ErrorCodeNotFound = 0,
-    
+
     VM1000_NullEmptyStringForExternalFunction = 1000,
-    
+
     VM2000_NoChunkFoundToExecute = 2000,
     VM2001_WrongOpCodePassedForScriptOpCode,
     VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction,
@@ -19,7 +19,7 @@ public enum ErrorCodes
     VM2010_HexArgumentCannotBeAFloatingPointNumber,
     VM2011_InvalidDataTypeAtSpecifiedLocation,
     VM2012_InstructionArgumentIsOutOfRange,
-    VM2013_UnknownInstructionOverloadSpecified,
+    VM2013_UnknownInstructionOverloadSpecified
 }
 
 public static class ErrorCodesExtensions
@@ -30,10 +30,10 @@ public static class ErrorCodesExtensions
         {
             case ErrorCodes.SYS0000_ErrorCodeNotFound:
                 return "Error code is not found! Maybe the error code is not included with the other error messages? Code: ";
-            
+
             case ErrorCodes.VM1000_NullEmptyStringForExternalFunction:
                 return "Tried to invoke an external function, but provided name that is null or empty!";
-            
+
             case ErrorCodes.VM2000_NoChunkFoundToExecute:
                 return "Tried to execute a script chunk that doesn't exist!";
             case ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode:

@@ -1,7 +1,7 @@
 ﻿# StrChar
 
 > [!IMPORTANT]
-> This API is still in the planning phase and may change in the future. 
+> This API is still in the planning phase and may change in the future.
 
 ## Signature
 
@@ -16,6 +16,7 @@ Gets the character at position `X` of the string located in `$B` and places it i
 ### Remarks
 
 Valid operation:
+
 - `X` is between 0, string's length - 1.
 - `$B` - must be a string.
 
