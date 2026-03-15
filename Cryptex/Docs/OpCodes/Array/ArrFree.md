@@ -1,7 +1,7 @@
 ﻿# ArrFree
 
 > [!IMPORTANT]
-> This API is still in the planning phase and may change in the future. 
+> This API is still in the planning phase and may change in the future.
 
 ## Signature
 

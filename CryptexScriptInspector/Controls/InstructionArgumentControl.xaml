@@ -26,7 +26,7 @@
             <TextBlock Text="Content" VerticalAlignment="Center" Margin="0 0 5 0"/>
             <TextBox x:Name="tbContent" MinWidth="100px" MaxHeight="45px" materialDesign:TextFieldAssist.PrefixText="$" TextChanged="TbContent_OnTextChanged" IsEnabled="False">
                 <TextBox.Text>
-                    <Binding Path="Name"
+                    <Binding Path="ChunkName"
                              UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <local:InstructionArgumentContentValidationRule ValidatesOnTargetUpdated="True" />

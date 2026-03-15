@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Cryptex.Exceptions;
 using Cryptex.VM.Execution.Scripts;
 
@@ -7,10 +7,10 @@ namespace Cryptex.VM.Execution;
 public sealed class Executor
 {
     internal const int MAX_FUNCTION_ARGS = 16;
-    private readonly Script m_script;
     private readonly ExecutorMemory m_memory;
-    private bool m_vmExited;
+    private readonly Script m_script;
     private BigInteger m_exitCode = 0;
+    private bool m_vmExited;
 
     public Executor(Script script)
     {
@@ -19,14 +19,13 @@ public sealed class Executor
     }
 
     /// <summary>
-    /// Begins executing the specified script.
+    ///     Begins executing the specified script.
     /// </summary>
-    /// <returns>true - if the script executed successfully, false - otherwise.</returns>
+    /// <returns><see langword="true" /> if the script executed successfully; <see langword="false" /> otherwise.</returns>
     public bool BeginExecution()
     {
         try
         {
-            //Will start to execute at the chunk with name "main" -- will error if it is not present.
             m_script.Execute(this);
         }
         catch (VMRuntimeException ex)
@@ -70,7 +69,11 @@ public sealed class Executor
 
     public BigInteger GetExitCode() => m_exitCode;
 
-    public string? GetValueInMemory(int location) => m_memory.GetSlot(location);
+    /// <summary>
+    ///     Returns the <see cref="VMValue" /> stored in memory slot <paramref name="location" />,
+    ///     or <see cref="VMValue.Undefined" /> if the slot has never been written.
+    /// </summary>
+    public VMValue GetValueInMemory(int location) => m_memory.GetSlot(location);
 
     internal void ExitInstructionCall(BigInteger code)
     {
@@ -79,4 +82,43 @@ public sealed class Executor
     }
 
     internal bool HasExitBeenCalled() => m_vmExited;
+
+    /// <summary>
+    ///     Resolves a constant by <paramref name="index" />, returning a raw
+    ///     <see cref="VMValue" /> (which may be <see cref="VMValueKind.Error" />).
+    /// </summary>
+    /// <remarks>
+    ///     Lookup order:
+    ///     <list type="number">
+    ///         <item>The instruction's <see cref="Scripts.ScriptInstruction.LocalConstants" /> (from the convenience string constructor).</item>
+    ///         <item>The script-level <see cref="ConstantsBlock" /> (from binary <c>.script</c> files).</item>
+    ///     </list>
+    /// </remarks>
+    internal VMValue GetConstant(in ScriptInstruction instruction, int index)
+    {
+        if (instruction.LocalConstants is { } local && (uint)index < (uint)local.Length)
+            return local[index];
+
+        return m_script.ConstantsBlock.Get(index);
+    }
+
+    /// <summary>
+    ///     Resolves a constant and throws immediately if it carries a deferred parse error.
+    ///     Use this inside instruction <c>Execute</c> methods for all constant lookups.
+    /// </summary>
+    /// <exception cref="VMRuntimeException">
+    ///     Thrown with the deferred <see cref="ErrorCodes" /> when the constant is a
+    ///     <see cref="VMValueKind.Error" /> value, or with
+    ///     <see cref="ErrorCodes.VM2012_InstructionArgumentIsOutOfRange" /> when the index is
+    ///     out of range.
+    /// </exception>
+    internal VMValue GetConstantOrThrow(in ScriptInstruction instruction, int index)
+    {
+        var val = GetConstant(in instruction, index);
+
+        if (val.IsError)
+            throw new VMRuntimeException(val.ErrorCode);
+
+        return val;
+    }
 }

@@ -11,6 +11,7 @@ dec $A
 Decrements an integer at `$A`.
 
 ### Remarks
+
 `$A = [$A] - 1`
 
 ## Example

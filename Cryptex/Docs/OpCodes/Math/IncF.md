@@ -11,6 +11,7 @@ incF $A
 Increments a floating value at `$A`.
 
 ### Remarks
+
 `$A = [$A] + 1`
 
 ## Example

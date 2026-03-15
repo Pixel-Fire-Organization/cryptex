@@ -11,6 +11,7 @@ mod $A, $B
 Performs the modulo operation on `$A` with `$B`. Stores the result in `$A`.
 
 ### Remarks
+
 Both must be integer.
 
 `$A = [$A] % [$B]`

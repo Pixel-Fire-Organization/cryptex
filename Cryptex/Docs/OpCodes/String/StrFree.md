@@ -1,7 +1,7 @@
 ﻿# StrFree
 
 > [!IMPORTANT]
-> This API is still in the planning phase and may change in the future. 
+> This API is still in the planning phase and may change in the future.
 
 ## Signature
 
@@ -12,6 +12,7 @@ strfree $A
 ## Description
 
 Valid operation:
+
 - `$A` - must be a string.
 
 Deletes string in location `$A`
