@@ -26,19 +26,40 @@ Follow this guide when writing or updating xUnit tests in the `Cryptex.Test` pro
 | Namespace | `Cryptex.Test.InstructionsTests` |
 | Test method name | `Test<Instruction>_<Scenario>` (e.g., `TestAdd_CorrectValues`) |
 
+## Script Model Overview
+
+Scripts are built from structured objects — not text strings:
+
+- `ScriptInstruction(OpCodes code, ScriptInstructionArgument[] args)` — represents a single instruction.
+- `ScriptInstructionArgument(int value, InstructionArgumentType type)` — a typed argument.
+  - `InstructionArgumentType.MemoryAddress` — `value` is the memory slot index (e.g., `1` for `$1`).
+  - `InstructionArgumentType.Constant` — `value` is the index into the script's constants table.
+  - `InstructionArgumentType.Label` — `value` is the index into the jump block.
+  - `InstructionArgumentType.Empty` — no argument (use `ScriptInstructionArgument.DEFAULT`).
+- `ScriptChunk(string chunkName, ScriptInstruction[] instructions)`
+- `Script(string scriptName, ScriptChunk[] chunks)`
+
 ## Standard Test Pattern
 
 Every instruction test follows this four-step pattern:
 
 ```csharp
 // 1. Build script
-ScriptChunk mainChunk = new ScriptChunk("main", new[]
-{
-    new ScriptChunkOpCode(OpCodes.Load, "$1, #5"),
-    new ScriptChunkOpCode(OpCodes.Load, "$2, #6"),
-    new ScriptChunkOpCode(OpCodes.Add,  "$1, $2"),
-});
-Script script = new Script("script", new[] { mainChunk });
+ScriptInstruction[] instructions =
+[
+    new ScriptInstruction(OpCodes.LoadImm,
+        [new ScriptInstructionArgument(1, InstructionArgumentType.MemoryAddress),
+         new ScriptInstructionArgument(5, InstructionArgumentType.Constant)]),
+    new ScriptInstruction(OpCodes.LoadImm,
+        [new ScriptInstructionArgument(2, InstructionArgumentType.MemoryAddress),
+         new ScriptInstructionArgument(6, InstructionArgumentType.Constant)]),
+    new ScriptInstruction(OpCodes.Add,
+        [new ScriptInstructionArgument(1, InstructionArgumentType.MemoryAddress),
+         new ScriptInstructionArgument(2, InstructionArgumentType.MemoryAddress)]),
+];
+
+ScriptChunk mainChunk = new ScriptChunk("main", instructions);
+Script script = new Script("script", [mainChunk]);
 
 // 2. Execute
 Executor executor = new Executor(script);
@@ -60,10 +81,10 @@ Each instruction (and each variant, e.g., `Add` and `AddF`) must have tests for:
 | Scenario | Expected `BeginExecution()` result | Notes |
 |----------|------------------------------------|-------|
 | Correct values (happy path) | `true` | Verify output memory slot(s) |
-| Wrong argument type (e.g., literal `#n` where `$slot` expected) | `false` | Memory unchanged |
+| Wrong argument type (e.g., `Constant` where `MemoryAddress` is expected) | `false` | Memory unchanged |
 | Too few arguments | `false` | Memory unchanged |
 | Too many arguments | `false` | Memory unchanged |
-| No arguments (empty string) | `false` | Memory unchanged |
+| No arguments (empty args array) | `false` | Memory unchanged |
 | Instruction-specific edge cases | varies | e.g., division by zero, overflow |
 
 ## Naming Test Methods
@@ -81,10 +102,9 @@ TestAdd_NoArguments
 
 ## Memory Slot Conventions
 
-- Memory slots are referenced as `$<n>` (e.g., `$1`, `$2`) in script arguments.
-- Literal integer values are prefixed with `#` (e.g., `#5`, `#42`).
-- Literal float values use `.` decimal separator (e.g., `#5.25`).
+- Memory slots are addressed by integer index (e.g., slot `1`, slot `2`) in `ScriptInstructionArgument`.
 - `GetValueInMemory(int)` returns the slot value as a `string?`; always assert `NotNull` before asserting the value.
+- Integer results are returned as decimal strings (e.g., `"11"`).
 - Float results are formatted to two decimal places (e.g., `"11.50"`).
 
 ## GlobalUsings
@@ -103,3 +123,4 @@ dotnet test --configuration Release --filter "FullyQualifiedName~AddInstructionT
 # Run a single test method
 dotnet test --configuration Release --filter "FullyQualifiedName~AddInstructionTest.TestAdd_CorrectValues"
 ```
+

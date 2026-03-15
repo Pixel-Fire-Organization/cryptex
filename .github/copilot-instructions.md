@@ -13,19 +13,43 @@ Cryptex is a .NET 8.0 virtual machine (VM) and scripting engine library written 
 
 ### Core VM (`Cryptex/VM/`)
 
-- **`Execution/`** — `Executor`, `ExecutorMemory`, `Script`, `ScriptChunk`, `ScriptChunkOpCode`, `OpCodes`
-- **`Execution/Instructions/`** — Modular instruction implementations grouped by category:
-  - `MathInstructions/` — `Add`, `Sub`, `Mul`, `Div`, `Inc`, `Dec` (and float variants `AddF`, `SubF`, etc.)
+- **`Execution/`** — `Executor`, `ExecutorMemory`, `OpCodes`, `OpCodesExtensions`
+- **`Execution/Scripts/`** — Script model:
+  - `Script` — top-level container (`[MessagePackObject]`), holds `ScriptChunk[]`, `ScriptName`, `EntryPointName`, `VMVersion`
+  - `ScriptChunk` — named block of `ScriptInstruction[]`
+  - `ScriptInstruction` — a single opcode + `ScriptInstructionArgument[]`
+  - `ScriptInstructionArgument` — typed argument: `Value` (int) + `InstructionArgumentType` (`Empty`, `Constant`, `MemoryAddress`, `Label`)
+  - `Loaders/ScriptFileLoader` — deserializes binary MessagePack `.script` files
+- **`Execution/Instructions/`** — All instructions implement `IInstruction` (`OpCode` property + `Execute(ScriptInstruction, Executor)` method), grouped by category:
+  - `MathInstructions/` — `Add`, `Sub`, `Mul`, `Div`, `Inc`, `Dec` (and float variants `AddF`, `SubF`, etc.; and immediate variants `AddImm`, `SubImm`, `MulImm`, `DivImm`, `Mod`, `ModImm`)
   - `BitwiseInstructions/` — `And`, `Or`, `Xor`, `Not`, `Shl`, `Shr`
-  - `MemoryInstructions/` — `Load`, `Free`
-  - `VMControlInstructions/` — `Nop`, `Exit`, `Crash`, `Term`
+  - `MemoryInstructions/` — `Load`, `LoadImm`, `Free`, `Reg`, `UnReg`
+  - `VMControlInstructions/` — `Nop`, `Exit`, `Crash`, `Term`, `GetError`
+  - `FunctionInstructions/` — `Arg`, `Exec`, `Call`, `Ret`, `Res`
+  - `LogicInstructions/` — `Cmp`, `Jmp`, `Jeq`, `Jnq`, `Jls`, `Jgr`, `Jge`, `Jle`
 - **`ExternalExecutor/`** — Delegate-based external function integration
-- **`Loaders/`** — `ScriptFileLoader` for loading `.script` files
-- **`DataTypes/`** — Type system helpers: `ArrayTypeHelper`, `CryptexDataConverter`
+- **Argument notation** (used in opcode docs and assembly):
+  - `X, Y, Z` — constants fetched from the **Constants Block** (integer index into the script's constant table)
+  - `$A, $B, $C` — memory address arguments (`InstructionArgumentType.MemoryAddress`)
+  - `L` — label fetched from the **Jump Block** (`InstructionArgumentType.Label`)
+- **VM Flags** — two runtime flags managed by the executor:
+  - `Compare` — set by `cmp`; read and cleared by jump instructions; values: `None`, `Equals`, `NotEquals`, `Greater`, `Less`, `GreaterEquals`, `LessEquals`
+  - `Error` — set by any instruction on data error; cleared/transferred to memory by `geterror`
+
+### Serialization
+- Scripts are serialized/deserialized using **MessagePack** (`MessagePack` NuGet package v3.1.4).
+- All script model classes carry `[MessagePackObject(keyAsPropertyName: true)]` attributes.
+- Use `ScriptFileLoader.LoadScript(byte[])` or `ScriptFileLoader.LoadScript(string path)` to load scripts.
+
+### Documentation
+- `Cryptex/Docs/` — per-opcode Markdown reference pages, organized by category (VM, Math, Memory, Bitwise, Logic, Function, String, Array).
+- `Cryptex/Docs/OpCodes/OpCodes.md` — master opcode table with implementation status and VM version.
+- `Cryptex/Docs/VM/VM Flags.md` — flag lifecycle documentation.
+- `Cryptex/Docs/ErrorCodes.md` — all VM error codes and their messages.
 
 ### Error Handling
-- `ErrorCodes.cs` — VM error code enumeration
-- `Exceptions/` — Custom exceptions: `VMRuntimeException`, `InvalidDataType`, `TerminateInstructionFoundException`
+- `ErrorCodes.cs` — VM error code enumeration (e.g., `VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction`)
+- `Exceptions/` — Custom exceptions: `VMRuntimeException`, `InvalidDataType`, `TerminateInstructionFoundException`, `RequiredMessageNotFoundException`
 
 ## Technology Stack
 
@@ -35,6 +59,7 @@ Cryptex is a .NET 8.0 virtual machine (VM) and scripting engine library written 
 | SDK | .NET 10.0 SDK (build/CI) |
 | Test Framework | xUnit 2.9.3 |
 | Test Coverage | coverlet.collector |
+| Serialization | MessagePack v3.1.4 (binary script format) |
 | GUI | WPF (Windows-only) |
 | Code Quality | JetBrains ReSharper InspectCode, `.editorconfig` |
 | CI/CD | GitHub Actions |
@@ -69,7 +94,7 @@ Cryptex is a .NET 8.0 virtual machine (VM) and scripting engine library written 
 
 - Every instruction (opcode) has a dedicated test class in `Cryptex.Test/InstructionsTests/`.
 - Test class naming: `<Instruction>InstructionTest` (e.g., `AddInstructionTest`).
-- Tests construct a `ScriptChunk`, build a `Script`, create an `Executor`, call `BeginExecution()`, and assert on memory slot values via `GetValueInMemory(int)`.
+- Tests construct `ScriptInstruction[]` (with `ScriptInstructionArgument[]`), build a `ScriptChunk` and `Script`, create an `Executor`, call `BeginExecution()`, and assert on memory slot values via `GetValueInMemory(int)`.
 - Each instruction is tested for: correct values, wrong argument types, too few arguments, too many arguments, and no arguments.
 - Use `Assert.True`/`Assert.False` for `BeginExecution()` return value; use `Assert.Equal` for memory slot content (always strings).
 - No mocking frameworks are used — tests exercise the real VM.

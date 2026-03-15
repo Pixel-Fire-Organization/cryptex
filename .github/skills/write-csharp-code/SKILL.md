@@ -53,6 +53,13 @@ Follow these conventions precisely when writing or modifying C# code in this rep
 - Braces on their own lines (Allman style).
 - Unsafe code is permitted only in `Cryptex/Cryptex.csproj` where `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>` is set.
 
+## Serialization (MessagePack)
+
+- Script model classes (`Script`, `ScriptChunk`, `ScriptInstruction`, `ScriptInstructionArgument`) are serialized with **MessagePack**.
+- Annotate serializable classes with `[MessagePackObject(keyAsPropertyName: true)]`.
+- Properties that must not be serialized carry `[IgnoreMember]`.
+- Do not add new serialization attributes unless a type is part of the binary script format.
+
 ## Numeric Types
 
 - Use `BigInteger` (from `System.Numerics`) for integer memory values in the VM — this is the established convention.
