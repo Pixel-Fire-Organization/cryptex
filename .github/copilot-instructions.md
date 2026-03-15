@@ -78,6 +78,47 @@ Cryptex is a .NET 8.0 virtual machine (VM) and scripting engine library written 
 - Instruction classes follow a consistent single-responsibility pattern — one class per opcode variant.
 - All code style rules are enforced via `.editorconfig`.
 
+### SOLID Design
+
+All C# code in `Cryptex` must follow SOLID principles:
+
+- **Single Responsibility** — each class has exactly one reason to change. Instruction classes encapsulate exactly one opcode's behaviour.
+- **Open/Closed** — add new behaviour by adding new classes; do not modify existing instruction implementations to support unrelated operations.
+- **Liskov Substitution** — every `IInstruction` implementation must be substitutable for any other; the executor must not down-cast or type-check instances.
+- **Interface Segregation** — `IInstruction` is intentionally minimal (`OpCode` + `Execute`). Do not bloat it.
+- **Dependency Inversion** — instructions depend on `Executor` (abstraction), not on concrete memory dictionaries or internal VM state directly.
+
+### AOT Compatibility
+
+The `Cryptex` library is published with Native AOT (`dotnet publish -p:PublishAOT=true`). The following are **strictly forbidden**:
+
+- `System.Reflection` APIs (`Type.GetMethod`, `MethodInfo.Invoke`, `Activator.CreateInstance`, etc.)
+- `dynamic` keyword
+- `System.Reflection.Emit` (no runtime IL generation)
+- `System.Linq.Expressions` that compile to delegates at runtime
+- Unbound generic type operations that cannot be resolved at compile time
+- Any attribute or API that requires a runtime metadata manifest not trimmed by the AOT linker
+
+When in doubt, check whether the API is tagged `[RequiresUnreferencedCode]` or `[RequiresDynamicCode]` in the .NET docs — if it is, do not use it.
+
+### Instruction Reuse and Composition
+
+**Never add a new opcode to implement a compound operation** that can already be expressed using existing opcodes. The VM instruction set is intentionally minimal; complex algorithms must be composed from primitives.
+
+> ✅ Correct — sum 10 elements: use `load`, `add`, `jmp`  
+> ❌ Wrong — add a `SumArray` opcode to the VM
+
+When reviewing a proposed new opcode ask: *"Can this be achieved by sequencing existing instructions?"*. If yes, reject the new opcode and document the composition pattern instead.
+
+### Instruction Performance
+
+Instructions execute on every VM tick and lie in the hot path. Follow these rules:
+
+- **No allocations in `Execute`** — avoid `new`, LINQ, `string.Format`, or `StringBuilder` inside `Execute()`; pre-compute or cache anything reusable.
+- **No boxing** — do not cast value types to `object` inside `Execute()`.
+- **Parse once** — read and validate arguments at the top of `Execute()`; do not re-read them in multiple branches.
+- **Early exit on error** — throw `VMRuntimeException` as soon as invalid state is detected; do not continue partial execution.
+
 ## CI/CD Pipelines
 
 | Workflow | Trigger | Purpose |
@@ -111,9 +152,14 @@ dotnet build --configuration Release
 # Run all tests
 dotnet test --configuration Release
 
+# Final verification — build with TreatWarningsAsErrors to surface AOT and nullable warnings
+dotnet build --configuration Release -p:TreatWarningsAsErrors=true
+
 # AOT publish for a specific platform (example: linux-x64)
 dotnet publish Cryptex/Cryptex.csproj -c Release -r linux-x64 -p:PublishAOT=true -p:TreatWarningsAsErrors=true
 ```
+
+> **Important:** Always run the `TreatWarningsAsErrors` build as the final step before considering any C# change complete. AOT-incompatible APIs, unused nullability suppressions, and trim-unsafe calls will surface here and must be resolved before merging.
 
 ## Copilot Skills and Prompts Available
 

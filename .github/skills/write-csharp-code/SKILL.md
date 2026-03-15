@@ -60,6 +60,59 @@ Follow these conventions precisely when writing or modifying C# code in this rep
 - Properties that must not be serialized carry `[IgnoreMember]`.
 - Do not add new serialization attributes unless a type is part of the binary script format.
 
+## SOLID Design Principles
+
+Every C# class in this repository must follow SOLID:
+
+| Principle | Rule |
+|-----------|------|
+| **Single Responsibility** | Each class has exactly one reason to change. Instruction classes encapsulate exactly one opcode's behaviour. |
+| **Open/Closed** | Add new behaviour via new classes; never modify an existing instruction class to handle an unrelated opcode. |
+| **Liskov Substitution** | Every `IInstruction` implementation must be fully substitutable — the executor never down-casts or type-checks instances. |
+| **Interface Segregation** | `IInstruction` is intentionally minimal (`OpCode` + `Execute`). Do not add methods that only some instructions need. |
+| **Dependency Inversion** | Instructions depend on `Executor` (the abstraction); never reach into concrete internal state directly. |
+
+## AOT Compatibility
+
+The `Cryptex` library is published with **Native AOT** (`dotnet publish -p:PublishAOT=true`). The following constructs are **strictly forbidden** in the `Cryptex` project:
+
+### Forbidden
+
+- `System.Reflection` APIs — `Type.GetMethod()`, `MethodInfo.Invoke()`, `Activator.CreateInstance()`, `GetType().GetProperties()`, etc.
+- `dynamic` keyword
+- `System.Reflection.Emit` — no runtime IL generation
+- `System.Linq.Expressions` that compile delegates at runtime (`.Compile()`)
+- Unbound generic type lookups that cannot be resolved at compile time
+- Any API annotated `[RequiresUnreferencedCode]` or `[RequiresDynamicCode]` in the .NET documentation
+
+### Allowed
+
+- Generic type constraints resolved at compile time
+- `typeof(T)`, `nameof(...)`, `sizeof(T)`
+- `BitConverter` static methods
+- `Span<T>`, `ReadOnlySpan<T>`, `stackalloc`
+- Abstract classes and virtual dispatch (devirtualised by the AOT compiler)
+- `unsafe` code blocks (the project already enables `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>`)
+
+## Instruction Performance
+
+Instructions are on the VM hot path — called for every opcode executed. Keep `Execute()` lean:
+
+- **No allocations** — avoid `new`, LINQ, `string.Format`, or `StringBuilder` inside `Execute()`; pre-compute and cache anything reusable as `static readonly` fields on the instruction class.
+- **No boxing** — do not cast value types (e.g., `long`, `double`) to `object`.
+- **Parse arguments once** — read and validate `c.Args` at the top of `Execute()`, then operate; do not re-read in multiple branches.
+- **Early exit on error** — throw `VMRuntimeException` as soon as invalid state is detected; never continue after detecting an error.
+
+## Build Verification
+
+After any C# change, run the following as the **final verification step**:
+
+```bash
+dotnet build --configuration Release -p:TreatWarningsAsErrors=true
+```
+
+This surfaces AOT-incompatible API usage, nullable reference type warnings, and trim-unsafe calls. **Do not consider a C# change complete until this command passes with zero warnings.**
+
 ## Numeric Types
 
 - Use `BigInteger` (from `System.Numerics`) for integer memory values in the VM — this is the established convention.
@@ -68,6 +121,7 @@ Follow these conventions precisely when writing or modifying C# code in this rep
 ## Do Not
 
 - Do not add new NuGet packages without explicit approval.
-- Do not use `dynamic` or reflection unless absolutely necessary.
+- Do not use `dynamic`, reflection, or any AOT-incompatible API — see the **AOT Compatibility** section above for the full forbidden list.
 - Do not suppress nullable warnings with `!` unless the null-safety is provably guaranteed by surrounding logic.
 - Do not use `Console.Write*` in the `Cryptex` library project — use `PrintingDelegates` instead.
+- Do not skip the `TreatWarningsAsErrors` build verification step before finalising any change.

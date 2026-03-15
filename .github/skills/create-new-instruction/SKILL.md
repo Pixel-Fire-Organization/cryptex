@@ -10,6 +10,14 @@ metadata:
 
 Use this skill when adding a brand-new opcode/instruction to the Cryptex VM.
 
+> **Before adding a new opcode — ask yourself:** *"Can this operation be expressed by sequencing existing instructions?"*
+> If yes, **do not add a new opcode**. Document the composition pattern instead.
+>
+> ✅ Correct — sum 10 elements: compose `load`, `add`, `jmp`  
+> ❌ Wrong — add a `SumArray` opcode  
+>
+> The VM instruction set is intentionally minimal. New opcodes must represent operations that are **impossible** to achieve by composing existing primitives.
+
 ## Checklist
 
 1. **Define the opcode** in `Cryptex/VM/Execution/OpCodes.cs` — add a new enum member (`OpCodes : byte`) following the existing naming pattern and inline comment style.
@@ -27,6 +35,12 @@ Use this skill when adding a brand-new opcode/instruction to the Cryptex VM.
    - Access arguments via `c.Args` (array of `ScriptInstructionArgument`). Each argument has:
      - `int Value` — index into the constants block (for `Constant`), or the memory address (for `MemoryAddress`), or label index (for `Label`).
      - `InstructionArgumentType Type` — `Constant`, `MemoryAddress`, `Label`, or `Empty`.
+   - **Performance rules for `Execute()`** (hot path — called for every opcode):
+     - No allocations: avoid `new`, LINQ, `string.Format`, or `StringBuilder`.
+     - No boxing: do not cast value types to `object`.
+     - Validate and read all arguments at the top; throw `VMRuntimeException` immediately on any error.
+     - Early exit: never continue execution after detecting an invalid state.
+   - **AOT rules** — do not use `dynamic`, reflection, `Activator.CreateInstance`, or any API annotated `[RequiresDynamicCode]` / `[RequiresUnreferencedCode]`.
 4. **Register the instruction** in `Cryptex/VM/Execution/OpCodesExtensions.cs` — add a `case` to the `GetByCode()` switch that returns `new YourInstruction()`.
 5. **Add opcode metadata** to `CryptexScriptInspector/OpCodeDescriptions.cs` and `CryptexScriptInspector/OpCodeArguments.cs` if the instruction should appear in the GUI inspector.
 6. **Add documentation** in `Cryptex/Docs/OpCodes/<Category>/<Name>.md` following the existing template (Signature, Description, Remarks, Example).
@@ -39,7 +53,12 @@ Use this skill when adding a brand-new opcode/instruction to the Cryptex VM.
    - No arguments
    - Any instruction-specific edge cases
 9. **Run the full test suite** to verify no regressions: `dotnet test --configuration Release`.
-10. **Run the linter** to ensure code style compliance: follow `.editorconfig` rules.
+10. **Run `TreatWarningsAsErrors` build** — the final gate before merging:
+    ```bash
+    dotnet build --configuration Release -p:TreatWarningsAsErrors=true
+    ```
+    This surfaces AOT-incompatible API usage, nullable warnings, and trim-unsafe calls. All warnings must be resolved.
+11. **Run the linter** to ensure code style compliance: follow `.editorconfig` rules.
 
 ## Naming Conventions
 
