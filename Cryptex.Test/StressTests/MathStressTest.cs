@@ -183,14 +183,14 @@ public sealed class MathStressTest
     public void StressAddF_ManyIterations_ConsistentResult()
     {
         const int iterations = 1_000;
-        VMValue[] constants = [VMValue.FromFloat(0.0m), VMValue.FromFloat(0.1m),
-                                VMValue.FromFloat((decimal)iterations)];
+        VMValue[] constants = [VMValue.FromFloat(0.0m), VMValue.FromFloat(1.0m),
+                                VMValue.FromFloat(iterations)];
 
         Script script = Args.Build("stress_addf", constants,
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0.0
-            new ScriptInstruction(OpCodes.Load,  [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 0.1
+            new ScriptInstruction(OpCodes.Load,  [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 1.0
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(3), Args.Const(2)]),  // 2: $3 = 1000.0
-            new ScriptInstruction(OpCodes.AddF,  [Args.Mem(1), Args.Mem(2)]),    // 3: $1 += 0.1
+            new ScriptInstruction(OpCodes.AddF,  [Args.Mem(1), Args.Mem(2)]),    // 3: $1 += 1.0
             new ScriptInstruction(OpCodes.Cmp,   [Args.Mem(1), Args.Mem(3)]),    // 4: cmp $1, $3
             new ScriptInstruction(OpCodes.Jls,   [Args.Label(3)]));              // 5: if $1 < $3 goto 3
 

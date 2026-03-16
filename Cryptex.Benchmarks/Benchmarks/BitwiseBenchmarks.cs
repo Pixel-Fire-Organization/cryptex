@@ -1,5 +1,3 @@
-using static Cryptex.Benchmarks.ScriptRunner;
-
 namespace Cryptex.Benchmarks.Benchmarks;
 
 /// <summary>

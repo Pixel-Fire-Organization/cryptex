@@ -62,7 +62,7 @@ jobs:
           CI: "true"
         run: |
           dotnet run --project Cryptex.Benchmarks --configuration Release --no-build \
-            -- --filter * --exporters json markdown
+            -- --filter '*' --exporters json markdown
 
       - name: Set up Python
         uses: actions/setup-python@v5

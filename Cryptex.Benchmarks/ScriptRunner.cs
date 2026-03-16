@@ -1,6 +1,3 @@
-using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.Scripts;
-
 namespace Cryptex.Benchmarks;
 
 /// <summary>
