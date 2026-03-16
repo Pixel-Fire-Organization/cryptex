@@ -1,21 +1,19 @@
-﻿# Nop
+# Random
 
 ## Signature
 
 ```asm
-nop X
+random $A
 ```
 
 ## Description
 
-Tells the VM to wait for `X` ms.
+Saves an integer random number in `$A`.
 
 ### Remarks
-
-X = [0; (2^31) - 1]
 
 ## Example
 
 ```asm
-nop 1
+random $1
 ```

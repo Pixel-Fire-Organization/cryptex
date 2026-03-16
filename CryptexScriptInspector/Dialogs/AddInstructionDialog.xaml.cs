@@ -76,271 +76,271 @@ public partial class AddInstructionDialog : Window
             OpCodes.Call  => InlineTextCreator.ParseText(CALL_DESC),
             OpCodes.Ret   => InlineTextCreator.ParseText(RET_DESC),
             OpCodes.Res   => InlineTextCreator.ParseText(RES_DESC),
-            OpCodes.Cmp => new Inline[]
-            {
+            OpCodes.Cmp =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Jmp => new Inline[]
-            {
+            ],
+            OpCodes.Jmp =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Jeq => new Inline[]
-            {
+            ],
+            OpCodes.Jeq =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Jnq => new Inline[]
-            {
+            ],
+            OpCodes.Jnq =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Jls => new Inline[]
-            {
+            ],
+            OpCodes.Jls =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Jgr => new Inline[]
-            {
+            ],
+            OpCodes.Jgr =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Jge => new Inline[]
-            {
+            ],
+            OpCodes.Jge =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Jle => new Inline[]
-            {
+            ],
+            OpCodes.Jle =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Shl => new Inline[]
-            {
+            ],
+            OpCodes.Shl =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Shr => new Inline[]
-            {
+            ],
+            OpCodes.Shr =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.And => new Inline[]
-            {
+            ],
+            OpCodes.And =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Or => new Inline[]
-            {
+            ],
+            OpCodes.Or =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Xor => new Inline[]
-            {
+            ],
+            OpCodes.Xor =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Not => new Inline[]
-            {
+            ],
+            OpCodes.Not =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
+            ],
             OpCodes.Load => InlineTextCreator.ParseText(LOAD_DESC),
-            OpCodes.Free => new Inline[]
-            {
+            OpCodes.Free =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Reg => new Inline[]
-            {
+            ],
+            OpCodes.Reg =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.UnReg => new Inline[]
-            {
+            ],
+            OpCodes.UnReg =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.ArrAccess => new Inline[]
-            {
+            ],
+            OpCodes.ArrAccess =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.ArrCreate => new Inline[]
-            {
+            ],
+            OpCodes.ArrCreate =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.ArrFree => new Inline[]
-            {
+            ],
+            OpCodes.ArrFree =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.ArrLen => new Inline[]
-            {
+            ],
+            OpCodes.ArrLen =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.ArrSet => new Inline[]
-            {
+            ],
+            OpCodes.ArrSet =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.StrCreate => new Inline[]
-            {
+            ],
+            OpCodes.StrCreate =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.StrSub => new Inline[]
-            {
+            ],
+            OpCodes.StrSub =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.StrAppend => new Inline[]
-            {
+            ],
+            OpCodes.StrAppend =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.StrFree => new Inline[]
-            {
+            ],
+            OpCodes.StrFree =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.StrNum => new Inline[]
-            {
+            ],
+            OpCodes.StrNum =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.StrChar => new Inline[]
-            {
+            ],
+            OpCodes.StrChar =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Print => new Inline[]
-            {
+            ],
+            OpCodes.Print =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Read => new Inline[]
-            {
+            ],
+            OpCodes.Read =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.ReadLine => new Inline[]
-            {
+            ],
+            OpCodes.ReadLine =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.Random => new Inline[]
-            {
+            ],
+            OpCodes.Random =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
-            OpCodes.RandomF => new Inline[]
-            {
+            ],
+            OpCodes.RandomF =>
+            [
                 new Run
                 {
                     Text       = "WIP",
                     Foreground = new SolidColorBrush(Colors.Green)
                 }
-            },
+            ],
             _ => throw new ArgumentOutOfRangeException(nameof(code), code, null)
         };
     }

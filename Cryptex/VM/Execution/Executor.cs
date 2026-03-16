@@ -96,8 +96,6 @@ public sealed class Executor
     /// </remarks>
     internal VMValue GetConstant(in ScriptInstruction instruction, int index)
     {
-        if (instruction.LocalConstants is { } local && (uint)index < (uint)local.Length)
-            return local[index];
 
         return m_script.ConstantsBlock.Get(index);
     }

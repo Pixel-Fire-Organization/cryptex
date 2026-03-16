@@ -8,8 +8,10 @@ public sealed class LoadInstructionTest
     [Fact]
     public void TestLoad_ValueToMemoryLocation()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.BeginExecution());
@@ -22,8 +24,11 @@ public sealed class LoadInstructionTest
     [Fact]
     public void TestLoad_HexValueToMemoryLocation()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, %10") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        // HexConstant type: the pre-parsed value (0x10 = 16) sits in the constants block.
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.HexConst(0)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(16)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.BeginExecution());
@@ -36,8 +41,13 @@ public sealed class LoadInstructionTest
     [Fact]
     public void TestLoad_SetMemoryLocation1ToMemoryLocation2Value()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5"), new ScriptInstruction(OpCodes.Load, "$2, #6"), new ScriptInstruction(OpCodes.Load, "$1, $2") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Mem(2)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.BeginExecution());

@@ -15,9 +15,9 @@ internal static class InlineTextCreator
     public static Inline[] ParseText(string text)
     {
         if (string.IsNullOrEmpty(text))
-            return Array.Empty<Inline>();
+            return [];
 
-        List<Inline> inlines = new();
+        List<Inline> inlines = [];
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < text.Length; i++)

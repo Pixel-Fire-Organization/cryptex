@@ -17,13 +17,13 @@ public sealed class ExternalExecutorFunction
 
     public void Invoke<T1>(T1 param)
         where T1 : unmanaged =>
-        Function.Execute(new[] { (object)param });
+        Function.Execute([(object)param]);
 
     public void Invoke<T1, T2>(T1 param1, T2 param2)
         where T1 : unmanaged where T2 : unmanaged =>
-        Function.Execute(new[] { param1, (object)param2 });
+        Function.Execute([param1, (object)param2]);
 
     public void Invoke<T1, T2, T3>(T1 param1, T2 param2, T3 param3)
         where T1 : unmanaged where T2 : unmanaged where T3 : unmanaged =>
-        Function.Execute(new[] { param1, param2, (object)param3 });
+        Function.Execute([param1, param2, (object)param3]);
 }

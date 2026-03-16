@@ -70,12 +70,12 @@
 
 |      OpCode Name      | Implemented | Since (VM Version) |
 |:---------------------:|:-----------:|:------------------:|
-| [Shl](Bitwise/Shl.md) |      ✕      |       1.0.0        |
-| [Shr](Bitwise/Shr.md) |      ✕      |       1.0.0        |
-| [And](Bitwise/And.md) |      ✕      |       1.0.0        |
-|  [Or](Bitwise/Or.md)  |      ✕      |       1.0.0        | 
-| [Xor](Bitwise/Xor.md) |      ✕      |       1.0.0        |
-| [Not](Bitwise/Not.md) |      ✕      |       1.0.0        |
+| [Shl](Bitwise/Shl.md) |      ✔      |       1.0.0        |
+| [Shr](Bitwise/Shr.md) |      ✔      |       1.0.0        |
+| [And](Bitwise/And.md) |      ✔      |       1.0.0        |
+|  [Or](Bitwise/Or.md)  |      ✔      |       1.0.0        | 
+| [Xor](Bitwise/Xor.md) |      ✔      |       1.0.0        |
+| [Not](Bitwise/Not.md) |      ✔      |       1.0.0        |
 
 ### Memory opcodes.
 
@@ -116,8 +116,10 @@
 
 ### Integrated functions.
 
-    Print,    // [print $1]     Prints the contents in the specified memory location in a readable format.
-    Read,     // [read $1]      Reads a char from the console and saves it in the specified memory location as an integer.
-    ReadLine, // [readline $1]  Reads a string from the console (every character until enter is pressed) and saves it in the specified memory location.
-    Random,   // [random $1]    Saves an integer random number in the specified memory location.
-    RandomF,  // [randomf $1]   Saves a floating random number [0.0, 1.0] in the specified memory location.
+|                 OpCode Name                 | Implemented | Since (VM Version) |
+|:-------------------------------------------:|:-----------:|:------------------:|
+|    [Print](IntegratedFunctions/Print.md)    |      ✕      |       1.0.0        |
+|     [Read](IntegratedFunctions/Read.md)     |      ✕      |       1.0.0        |
+| [ReadLine](IntegratedFunctions/ReadLine.md) |      ✕      |       1.0.0        |
+|   [Random](IntegratedFunctions/Random.md)   |      ✕      |       1.0.0        |
+|  [RandomF](IntegratedFunctions/RandomF.md)  |      ✕      |       1.0.0        |

@@ -8,8 +8,13 @@ public sealed class FreeInstructionTest
     [Fact]
     public void TestFree_OnExistingAddress()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5"), new ScriptInstruction(OpCodes.Load, "$2, #6"), new ScriptInstruction(OpCodes.Free, "$1") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
+            new ScriptInstruction(OpCodes.Free, [Args.Mem(1)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.BeginExecution());
@@ -20,12 +25,17 @@ public sealed class FreeInstructionTest
         Assert.False(memoryValue2.IsUndefined);
         Assert.Equal(VMValue.FromInteger(6), memoryValue2);
     }
-    
+
     [Fact]
     public void TestFree_OnNonExistingAddress()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5"), new ScriptInstruction(OpCodes.Load, "$2, #6"), new ScriptInstruction(OpCodes.Free, "$3") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
+            new ScriptInstruction(OpCodes.Free, [Args.Mem(3)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.BeginExecution());

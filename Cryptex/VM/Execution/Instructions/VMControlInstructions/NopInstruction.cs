@@ -26,7 +26,7 @@ internal sealed class NopInstruction : IInstruction
 
         var ms = val.AsInteger();
         if (ms < 0 || ms > int.MaxValue)
-            throw new VMRuntimeException(ErrorCodes.VM2005_DecimalArgumentIsNotANumber);
+            throw new VMRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
 
         Thread.Sleep((int)ms);
     }

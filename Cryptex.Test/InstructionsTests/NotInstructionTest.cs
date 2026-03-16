@@ -8,8 +8,11 @@ public sealed class NotInstructionTest
     [Fact]
     public void TestNot_ValidAddress()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5"), new ScriptInstruction(OpCodes.Not, "$1") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Not, [Args.Mem(1)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.BeginExecution());
@@ -18,12 +21,15 @@ public sealed class NotInstructionTest
         Assert.False(memoryValue1.IsUndefined);
         Assert.Equal(VMValue.FromInteger(~5), memoryValue1);
     }
-    
+
     [Fact]
     public void TestNot_Floating()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5.5"), new ScriptInstruction(OpCodes.Not, "$1") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Not, [Args.Mem(1)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.BeginExecution());
