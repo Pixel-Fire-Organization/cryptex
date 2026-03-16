@@ -1,6 +1,3 @@
-using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.Scripts;
-
 namespace Cryptex.Test.StressTests;
 
 /// <summary>
@@ -16,12 +13,10 @@ public sealed class BitwiseStressTest
         // 0xFF & 0xFF = 0xFF — both operands all 1s must remain all 1s.
         VMValue[] constants = [VMValue.FromInteger(0xFF), VMValue.FromInteger(0xFF)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_and_allbits", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
-            new ScriptInstruction(OpCodes.And,  [Args.Mem(1), Args.Mem(2)])
-        ]);
-        Script script = new Script("stress_and_allbits", [chunk], constants);
+            new ScriptInstruction(OpCodes.And,  [Args.Mem(1), Args.Mem(2)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -38,7 +33,7 @@ public sealed class BitwiseStressTest
         VMValue[] constants = [VMValue.FromInteger(0xFFFF), VMValue.FromInteger(0xF0F0),
                                 VMValue.FromInteger(iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_and_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0xFFFF
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 0xF0F0
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]),  // 2: $3 = counter limit
@@ -46,9 +41,7 @@ public sealed class BitwiseStressTest
             new ScriptInstruction(OpCodes.And,  [Args.Mem(1), Args.Mem(2)]),    // 4: $1 &= $2
             new ScriptInstruction(OpCodes.Inc,  [Args.Mem(4)]),                 // 5: $4++
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(4), Args.Mem(3)]),    // 6: cmp counter, limit
-            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]),               // 7: if counter < limit goto 4
-        ]);
-        Script script = new Script("stress_and_many", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]));              // 7: if counter < limit goto 4
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -64,12 +57,10 @@ public sealed class BitwiseStressTest
         // 0 | 0xFF = 0xFF
         VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(0xFF)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_or_zeros", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
-            new ScriptInstruction(OpCodes.Or,   [Args.Mem(1), Args.Mem(2)])
-        ]);
-        Script script = new Script("stress_or_zeros", [chunk], constants);
+            new ScriptInstruction(OpCodes.Or,   [Args.Mem(1), Args.Mem(2)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -85,7 +76,7 @@ public sealed class BitwiseStressTest
         VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(0xABCD),
                                 VMValue.FromInteger(iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_or_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 0xABCD
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]),  // 2: $3 = limit
@@ -93,9 +84,7 @@ public sealed class BitwiseStressTest
             new ScriptInstruction(OpCodes.Or,   [Args.Mem(1), Args.Mem(2)]),    // 4: $1 |= $2
             new ScriptInstruction(OpCodes.Inc,  [Args.Mem(4)]),                 // 5: $4++
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(4), Args.Mem(3)]),    // 6: cmp $4, limit
-            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]),               // 7: if $4 < limit goto 4
-        ]);
-        Script script = new Script("stress_or_many", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]));              // 7: if $4 < limit goto 4
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -112,7 +101,7 @@ public sealed class BitwiseStressTest
         VMValue[] constants = [VMValue.FromInteger(0x1234), VMValue.FromInteger(0xFFFF),
                                 VMValue.FromInteger(iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_xor_toggle", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0x1234
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 0xFFFF
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]),  // 2: $3 = limit
@@ -120,9 +109,7 @@ public sealed class BitwiseStressTest
             new ScriptInstruction(OpCodes.Xor,  [Args.Mem(1), Args.Mem(2)]),    // 4: $1 ^= $2
             new ScriptInstruction(OpCodes.Inc,  [Args.Mem(4)]),                 // 5: $4++
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(4), Args.Mem(3)]),    // 6: cmp $4, limit
-            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]),               // 7: if $4 < limit goto 4
-        ]);
-        Script script = new Script("stress_xor_toggle", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]));              // 7: if $4 < limit goto 4
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -137,12 +124,10 @@ public sealed class BitwiseStressTest
     {
         VMValue[] constants = [VMValue.FromInteger(0x12345678)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_not_double", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Not,  [Args.Mem(1)]),
-            new ScriptInstruction(OpCodes.Not,  [Args.Mem(1)])
-        ]);
-        Script script = new Script("stress_not_double", [chunk], constants);
+            new ScriptInstruction(OpCodes.Not,  [Args.Mem(1)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -162,16 +147,14 @@ public sealed class BitwiseStressTest
                                 VMValue.FromInteger(shifts), // const[1] = 8 (countdown)
                                 VMValue.FromInteger(0)];     // const[2] = 0 (compare target)
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_shl_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 1
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(1)]),  // 1: $3 = shifts (countdown)
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(2)]),  // 2: $4 = 0 (compare target)
             new ScriptInstruction(OpCodes.Shl,  [Args.Mem(1), Args.Const(0)]),  // 3: $1 <<= const[0]=1
             new ScriptInstruction(OpCodes.Dec,  [Args.Mem(3)]),                 // 4: $3--
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(3), Args.Mem(4)]),    // 5: cmp $3, 0
-            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]),               // 6: if $3 > 0 goto 3
-        ]);
-        Script script = new Script("stress_shl_many", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]));              // 6: if $3 > 0 goto 3
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -192,16 +175,14 @@ public sealed class BitwiseStressTest
                                 VMValue.FromInteger(shifts),      // const[2] = 8 (countdown)
                                 VMValue.FromInteger(0)];          // const[3] = 0 (compare target)
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_shr_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 256
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]),  // 1: $3 = shifts (countdown)
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(3)]),  // 2: $4 = 0 (compare target)
             new ScriptInstruction(OpCodes.Shr,  [Args.Mem(1), Args.Const(1)]),  // 3: $1 >>= const[1]=1
             new ScriptInstruction(OpCodes.Dec,  [Args.Mem(3)]),                 // 4: $3--
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(3), Args.Mem(4)]),    // 5: cmp $3, 0
-            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]),               // 6: if $3 > 0 goto 3
-        ]);
-        Script script = new Script("stress_shr_many", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]));              // 6: if $3 > 0 goto 3
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -216,12 +197,10 @@ public sealed class BitwiseStressTest
     {
         VMValue[] constants = [VMValue.FromInteger(0xDEADBEEF), VMValue.FromInteger(0)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_and_zeromask", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
-            new ScriptInstruction(OpCodes.And,  [Args.Mem(1), Args.Mem(2)])
-        ]);
-        Script script = new Script("stress_and_zeromask", [chunk], constants);
+            new ScriptInstruction(OpCodes.And,  [Args.Mem(1), Args.Mem(2)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());

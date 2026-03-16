@@ -1,6 +1,3 @@
-using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.Scripts;
-
 namespace Cryptex.Test.StressTests;
 
 /// <summary>
@@ -21,8 +18,7 @@ public sealed class MemoryStressTest
         for (int i = 1; i <= slotCount; i++)
             instructions.Add(new ScriptInstruction(OpCodes.Load, [Args.Mem(i), Args.Const(0)]));
 
-        ScriptChunk chunk = new ScriptChunk("main", instructions.ToArray());
-        Script script = new Script("stress_load_slots", [chunk], constants);
+        Script script = Args.Build("stress_load_slots", constants, instructions.ToArray());
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -38,10 +34,8 @@ public sealed class MemoryStressTest
         System.Numerics.BigInteger large = System.Numerics.BigInteger.Pow(2, 127) - 1;
         VMValue[] constants = [VMValue.FromInteger(large)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
-        ]);
-        Script script = new Script("stress_load_large", [chunk], constants);
+        Script script = Args.Build("stress_load_large", constants,
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -57,7 +51,7 @@ public sealed class MemoryStressTest
         const int iterations = 5_000;
         VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1), VMValue.FromInteger(iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_load_overwrite", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(2)]),  // 1: $2 = iterations
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(0)]),  // 2: $3 = 0 (counter)
@@ -65,9 +59,7 @@ public sealed class MemoryStressTest
             new ScriptInstruction(OpCodes.Add,  [Args.Mem(1), Args.Mem(4)]),    // 4: $1 += 1
             new ScriptInstruction(OpCodes.Inc,  [Args.Mem(3)]),                 // 5: $3++
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(3), Args.Mem(2)]),    // 6: cmp $3, iterations
-            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]),               // 7: if $3 < iterations goto 4
-        ]);
-        Script script = new Script("stress_load_overwrite", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,  [Args.Label(4)]));              // 7: if $3 < iterations goto 4
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -82,12 +74,10 @@ public sealed class MemoryStressTest
         // Load a slot, free it, reload it, and verify the new value is stored correctly.
         VMValue[] constants = [VMValue.FromInteger(100), VMValue.FromInteger(200)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_free_reload", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Free, [Args.Mem(1)]),
-            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(1)])
-        ]);
-        Script script = new Script("stress_free_reload", [chunk], constants);
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(1)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -110,8 +100,7 @@ public sealed class MemoryStressTest
         for (int i = 1; i <= slotCount; i++)
             instructions.Add(new ScriptInstruction(OpCodes.Load, [Args.Mem(i), Args.Const(1)]));
 
-        ScriptChunk chunk = new ScriptChunk("main", instructions.ToArray());
-        Script script = new Script("stress_free_many", [chunk], constants);
+        Script script = Args.Build("stress_free_many", constants, instructions.ToArray());
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -127,10 +116,8 @@ public sealed class MemoryStressTest
         System.Numerics.BigInteger large = -System.Numerics.BigInteger.Pow(2, 127);
         VMValue[] constants = [VMValue.FromInteger(large)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
-        ]);
-        Script script = new Script("stress_load_neg_large", [chunk], constants);
+        Script script = Args.Build("stress_load_neg_large", constants,
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -149,8 +136,7 @@ public sealed class MemoryStressTest
         for (int i = 1; i <= slotCount; i++)
             instructions.Add(new ScriptInstruction(OpCodes.Load, [Args.Mem(i), Args.Const(0)]));
 
-        ScriptChunk chunk = new ScriptChunk("main", instructions.ToArray());
-        Script script = new Script("stress_load_float_slots", [chunk], constants);
+        Script script = Args.Build("stress_load_float_slots", constants, instructions.ToArray());
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());

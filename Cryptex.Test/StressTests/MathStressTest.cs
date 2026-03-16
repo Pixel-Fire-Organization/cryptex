@@ -1,6 +1,4 @@
 using System.Numerics;
-using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.StressTests;
 
@@ -19,15 +17,13 @@ public sealed class MathStressTest
         // $1 = 0 (accumulator), $2 = 1 (step), $3 = iterations
         VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1), VMValue.FromInteger(iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_add", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 1
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]),  // 2: $3 = 10000
             new ScriptInstruction(OpCodes.Add,  [Args.Mem(1), Args.Mem(2)]),    // 3: $1 += 1  (loop body)
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Mem(3)]),    // 4: cmp $1, $3
-            new ScriptInstruction(OpCodes.Jls,  [Args.Label(3)]),               // 5: if $1 < $3 goto 3
-        ]);
-        Script script = new Script("stress_add", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,  [Args.Label(3)]));              // 5: if $1 < $3 goto 3
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -42,12 +38,10 @@ public sealed class MathStressTest
         BigInteger large = BigInteger.Pow(2, 62);
         VMValue[] constants = [VMValue.FromInteger(large), VMValue.FromInteger(large)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_add_large", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
-            new ScriptInstruction(OpCodes.Add,  [Args.Mem(1), Args.Mem(2)])
-        ]);
-        Script script = new Script("stress_add_large", [chunk], constants);
+            new ScriptInstruction(OpCodes.Add,  [Args.Mem(1), Args.Mem(2)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -62,15 +56,13 @@ public sealed class MathStressTest
         const int iterations = 10_000;
         VMValue[] constants = [VMValue.FromInteger(iterations), VMValue.FromInteger(1), VMValue.FromInteger(0)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_sub", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 10000
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 1
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]),  // 2: $3 = 0
             new ScriptInstruction(OpCodes.Sub,  [Args.Mem(1), Args.Mem(2)]),    // 3: $1 -= 1
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Mem(3)]),    // 4: cmp $1, 0
-            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]),               // 5: if $1 > 0 goto 3
-        ]);
-        Script script = new Script("stress_sub", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]));              // 5: if $1 > 0 goto 3
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -85,12 +77,10 @@ public sealed class MathStressTest
         BigInteger large = BigInteger.Pow(2, 32);
         VMValue[] constants = [VMValue.FromInteger(large), VMValue.FromInteger(large)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_mul_large", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
-            new ScriptInstruction(OpCodes.Mul,  [Args.Mem(1), Args.Mem(2)])
-        ]);
-        Script script = new Script("stress_mul_large", [chunk], constants);
+            new ScriptInstruction(OpCodes.Mul,  [Args.Mem(1), Args.Mem(2)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -107,15 +97,13 @@ public sealed class MathStressTest
         BigInteger start = (BigInteger)iterations * 2;
         VMValue[] constants = [VMValue.FromInteger(start), VMValue.FromInteger(2), VMValue.FromInteger(1)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_div", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]),
             new ScriptInstruction(OpCodes.Div,  [Args.Mem(1), Args.Mem(2)]),
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Mem(3)]),
-            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]),
-        ]);
-        Script script = new Script("stress_div", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(3)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -130,14 +118,12 @@ public sealed class MathStressTest
         const int iterations = 10_000;
         VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_inc", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 10000
             new ScriptInstruction(OpCodes.Inc,  [Args.Mem(1)]),                 // 2: $1++
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Mem(2)]),    // 3: cmp $1, $2
-            new ScriptInstruction(OpCodes.Jls,  [Args.Label(2)]),               // 4: if $1 < $2 goto 2
-        ]);
-        Script script = new Script("stress_inc", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,  [Args.Label(2)]));              // 4: if $1 < $2 goto 2
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -152,14 +138,12 @@ public sealed class MathStressTest
         const int iterations = 10_000;
         VMValue[] constants = [VMValue.FromInteger(iterations), VMValue.FromInteger(0)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_dec", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 10000
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 0
             new ScriptInstruction(OpCodes.Dec,  [Args.Mem(1)]),                 // 2: $1--
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Mem(2)]),    // 3: cmp $1, 0
-            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(2)]),               // 4: if $1 > 0 goto 2
-        ]);
-        Script script = new Script("stress_dec", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jgr,  [Args.Label(2)]));              // 4: if $1 > 0 goto 2
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -176,7 +160,7 @@ public sealed class MathStressTest
         VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1),
                                 VMValue.FromInteger(modulus), VMValue.FromInteger(iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_mod", constants,
             new ScriptInstruction(OpCodes.Load,   [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0 (counter)
             new ScriptInstruction(OpCodes.Load,   [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 1
             new ScriptInstruction(OpCodes.Load,   [Args.Mem(3), Args.Const(2)]),  // 2: $3 = modulus
@@ -186,9 +170,7 @@ public sealed class MathStressTest
             new ScriptInstruction(OpCodes.Add,    [Args.Mem(5), Args.Mem(1)]),    // 6: $5 = $1 (copy via 0+$1)
             new ScriptInstruction(OpCodes.Mod,    [Args.Mem(5), Args.Mem(3)]),    // 7: $5 = $1 % modulus
             new ScriptInstruction(OpCodes.Cmp,    [Args.Mem(1), Args.Mem(4)]),    // 8: cmp $1, iterations
-            new ScriptInstruction(OpCodes.Jls,    [Args.Label(4)]),               // 9: if $1 < iterations goto 4
-        ]);
-        Script script = new Script("stress_mod", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,    [Args.Label(4)]));              // 9: if $1 < iterations goto 4
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -204,15 +186,13 @@ public sealed class MathStressTest
         VMValue[] constants = [VMValue.FromFloat(0.0m), VMValue.FromFloat(0.1m),
                                 VMValue.FromFloat((decimal)iterations)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_addf", constants,
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0.0
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(2), Args.Const(1)]),  // 1: $2 = 0.1
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(3), Args.Const(2)]),  // 2: $3 = 1000.0
             new ScriptInstruction(OpCodes.AddF,  [Args.Mem(1), Args.Mem(2)]),    // 3: $1 += 0.1
             new ScriptInstruction(OpCodes.Cmp,   [Args.Mem(1), Args.Mem(3)]),    // 4: cmp $1, $3
-            new ScriptInstruction(OpCodes.Jls,   [Args.Label(3)]),               // 5: if $1 < $3 goto 3
-        ]);
-        Script script = new Script("stress_addf", [chunk], constants);
+            new ScriptInstruction(OpCodes.Jls,   [Args.Label(3)]));              // 5: if $1 < $3 goto 3
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -230,14 +210,12 @@ public sealed class MathStressTest
         VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(step),
                                 VMValue.FromInteger(iterations * step)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Load,   [Args.Mem(1), Args.Const(0)]),      // 0: $1 = 0
-            new ScriptInstruction(OpCodes.Load,   [Args.Mem(2), Args.Const(2)]),      // 1: $2 = target
-            new ScriptInstruction(OpCodes.AddImm, [Args.Mem(1), Args.Const(1)]),      // 2: $1 += step
-            new ScriptInstruction(OpCodes.Cmp,    [Args.Mem(1), Args.Mem(2)]),        // 3: cmp $1, target
-            new ScriptInstruction(OpCodes.Jls,    [Args.Label(2)]),                   // 4: if $1 < target goto 2
-        ]);
-        Script script = new Script("stress_addimm", [chunk], constants);
+        Script script = Args.Build("stress_addimm", constants,
+            new ScriptInstruction(OpCodes.Load,   [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
+            new ScriptInstruction(OpCodes.Load,   [Args.Mem(2), Args.Const(2)]),  // 1: $2 = target
+            new ScriptInstruction(OpCodes.AddImm, [Args.Mem(1), Args.Const(1)]),  // 2: $1 += step
+            new ScriptInstruction(OpCodes.Cmp,    [Args.Mem(1), Args.Mem(2)]),    // 3: cmp $1, target
+            new ScriptInstruction(OpCodes.Jls,    [Args.Label(2)]));              // 4: if $1 < target goto 2
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -252,12 +230,10 @@ public sealed class MathStressTest
         BigInteger large = -BigInteger.Pow(2, 62);
         VMValue[] constants = [VMValue.FromInteger(large), VMValue.FromInteger(1)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_add_negative", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
-            new ScriptInstruction(OpCodes.Add,  [Args.Mem(1), Args.Mem(2)])
-        ]);
-        Script script = new Script("stress_add_negative", [chunk], constants);
+            new ScriptInstruction(OpCodes.Add,  [Args.Mem(1), Args.Mem(2)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -273,11 +249,9 @@ public sealed class MathStressTest
         const long factor = 1_000L;
         VMValue[] constants = [VMValue.FromInteger(value), VMValue.FromInteger(factor)];
 
-        ScriptChunk chunk = new ScriptChunk("main", [
+        Script script = Args.Build("stress_mulimm_large", constants,
             new ScriptInstruction(OpCodes.Load,   [Args.Mem(1), Args.Const(0)]),
-            new ScriptInstruction(OpCodes.MulImm, [Args.Mem(1), Args.Const(1)])
-        ]);
-        Script script = new Script("stress_mulimm_large", [chunk], constants);
+            new ScriptInstruction(OpCodes.MulImm, [Args.Mem(1), Args.Const(1)]));
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());

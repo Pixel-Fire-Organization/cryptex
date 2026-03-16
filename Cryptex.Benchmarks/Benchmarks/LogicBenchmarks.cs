@@ -1,6 +1,4 @@
-using BenchmarkDotNet.Attributes;
-using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.Scripts;
+using static Cryptex.Benchmarks.ScriptRunner;
 
 namespace Cryptex.Benchmarks.Benchmarks;
 
@@ -31,20 +29,20 @@ public class LogicBenchmarks
     public void Setup()
     {
         // cmp: compare two values (sets flag, no jump)
-        m_cmpScript = Build("cmp",
+        m_cmpScript = Build("cmp", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(1)]),
             new ScriptInstruction(OpCodes.Cmp,  [Mem(1), Mem(2)]));
 
         // jmp: unconditional jump over a Load instruction, then a Nop (sleep 0ms) to end.
-        m_jmpScript = Build("jmp",
+        m_jmpScript = Build("jmp", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Jmp,  [Label(3)]),              // 1 → skip 2
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(1)]),      // 2 (skipped)
             new ScriptInstruction(OpCodes.Nop,  [Const(2)]));             // 3 (sleep 0ms)
 
         // jeq: cmp two equal values → flag=Equals → Jeq taken → Nop
-        m_jeqScript = Build("jeq",
+        m_jeqScript = Build("jeq", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(0)]),
             new ScriptInstruction(OpCodes.Cmp,  [Mem(1), Mem(2)]),
@@ -53,7 +51,7 @@ public class LogicBenchmarks
             new ScriptInstruction(OpCodes.Nop,  [Const(2)]));             // 5
 
         // jnq: cmp two different values → flag=Less → Jnq taken → Nop
-        m_jnqScript = Build("jnq",
+        m_jnqScript = Build("jnq", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(1)]),
             new ScriptInstruction(OpCodes.Cmp,  [Mem(1), Mem(2)]),
@@ -62,7 +60,7 @@ public class LogicBenchmarks
             new ScriptInstruction(OpCodes.Nop,  [Const(2)]));
 
         // jls: 5 < 10 → Less → Jls taken
-        m_jlsScript = Build("jls",
+        m_jlsScript = Build("jls", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(1)]),
             new ScriptInstruction(OpCodes.Cmp,  [Mem(1), Mem(2)]),
@@ -71,7 +69,7 @@ public class LogicBenchmarks
             new ScriptInstruction(OpCodes.Nop,  [Const(2)]));
 
         // jgr: 10 > 5 → Greater → Jgr taken
-        m_jgrScript = Build("jgr",
+        m_jgrScript = Build("jgr", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(0)]),
             new ScriptInstruction(OpCodes.Cmp,  [Mem(1), Mem(2)]),
@@ -80,7 +78,7 @@ public class LogicBenchmarks
             new ScriptInstruction(OpCodes.Nop,  [Const(2)]));
 
         // jge: 10 >= 5 → Greater → Jge taken
-        m_jgeScript = Build("jge",
+        m_jgeScript = Build("jge", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(0)]),
             new ScriptInstruction(OpCodes.Cmp,  [Mem(1), Mem(2)]),
@@ -89,7 +87,7 @@ public class LogicBenchmarks
             new ScriptInstruction(OpCodes.Nop,  [Const(2)]));
 
         // jle: 5 <= 10 → Less → Jle taken
-        m_jleScript = Build("jle",
+        m_jleScript = Build("jle", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(1)]),
             new ScriptInstruction(OpCodes.Cmp,  [Mem(1), Mem(2)]),
@@ -106,25 +104,4 @@ public class LogicBenchmarks
     [Benchmark] public bool Jgr() => Run(m_jgrScript);
     [Benchmark] public bool Jge() => Run(m_jgeScript);
     [Benchmark] public bool Jle() => Run(m_jleScript);
-
-    private static bool Run(Script script)
-    {
-        var executor = new Executor(script);
-        return executor.ExecuteScript();
-    }
-
-    private static Script Build(string name, params ScriptInstruction[] instructions)
-    {
-        var chunk = new ScriptChunk("main", instructions);
-        return new Script(name, [chunk], Constants);
-    }
-
-    private static ScriptInstructionArgument Mem(int slot)
-        => new(slot, InstructionArgumentType.MemoryAddress);
-
-    private static ScriptInstructionArgument Const(int index)
-        => new(index, InstructionArgumentType.Constant);
-
-    private static ScriptInstructionArgument Label(int instructionIndex)
-        => new(instructionIndex, InstructionArgumentType.Label);
 }

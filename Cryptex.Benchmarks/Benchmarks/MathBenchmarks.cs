@@ -1,6 +1,4 @@
-using BenchmarkDotNet.Attributes;
-using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.Scripts;
+using static Cryptex.Benchmarks.ScriptRunner;
 
 namespace Cryptex.Benchmarks.Benchmarks;
 
@@ -46,88 +44,88 @@ public class MathBenchmarks
     public void Setup()
     {
         // Integer operations — const[0]=5, const[1]=6
-        m_addScript = Build("add",
+        m_addScript = Build("add", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(1)]),
             new ScriptInstruction(OpCodes.Add,    [Mem(1), Mem(2)]));
 
-        m_addImmScript = Build("addimm",
+        m_addImmScript = Build("addimm", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.AddImm, [Mem(1), Const(1)]));
 
-        m_subScript = Build("sub",
+        m_subScript = Build("sub", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(0)]),
             new ScriptInstruction(OpCodes.Sub,    [Mem(1), Mem(2)]));
 
-        m_subImmScript = Build("subimm",
+        m_subImmScript = Build("subimm", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.SubImm, [Mem(1), Const(0)]));
 
-        m_mulScript = Build("mul",
+        m_mulScript = Build("mul", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(1)]),
             new ScriptInstruction(OpCodes.Mul,    [Mem(1), Mem(2)]));
 
-        m_mulImmScript = Build("mulimm",
+        m_mulImmScript = Build("mulimm", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.MulImm, [Mem(1), Const(1)]));
 
         // const[1]=6 / const[2]=3 = 2
-        m_divScript = Build("div",
+        m_divScript = Build("div", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(2)]),
             new ScriptInstruction(OpCodes.Div,    [Mem(1), Mem(2)]));
 
-        m_divImmScript = Build("divimm",
+        m_divImmScript = Build("divimm", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.DivImm, [Mem(1), Const(2)]));
 
-        m_incScript = Build("inc",
+        m_incScript = Build("inc", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(0)]),
             new ScriptInstruction(OpCodes.Inc,  [Mem(1)]));
 
-        m_decScript = Build("dec",
+        m_decScript = Build("dec", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.Dec,  [Mem(1)]));
 
         // const[1]=6, const[2]=3
-        m_modScript = Build("mod",
+        m_modScript = Build("mod", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.Load, [Mem(2), Const(2)]),
             new ScriptInstruction(OpCodes.Mod,  [Mem(1), Mem(2)]));
 
-        m_modImmScript = Build("modimm",
+        m_modImmScript = Build("modimm", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(1)]),
             new ScriptInstruction(OpCodes.ModImm, [Mem(1), Const(2)]));
 
         // Float operations — const[4]=5.5m, const[5]=6.5m
-        m_addFScript = Build("addf",
+        m_addFScript = Build("addf", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(4)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(5)]),
             new ScriptInstruction(OpCodes.AddF,   [Mem(1), Mem(2)]));
 
-        m_subFScript = Build("subf",
+        m_subFScript = Build("subf", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(5)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(4)]),
             new ScriptInstruction(OpCodes.SubF,   [Mem(1), Mem(2)]));
 
-        m_mulFScript = Build("mulf",
+        m_mulFScript = Build("mulf", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(4)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(5)]),
             new ScriptInstruction(OpCodes.MulF,   [Mem(1), Mem(2)]));
 
         // const[5]=6.5 / const[4]=5.5
-        m_divFScript = Build("divf",
+        m_divFScript = Build("divf", Constants,
             new ScriptInstruction(OpCodes.Load,   [Mem(1), Const(5)]),
             new ScriptInstruction(OpCodes.Load,   [Mem(2), Const(4)]),
             new ScriptInstruction(OpCodes.DivF,   [Mem(1), Mem(2)]));
 
-        m_incFScript = Build("incf",
+        m_incFScript = Build("incf", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(4)]),
             new ScriptInstruction(OpCodes.IncF, [Mem(1)]));
 
-        m_decFScript = Build("decf",
+        m_decFScript = Build("decf", Constants,
             new ScriptInstruction(OpCodes.Load, [Mem(1), Const(5)]),
             new ScriptInstruction(OpCodes.DecF, [Mem(1)]));
     }
@@ -150,23 +148,5 @@ public class MathBenchmarks
     [Benchmark] public bool DecF()   => Run(m_decFScript);
     [Benchmark] public bool Mod()    => Run(m_modScript);
     [Benchmark] public bool ModImm() => Run(m_modImmScript);
-
-    private static bool Run(Script script)
-    {
-        var executor = new Executor(script);
-        return executor.ExecuteScript();
-    }
-
-    private static Script Build(string name, params ScriptInstruction[] instructions)
-    {
-        var chunk = new ScriptChunk("main", instructions);
-        return new Script(name, [chunk], Constants);
-    }
-
-    private static ScriptInstructionArgument Mem(int slot)
-        => new(slot, InstructionArgumentType.MemoryAddress);
-
-    private static ScriptInstructionArgument Const(int index)
-        => new(index, InstructionArgumentType.Constant);
 }
 

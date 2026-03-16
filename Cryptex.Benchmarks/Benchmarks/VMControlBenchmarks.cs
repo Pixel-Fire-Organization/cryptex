@@ -1,6 +1,4 @@
-using BenchmarkDotNet.Attributes;
-using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.Scripts;
+using static Cryptex.Benchmarks.ScriptRunner;
 
 namespace Cryptex.Benchmarks.Benchmarks;
 
@@ -22,29 +20,14 @@ public class VMControlBenchmarks
     public void Setup()
     {
         // Nop requires a Constant arg specifying sleep milliseconds (0 = no sleep).
-        m_nopScript = Build("nop",
+        m_nopScript = Build("nop", Constants,
             new ScriptInstruction(OpCodes.Nop, [Const(0)]));
 
         // Exit sets the VM exit code from a Constant and stops execution.
-        m_exitScript = Build("exit",
+        m_exitScript = Build("exit", Constants,
             new ScriptInstruction(OpCodes.Exit, [Const(0)]));
     }
 
     [Benchmark] public bool Nop()  => Run(m_nopScript);
     [Benchmark] public bool Exit() => Run(m_exitScript);
-
-    private static bool Run(Script script)
-    {
-        var executor = new Executor(script);
-        return executor.ExecuteScript();
-    }
-
-    private static Script Build(string name, params ScriptInstruction[] instructions)
-    {
-        var chunk = new ScriptChunk("main", instructions);
-        return new Script(name, [chunk], Constants);
-    }
-
-    private static ScriptInstructionArgument Const(int index)
-        => new(index, InstructionArgumentType.Constant);
 }
