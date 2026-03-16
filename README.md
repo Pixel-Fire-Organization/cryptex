@@ -33,7 +33,7 @@ Stress tests live in `Cryptex.Test/StressTests/` and are tagged `[Trait("Categor
 They verify that every instruction produces **consistent results** under extreme conditions:
 
 - Very large integer values (up to `BigInteger.Pow(2, 127)`)
-- 10 000-iteration VM loops testing convergence and loop termination
+- 10_000-iteration VM loops testing convergence and loop termination
 - Edge cases: zero masks, double negation, all-bits-set patterns
 
 Run locally:
