@@ -3,15 +3,19 @@ name: Stress Tests and Benchmarks
 on:
   push:
   workflow_dispatch:
-
-permissions:
-  contents: read
+    inputs:
+      update_baseline:
+        description: 'Commit current results as the new benchmark baseline'
+        type: boolean
+        default: false
 
 jobs:
   stress-tests:
     name: Stress Tests
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/dotnet/sdk:10.0
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -38,10 +42,14 @@ jobs:
     name: Benchmarks
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/dotnet/sdk:10.0
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache dotnet packages
         uses: actions/cache@v4
@@ -69,44 +77,85 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Check relative error threshold (≤ 10 %)
+      - name: Compare against baseline (± 10 % threshold)
         run: |
           python3 - << 'PYEOF'
           import json, sys, glob, os
 
-          threshold = 0.10  # 10 % maximum relative measurement error
+          THRESHOLD    = 0.10
+          BASELINE     = ".github/benchmarks/baseline.json"
+          CURRENT_OUT  = ".github/benchmarks/current.json"
 
+          # Collect current means from BenchmarkDotNet JSON output.
           result_files = glob.glob("BenchmarkDotNet.Artifacts/results/*report-full*.json")
           if not result_files:
-              print("No benchmark result files found — skipping threshold check.")
+              print("No benchmark result files found — skipping comparison.")
               sys.exit(0)
 
-          failed = []
+          current = {}
           for path in result_files:
               with open(path) as f:
                   data = json.load(f)
               for bench in data.get("Benchmarks", []):
                   stats = bench.get("Statistics")
-                  if not stats:
-                      continue
-                  mean = stats.get("Mean", 0)
-                  se   = stats.get("StandardError", 0)
-                  if mean <= 0:
-                      continue
-                  rel_error = se / mean
-                  name = bench.get("FullName", "Unknown")
-                  print(f"  {name}: mean={mean:.0f} ns, rel_error={rel_error:.2%}")
-                  if rel_error > threshold:
-                      failed.append((name, rel_error))
+                  if stats:
+                      name = bench.get("FullName", "Unknown")
+                      current[name] = stats.get("Mean", 0)
+
+          # Always write the current results so the update-baseline step can commit them.
+          os.makedirs(os.path.dirname(CURRENT_OUT), exist_ok=True)
+          with open(CURRENT_OUT, "w") as f:
+              json.dump(current, f, indent=2, sort_keys=True)
+
+          # Load baseline; skip comparison if it is empty.
+          if not os.path.exists(BASELINE):
+              print("No baseline file found — skipping comparison.")
+              sys.exit(0)
+
+          with open(BASELINE) as f:
+              baseline = json.load(f)
+
+          if not baseline:
+              print("Baseline is empty — skipping comparison (run with update_baseline=true to populate).")
+              sys.exit(0)
+
+          failed = []
+          for name, mean in current.items():
+              if name not in baseline:
+                  print(f"  NEW  {name}: mean={mean:.0f} ns (not in baseline)")
+                  continue
+              base = baseline[name]
+              if base <= 0:
+                  continue
+              diff = (mean - base) / base
+              sign = "+" if diff >= 0 else ""
+              print(f"  {sign}{diff:.2%}  {name}  (baseline={base:.0f} ns, current={mean:.0f} ns)")
+              if abs(diff) >= THRESHOLD:
+                  failed.append((name, base, mean, diff))
 
           if failed:
-              print(f"\nFAILED: {len(failed)} benchmark(s) exceeded the {threshold:.0%} relative error threshold:")
-              for name, err in failed:
-                  print(f"  {name}: {err:.2%}")
+              print(f"\nFAILED: {len(failed)} benchmark(s) deviated >= {THRESHOLD:.0%} from baseline:")
+              for name, base, curr, diff in failed:
+                  sign = "+" if diff >= 0 else ""
+                  print(f"  {sign}{diff:.2%}  {name}  (baseline={base:.0f} ns, current={curr:.0f} ns)")
               sys.exit(1)
           else:
-              print(f"\nAll benchmarks are within the {threshold:.0%} relative error threshold.")
+              print(f"\nAll benchmarks are within {THRESHOLD:.0%} of the stored baseline.")
           PYEOF
+
+      - name: Update baseline
+        if: ${{ github.event_name == 'workflow_dispatch' && fromJSON(github.event.inputs.update_baseline || 'false') }}
+        run: |
+          cp .github/benchmarks/current.json .github/benchmarks/baseline.json
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/benchmarks/baseline.json
+          if git diff --staged --quiet; then
+            echo "Baseline unchanged — no commit needed."
+          else
+            git commit -m "ci: update benchmark baseline [skip ci]"
+            git push
+          fi
 
       - name: Write results to job summary
         if: always()
