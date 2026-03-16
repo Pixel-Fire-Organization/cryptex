@@ -5,9 +5,8 @@ namespace Cryptex.Test.InstructionsTests;
 
 public sealed class JeqInstructionTest
 {
-    private static ScriptChunk BuildChunk(int v1, int v2, OpCodes jumpOp, int labelIdx)
-    {
-        return new ScriptChunk("main", [
+    private static ScriptChunk BuildChunk(int v1, int v2, OpCodes jumpOp, int labelIdx) =>
+        new("main", [
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]), // 0
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]), // 1
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Mem(2)]),   // 2
@@ -15,7 +14,6 @@ public sealed class JeqInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(2)]), // 4
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(2)])  // 5
         ]);
-    }
 
     [Fact]
     public void TestJeq_Fires_WhenEqual()
