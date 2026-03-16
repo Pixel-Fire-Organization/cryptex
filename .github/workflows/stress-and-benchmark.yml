@@ -1,0 +1,121 @@
+name: Stress Tests and Benchmarks
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stress-tests:
+    name: Stress Tests
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache dotnet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-dotnet-
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run stress tests
+        run: dotnet test --no-build --configuration Release --filter "Category=Stress" --logger "console;verbosity=normal"
+
+  benchmarks:
+    name: Benchmarks
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache dotnet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-dotnet-
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build benchmarks (Release)
+        run: dotnet build Cryptex.Benchmarks/Cryptex.Benchmarks.csproj --no-restore --configuration Release
+
+      - name: Run benchmarks
+        env:
+          CI: "true"
+        run: |
+          dotnet run --project Cryptex.Benchmarks --configuration Release --no-build \
+            -- --filter * --exporters json markdown
+
+      - name: Check relative error threshold (≤ 10 %)
+        run: |
+          python3 - << 'PYEOF'
+          import json, sys, glob, os
+
+          threshold = 0.10  # 10 % maximum relative measurement error
+
+          result_files = glob.glob("BenchmarkDotNet.Artifacts/results/*report-full*.json")
+          if not result_files:
+              print("No benchmark result files found — skipping threshold check.")
+              sys.exit(0)
+
+          failed = []
+          for path in result_files:
+              with open(path) as f:
+                  data = json.load(f)
+              for bench in data.get("Benchmarks", []):
+                  stats = bench.get("Statistics")
+                  if not stats:
+                      continue
+                  mean = stats.get("Mean", 0)
+                  se   = stats.get("StandardError", 0)
+                  if mean <= 0:
+                      continue
+                  rel_error = se / mean
+                  name = bench.get("FullName", "Unknown")
+                  print(f"  {name}: mean={mean:.0f} ns, rel_error={rel_error:.2%}")
+                  if rel_error > threshold:
+                      failed.append((name, rel_error))
+
+          if failed:
+              print(f"\nFAILED: {len(failed)} benchmark(s) exceeded the {threshold:.0%} relative error threshold:")
+              for name, err in failed:
+                  print(f"  {name}: {err:.2%}")
+              sys.exit(1)
+          else:
+              print(f"\nAll benchmarks are within the {threshold:.0%} relative error threshold.")
+          PYEOF
+
+      - name: Write results to job summary
+        if: always()
+        run: |
+          echo "## Benchmark Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          for md in BenchmarkDotNet.Artifacts/results/*.md; do
+            [ -f "$md" ] && cat "$md" >> "$GITHUB_STEP_SUMMARY" && echo "" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+      - name: Upload benchmark artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.run_number }}
+          path: BenchmarkDotNet.Artifacts/results/
+          retention-days: 90

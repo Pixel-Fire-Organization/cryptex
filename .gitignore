@@ -64,3 +64,6 @@ Thumbs.db
 *.mov
 *.wmv
 
+# BenchmarkDotNet output
+BenchmarkDotNet.Artifacts/
+
