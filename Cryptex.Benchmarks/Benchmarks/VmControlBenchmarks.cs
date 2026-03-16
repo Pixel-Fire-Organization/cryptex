@@ -4,7 +4,7 @@ namespace Cryptex.Benchmarks.Benchmarks;
 ///     Benchmarks for VM-control instructions: Nop, Exit.
 /// </summary>
 [MemoryDiagnoser]
-public class VMControlBenchmarks
+public class VmControlBenchmarks
 {
     private static readonly VMValue[] Constants =
     [
