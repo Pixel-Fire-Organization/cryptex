@@ -107,8 +107,6 @@ public class LogicBenchmarks
     [Benchmark] public bool Jge() => Run(m_jgeScript);
     [Benchmark] public bool Jle() => Run(m_jleScript);
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
-
     private static bool Run(Script script)
     {
         var executor = new Executor(script);

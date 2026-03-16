@@ -40,8 +40,6 @@ public class MemoryBenchmarks
     [Benchmark] public bool Free()         => Run(m_freeScript);
     [Benchmark] public bool LoadFreeLoad() => Run(m_loadFreeScript);
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
-
     private static bool Run(Script script)
     {
         var executor = new Executor(script);

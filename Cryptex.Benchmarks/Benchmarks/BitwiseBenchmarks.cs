@@ -63,8 +63,6 @@ public class BitwiseBenchmarks
     [Benchmark] public bool Shl() => Run(m_shlScript);
     [Benchmark] public bool Shr() => Run(m_shrScript);
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
-
     private static bool Run(Script script)
     {
         var executor = new Executor(script);

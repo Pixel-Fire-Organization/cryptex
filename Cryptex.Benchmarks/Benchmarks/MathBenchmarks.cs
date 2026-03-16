@@ -151,8 +151,6 @@ public class MathBenchmarks
     [Benchmark] public bool Mod()    => Run(m_modScript);
     [Benchmark] public bool ModImm() => Run(m_modImmScript);
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
-
     private static bool Run(Script script)
     {
         var executor = new Executor(script);

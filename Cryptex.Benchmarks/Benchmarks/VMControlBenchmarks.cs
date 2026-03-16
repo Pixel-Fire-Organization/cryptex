@@ -33,8 +33,6 @@ public class VMControlBenchmarks
     [Benchmark] public bool Nop()  => Run(m_nopScript);
     [Benchmark] public bool Exit() => Run(m_exitScript);
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
-
     private static bool Run(Script script)
     {
         var executor = new Executor(script);
