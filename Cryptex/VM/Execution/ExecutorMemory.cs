@@ -6,19 +6,6 @@ namespace Cryptex.VM.Execution;
 /// <summary>
 ///     The VM's working memory.
 /// </summary>
-/// <remarks>
-///     <para>
-///         Memory is divided into fixed-size <em>pages</em> of <see cref="PAGE_SIZE" /> slots each.
-///         A page is allocated on first write to any slot within it; pages are never freed during
-///         execution. This gives O(1) reads and writes without the rehashing cost of a dictionary.
-///     </para>
-///     <para>
-///         An unwritten slot contains <see cref="VMValue.Undefined" />.
-///         After a script is loaded and validated, instructions that read a slot they previously
-///         wrote will always get a non-undefined value — no null checks are needed past the initial
-///         undefined guard.
-///     </para>
-/// </remarks>
 public sealed class ExecutorMemory
 {
     // PAGE_SIZE must be a power of two so that / and % compile to bit shifts.
@@ -27,9 +14,7 @@ public sealed class ExecutorMemory
     private const int PAGE_MASK = PAGE_SIZE - 1;
 
     private readonly List<VMValue[]> m_pages = [];
-
-    /// <summary>Stores <paramref name="value" /> at <paramref name="slot" />.</summary>
-    /// <exception cref="VMRuntimeException">Thrown for negative slot indices.</exception>
+    
     public void SetSlot(int slot, VMValue value)
     {
         if (slot < 0)
@@ -39,11 +24,7 @@ public sealed class ExecutorMemory
         EnsurePage(pageIndex);
         m_pages[pageIndex][slot & PAGE_MASK] = value;
     }
-
-    /// <summary>
-    ///     Returns the value at <paramref name="slot" />, or <see cref="VMValue.Undefined" />
-    ///     if the slot has never been written.
-    /// </summary>
+    
     public VMValue GetSlot(int slot)
     {
         if (slot < 0)
@@ -54,11 +35,7 @@ public sealed class ExecutorMemory
             ? m_pages[pageIndex][slot & PAGE_MASK]
             : VMValue.Undefined;
     }
-
-    /// <summary>
-    ///     Clears <paramref name="slot" /> and returns the value that was stored there.
-    ///     Returns <see cref="VMValue.Undefined" /> if the slot was never written.
-    /// </summary>
+    
     public VMValue RemoveSlot(int slot)
     {
         if (slot < 0)

@@ -18,7 +18,7 @@ public sealed class XorInstructionTest
         Script script = new Script("script", [mainChunk], IntConstants);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5 ^ 6), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6),     executor.GetValueInMemory(2));
@@ -35,7 +35,7 @@ public sealed class XorInstructionTest
         Script script = new Script("script", [mainChunk], IntConstants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
@@ -51,7 +51,7 @@ public sealed class XorInstructionTest
         Script script = new Script("script", [mainChunk], IntConstants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
@@ -68,7 +68,7 @@ public sealed class XorInstructionTest
             [VMValue.FromFloat(5.5m), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.5m), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6),  executor.GetValueInMemory(2));
@@ -86,7 +86,7 @@ public sealed class XorInstructionTest
             [VMValue.FromInteger(5), VMValue.FromFloat(6.5m)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5),  executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromFloat(6.5m), executor.GetValueInMemory(2));
@@ -104,7 +104,7 @@ public sealed class XorInstructionTest
             [VMValue.FromInteger(5), VMValue.FromFloat(10.5m)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
@@ -121,7 +121,7 @@ public sealed class XorInstructionTest
             [VMValue.FromInteger(5), VMValue.FromFloat(10.5m)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
@@ -136,7 +136,7 @@ public sealed class XorInstructionTest
         Script script = new Script("script", [mainChunk], IntConstants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }

@@ -1,18 +1,28 @@
-﻿using Cryptex.VM.Execution.Scripts;
+﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
-/// <summary>
-///     <c>and $A, ($B | #V | %H)</c> — bitwise AND of the integer at slot <c>$A</c> with a second
-///     integer operand. Result stored in <c>$A</c>.
-/// </summary>
 internal sealed class AndInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.And;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
-        var (a, b) = BinaryBitwiseHelper.ReadOperands(in c, vm);
-        BinaryBitwiseHelper.GetMemory(vm).SetSlot(c.Args[0].Value, VMValue.FromInteger(a & b));
+        if (c.Args.Length != 2)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+
+        if (c.Args[0].Type != InstructionArgumentType.MemoryAddress ||
+            c.Args[1].Type != InstructionArgumentType.MemoryAddress)
+            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+
+        var aVal = vm.GetMemory().GetSlot(c.Args[0].Value);
+        var bVal = vm.GetMemory().GetSlot(c.Args[1].Value);
+
+        if (!aVal.IsInteger || !bVal.IsInteger)
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
+
+        vm.GetMemory().SetSlot(c.Args[0].Value, VMValue.FromInteger(aVal.AsInteger() & bVal.AsInteger()));
     }
 }
+

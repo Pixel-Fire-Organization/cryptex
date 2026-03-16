@@ -22,16 +22,29 @@ public sealed class ScriptChunk
 
     internal void Execute(Executor vm)
     {
-        foreach (var instruction in Instructions)
+        var ip = 0;
+        while (ip < Instructions.Length)
         {
             if (vm.HasExitBeenCalled())
                 return;
 
+            var instruction = Instructions[ip];
             var inst = instruction.Code.GetByCode();
             if (inst is null)
                 throw new VMRuntimeException(ErrorCodes.VM2008_InvalidInstructionFoundInScriptChunk);
 
-            inst?.Execute(instruction, vm);
+            inst.Execute(instruction, vm);
+
+            if (vm.TryConsumeJump(out var target))
+            {
+                if ((uint)target >= (uint)Instructions.Length)
+                    throw new VMRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
+                ip = target;
+            }
+            else
+            {
+                ip++;
+            }
         }
     }
 }

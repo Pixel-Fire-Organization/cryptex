@@ -17,7 +17,7 @@ public sealed class ShlInstructionTest
             [VMValue.FromInteger(5), VMValue.FromInteger(new BigInteger((long)int.MaxValue + 1))]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
@@ -33,7 +33,7 @@ public sealed class ShlInstructionTest
             [VMValue.FromInteger(5), VMValue.FromInteger(new BigInteger((long)int.MinValue - 1))]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
@@ -49,7 +49,7 @@ public sealed class ShlInstructionTest
             [VMValue.FromInteger(5), VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
     }
@@ -65,7 +65,7 @@ public sealed class ShlInstructionTest
             [VMValue.FromInteger(5), VMValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
@@ -81,7 +81,7 @@ public sealed class ShlInstructionTest
             [VMValue.FromFloat(5.5m), VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.5m), executor.GetValueInMemory(1));
     }
@@ -97,7 +97,7 @@ public sealed class ShlInstructionTest
             [VMValue.FromInteger(5), VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
     }

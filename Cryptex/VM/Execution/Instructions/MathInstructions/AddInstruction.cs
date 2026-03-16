@@ -3,10 +3,6 @@ using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
-/// <summary>
-///     <c>add $A, $B</c> — adds the integer at slot <c>$B</c> to the integer at slot <c>$A</c>.
-///     Result is stored in <c>$A</c>.
-/// </summary>
 internal sealed class AddInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Add;
@@ -20,16 +16,13 @@ internal sealed class AddInstruction : IInstruction
             c.Args[1].Type != InstructionArgumentType.MemoryAddress)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        var memory = vm.GetMemory();
-        var a = memory.GetSlot(c.Args[0].Value);
-        var b = memory.GetSlot(c.Args[1].Value);
+        var aVal = vm.GetMemory().GetSlot(c.Args[0].Value);
+        var bVal = vm.GetMemory().GetSlot(c.Args[1].Value);
 
-        if (a.IsUndefined || b.IsUndefined)
-            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
-
-        if (!a.IsInteger || !b.IsInteger)
+        if (!aVal.IsInteger || !bVal.IsInteger)
             throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
-        memory.SetSlot(c.Args[0].Value, VMValue.FromInteger(a.AsInteger() + b.AsInteger()));
+        vm.GetMemory().SetSlot(c.Args[0].Value, VMValue.FromInteger(aVal.AsInteger() + bVal.AsInteger()));
     }
 }
+

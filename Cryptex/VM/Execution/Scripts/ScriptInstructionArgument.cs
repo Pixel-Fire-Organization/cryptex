@@ -11,7 +11,7 @@ public sealed class ScriptInstructionArgument
         Type = type;
     }
 
-    [IgnoreMember] public static ScriptInstructionArgument DEFAULT { get; } = new(0, InstructionArgumentType.Empty);
+    [IgnoreMember] public static ScriptInstructionArgument Default { get; } = new(0, InstructionArgumentType.Empty);
 
     public int Value { get; }
     public InstructionArgumentType Type { get; }

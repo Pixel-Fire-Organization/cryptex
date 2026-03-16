@@ -17,7 +17,7 @@ public sealed class FreeInstructionTest
             [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         VMValue memoryValue1 = executor.GetValueInMemory(1);
         VMValue memoryValue2 = executor.GetValueInMemory(2);
@@ -38,7 +38,7 @@ public sealed class FreeInstructionTest
             [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         VMValue memoryValue1 = executor.GetValueInMemory(1);
         VMValue memoryValue2 = executor.GetValueInMemory(2);

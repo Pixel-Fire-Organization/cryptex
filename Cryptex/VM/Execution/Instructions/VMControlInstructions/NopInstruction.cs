@@ -3,31 +3,27 @@ using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
-/// <summary>
-///     <c>nop X</c> — suspends VM execution for <c>X</c> milliseconds.
-///     <para>X must be a decimal-integer constant (<c>#N</c>); range [0, 2^31−1].</para>
-/// </summary>
 internal sealed class NopInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Nop;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Args.Length != 1 || c.Args[0].Type == InstructionArgumentType.Empty)
+        if (c.Args.Length != 1)
             throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.Constant)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        var val = vm.GetConstantOrThrow(in c, c.Args[0].Value);
+        var ms = vm.GetConstant(c.Args[0].Value);
+        if (!ms.IsInteger)
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
-        if (!val.IsInteger)
-            throw new VMRuntimeException(ErrorCodes.VM2005_DecimalArgumentIsNotANumber);
-
-        var ms = val.AsInteger();
-        if (ms < 0 || ms > int.MaxValue)
+        var msValue = ms.AsInteger();
+        if (msValue < 0 || msValue > int.MaxValue)
             throw new VMRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
 
-        Thread.Sleep((int)ms);
+        Thread.Sleep((int)msValue);
     }
 }
+
