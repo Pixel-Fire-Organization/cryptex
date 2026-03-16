@@ -15,7 +15,7 @@ public sealed class DecInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         VMValue memoryValue = executor.GetValueInMemory(1);
         Assert.False(memoryValue.IsUndefined);
@@ -32,7 +32,7 @@ public sealed class DecInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromFloat(5.25m)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         VMValue memoryValue = executor.GetValueInMemory(1);
         Assert.False(memoryValue.IsUndefined);

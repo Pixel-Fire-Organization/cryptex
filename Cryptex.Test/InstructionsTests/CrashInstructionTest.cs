@@ -15,7 +15,7 @@ public sealed class CrashInstructionTest
         Script script = new Script("script", [mainChunk]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class CrashInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0x7f)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class CrashInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(2000)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
     }
 
     [Fact]
@@ -52,6 +52,6 @@ public sealed class CrashInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(80000)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
     }
 }

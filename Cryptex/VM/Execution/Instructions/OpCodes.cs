@@ -7,6 +7,7 @@ public enum OpCodes : byte
     Nop,
     Exit,
     Crash,
+    GetError,
 
     //Math opcodes.
     Inc,
@@ -22,6 +23,11 @@ public enum OpCodes : byte
     MulF,
     DivF,
     Mod,
+    AddImm,
+    SubImm,
+    MulImm,
+    DivImm,
+    ModImm,
 
     //Function opcodes.
     Arg,

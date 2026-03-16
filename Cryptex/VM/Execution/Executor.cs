@@ -6,11 +6,18 @@ namespace Cryptex.VM.Execution;
 
 public sealed class Executor
 {
-    internal const int MAX_FUNCTION_ARGS = 16;
+    public static int VM_VERSION { get; } = 1; // This must be changed on each publish. 
+
     private readonly ExecutorMemory m_memory;
     private readonly Script m_script;
     private BigInteger m_exitCode = 0;
     private bool m_vmExited;
+
+    private CompareFlag m_compareFlag;
+    private bool m_hasError;
+    private ErrorCodes m_errorCode;
+    private bool m_jumpPending;
+    private int m_jumpTarget;
 
     public Executor(Script script)
     {
@@ -18,11 +25,7 @@ public sealed class Executor
         m_memory = new ExecutorMemory();
     }
 
-    /// <summary>
-    ///     Begins executing the specified script.
-    /// </summary>
-    /// <returns><see langword="true" /> if the script executed successfully; <see langword="false" /> otherwise.</returns>
-    public bool BeginExecution()
+    public bool ExecuteScript()
     {
         try
         {
@@ -69,11 +72,9 @@ public sealed class Executor
 
     public BigInteger GetExitCode() => m_exitCode;
 
-    /// <summary>
-    ///     Returns the <see cref="VMValue" /> stored in memory slot <paramref name="location" />,
-    ///     or <see cref="VMValue.Undefined" /> if the slot has never been written.
-    /// </summary>
     public VMValue GetValueInMemory(int location) => m_memory.GetSlot(location);
+    
+    internal VMValue GetConstant(int index) => m_script.ConstantsBlock.Get(index);
 
     internal void ExitInstructionCall(BigInteger code)
     {
@@ -83,40 +84,45 @@ public sealed class Executor
 
     internal bool HasExitBeenCalled() => m_vmExited;
 
-    /// <summary>
-    ///     Resolves a constant by <paramref name="index" />, returning a raw
-    ///     <see cref="VMValue" /> (which may be <see cref="VMValueKind.Error" />).
-    /// </summary>
-    /// <remarks>
-    ///     Lookup order:
-    ///     <list type="number">
-    ///         <item>The instruction's <see cref="Scripts.ScriptInstruction.LocalConstants" /> (from the convenience string constructor).</item>
-    ///         <item>The script-level <see cref="ConstantsBlock" /> (from binary <c>.script</c> files).</item>
-    ///     </list>
-    /// </remarks>
-    internal VMValue GetConstant(in ScriptInstruction instruction, int index)
-    {
+    internal CompareFlag GetCompareFlag() => m_compareFlag;
+    internal void SetCompareFlag(CompareFlag flag) => m_compareFlag = flag;
+    internal void ClearCompareFlag() => m_compareFlag = CompareFlag.None;
 
-        return m_script.ConstantsBlock.Get(index);
+    internal void SetError(ErrorCodes code)
+    {
+        m_hasError = true;
+        m_errorCode = code;
     }
 
-    /// <summary>
-    ///     Resolves a constant and throws immediately if it carries a deferred parse error.
-    ///     Use this inside instruction <c>Execute</c> methods for all constant lookups.
-    /// </summary>
-    /// <exception cref="VMRuntimeException">
-    ///     Thrown with the deferred <see cref="ErrorCodes" /> when the constant is a
-    ///     <see cref="VMValueKind.Error" /> value, or with
-    ///     <see cref="ErrorCodes.VM2012_InstructionArgumentIsOutOfRange" /> when the index is
-    ///     out of range.
-    /// </exception>
-    internal VMValue GetConstantOrThrow(in ScriptInstruction instruction, int index)
+    internal bool HasError() => m_hasError;
+
+    internal ErrorCodes ConsumeError()
     {
-        var val = GetConstant(in instruction, index);
+        if (!m_hasError)
+            return ErrorCodes.SYS0000_ErrorCodeNotFound;
 
-        if (val.IsError)
-            throw new VMRuntimeException(val.ErrorCode);
+        var code = m_errorCode;
+        m_hasError = false;
+        m_errorCode = default;
+        return code;
+    }
 
-        return val;
+    internal void RequestJump(int instructionIndex)
+    {
+        m_jumpPending = true;
+        m_jumpTarget = instructionIndex;
+    }
+
+    internal bool TryConsumeJump(out int target)
+    {
+        if (!m_jumpPending)
+        {
+            target = 0;
+            return false;
+        }
+
+        target = m_jumpTarget;
+        m_jumpPending = false;
+        return true;
     }
 }

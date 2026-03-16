@@ -15,7 +15,7 @@ public sealed class NotInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         VMValue memoryValue1 = executor.GetValueInMemory(1);
         Assert.False(memoryValue1.IsUndefined);
@@ -32,7 +32,7 @@ public sealed class NotInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         VMValue memoryValue1 = executor.GetValueInMemory(1);
         Assert.False(memoryValue1.IsUndefined);

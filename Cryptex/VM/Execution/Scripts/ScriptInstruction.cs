@@ -11,13 +11,13 @@ public struct ScriptInstruction
     public ScriptInstruction()
     {
         Code = OpCodes.Crash;
-        Args = [ScriptInstructionArgument.DEFAULT];
+        Args = [];
     }
 
     public ScriptInstruction(OpCodes code)
     {
         Code = code;
-        Args = [ScriptInstructionArgument.DEFAULT];
+        Args = [];
     }
 
     public ScriptInstruction(OpCodes code, ScriptInstructionArgument[] args)

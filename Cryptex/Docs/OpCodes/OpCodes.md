@@ -15,77 +15,77 @@
 
 |     OpCode Name      | Implemented | Since (VM Version) |
 |:--------------------:|:-----------:|:------------------:|
-|  [Term](VM/Term.md)  |      ✔      |       1.0.0        |
-|   [Nop](VM/Nop.md)   |      ✔      |       1.0.0        |
-|  [Exit](VM/Exit.md)  |      ✔      |       1.0.0        |
-| [Crash](VM/Crash.md) |      ✔      |       1.0.0        |
+|  [Term](VM/Term.md)  |      ✔      |         1          |
+|   [Nop](VM/Nop.md)   |      ✔      |         1          |
+|  [Exit](VM/Exit.md)  |      ✔      |         1          |
+| [Crash](VM/Crash.md) |      ✔      |         1          |
 
 ### Math opcodes.
 
 |       OpCode Name        | Implemented | Since (VM Version) |
 |:------------------------:|:-----------:|:------------------:|
-|    [Inc](Math/Inc.md)    |      ✔      |       1.0.0        |
-|    [Dec](Math/Dec.md)    |      ✔      |       1.0.0        |
-|    [Add](Math/Add.md)    |      ✔      |       1.0.0        |
-|    [Sub](Math/Sub.md)    |      ✔      |       1.0.0        |
-|    [Mul](Math/Mul.md)    |      ✔      |       1.0.0        |
-|    [Div](Math/Div.md)    |      ✔      |       1.0.0        |
-| [AddImm](Math/AddImm.md) |      ✕      |       1.0.0        |
-| [SubImm](Math/SubImm.md) |      ✕      |       1.0.0        |
-| [MulImm](Math/MulImm.md) |      ✕      |       1.0.0        |
-| [DivImm](Math/DivImm.md) |      ✕      |       1.0.0        |
-|   [IncF](Math/IncF.md)   |      ✔      |       1.0.0        |
-|   [DecF](Math/DecF.md)   |      ✔      |       1.0.0        |
-|   [AddF](Math/AddF.md)   |      ✔      |       1.0.0        |
-|   [SubF](Math/SubF.md)   |      ✔      |       1.0.0        |
-|   [MulF](Math/MulF.md)   |      ✔      |       1.0.0        |
-|   [DivF](Math/DivF.md)   |      ✔      |       1.0.0        |
-|    [Mod](Math/Mod.md)    |      ✔      |       1.0.0        |
-| [ModImm](Math/ModImm.md) |      ✕      |       1.0.0        |
+|    [Inc](Math/Inc.md)    |      ✔      |         1          |
+|    [Dec](Math/Dec.md)    |      ✔      |         1          |
+|    [Add](Math/Add.md)    |      ✔      |         1          |
+|    [Sub](Math/Sub.md)    |      ✔      |         1          |
+|    [Mul](Math/Mul.md)    |      ✔      |         1          |
+|    [Div](Math/Div.md)    |      ✔      |         1          |
+| [AddImm](Math/AddImm.md) |      ✔      |         1          |
+| [SubImm](Math/SubImm.md) |      ✔      |         1          |
+| [MulImm](Math/MulImm.md) |      ✔      |         1          |
+| [DivImm](Math/DivImm.md) |      ✔      |         1          |
+|   [IncF](Math/IncF.md)   |      ✔      |         1          |
+|   [DecF](Math/DecF.md)   |      ✔      |         1          |
+|   [AddF](Math/AddF.md)   |      ✔      |         1          |
+|   [SubF](Math/SubF.md)   |      ✔      |         1          |
+|   [MulF](Math/MulF.md)   |      ✔      |         1          |
+|   [DivF](Math/DivF.md)   |      ✔      |         1          |
+|    [Mod](Math/Mod.md)    |      ✔      |         1          |
+| [ModImm](Math/ModImm.md) |      ✔      |         1          |
 
 ### Function opcodes.
 
 |       OpCode Name        | Implemented | Since (VM Version) |
 |:------------------------:|:-----------:|:------------------:|
-|  [Arg](Function/Arg.md)  |      ✕      |       1.0.0        |
-| [Exec](Function/Exec.md) |      ✕      |       1.0.0        |
-| [Call](Function/Call.md) |      ✕      |       1.0.0        |
-|  [Ret](Function/Ret.md)  |      ✕      |       1.0.0        |
-|  [Res](Function/Res.md)  |      ✕      |       1.0.0        |
+|  [Arg](Function/Arg.md)  |      ✕      |         -          |
+| [Exec](Function/Exec.md) |      ✕      |         -          |
+| [Call](Function/Call.md) |      ✕      |         -          |
+|  [Ret](Function/Ret.md)  |      ✕      |         -          |
+|  [Res](Function/Res.md)  |      ✕      |         -          |
 
 ### Logic opcodes.
 
 |       OpCode Name        | Implemented | Since (VM Version) |
 |:------------------------:|:-----------:|:------------------:|
-|   [Cmp](Logic/Cmp.md)    |      ✕      |       1.0.0        | 
-| [Jmp](Logic/Jump/Jmp.md) |      ✕      |       1.0.0        | 
-| [Jeq](Logic/Jump/Jeq.md) |      ✕      |       1.0.0        | 
-| [Jnq](Logic/Jump/Jnq.md) |      ✕      |       1.0.0        | 
-| [Jls](Logic/Jump/Jls.md) |      ✕      |       1.0.0        | 
-| [Jgr](Logic/Jump/Jgr.md) |      ✕      |       1.0.0        | 
-| [Jge](Logic/Jump/Jge.md) |      ✕      |       1.0.0        | 
-| [Jle](Logic/Jump/Jle.md) |      ✕      |       1.0.0        |
+|   [Cmp](Logic/Cmp.md)    |      ✔      |         1          | 
+| [Jmp](Logic/Jump/Jmp.md) |      ✔      |         1          | 
+| [Jeq](Logic/Jump/Jeq.md) |      ✔      |         1          | 
+| [Jnq](Logic/Jump/Jnq.md) |      ✔      |         1          | 
+| [Jls](Logic/Jump/Jls.md) |      ✔      |         1          | 
+| [Jgr](Logic/Jump/Jgr.md) |      ✔      |         1          | 
+| [Jge](Logic/Jump/Jge.md) |      ✔      |         1          | 
+| [Jle](Logic/Jump/Jle.md) |      ✔      |         1          |
 
 ### Bitwise opcodes.
 
 |      OpCode Name      | Implemented | Since (VM Version) |
 |:---------------------:|:-----------:|:------------------:|
-| [Shl](Bitwise/Shl.md) |      ✔      |       1.0.0        |
-| [Shr](Bitwise/Shr.md) |      ✔      |       1.0.0        |
-| [And](Bitwise/And.md) |      ✔      |       1.0.0        |
-|  [Or](Bitwise/Or.md)  |      ✔      |       1.0.0        | 
-| [Xor](Bitwise/Xor.md) |      ✔      |       1.0.0        |
-| [Not](Bitwise/Not.md) |      ✔      |       1.0.0        |
+| [Shl](Bitwise/Shl.md) |      ✔      |         1          |
+| [Shr](Bitwise/Shr.md) |      ✔      |         1          |
+| [And](Bitwise/And.md) |      ✔      |         1          |
+|  [Or](Bitwise/Or.md)  |      ✔      |         1          | 
+| [Xor](Bitwise/Xor.md) |      ✔      |         1          |
+| [Not](Bitwise/Not.md) |      ✔      |         1          |
 
 ### Memory opcodes.
 
 |         OpCode Name          | Implemented | Since (VM Version) |
 |:----------------------------:|:-----------:|:------------------:|
-|    [Load](Memory/Load.md)    |      ✔      |       1.0.0        |
-| [LoadImm](Memory/LoadImm.md) |      ✕      |       1.0.0        |
-|    [Free](Memory/Free.md)    |      ✔      |       1.0.0        |
-|     [Reg](Memory/Reg.md)     |      ✕      |       1.0.0        |
-|   [UnReg](Memory/UnReg.md)   |      ✕      |       1.0.0        |
+|    [Load](Memory/Load.md)    |      ✔      |         1          |
+| [LoadImm](Memory/LoadImm.md) |      ✔      |         1          |
+|    [Free](Memory/Free.md)    |      ✔      |         1          |
+|     [Reg](Memory/Reg.md)     |      ✕      |         -          |
+|   [UnReg](Memory/UnReg.md)   |      ✕      |         -          |
 
 ### Array opcodes.
 
@@ -118,8 +118,8 @@
 
 |                 OpCode Name                 | Implemented | Since (VM Version) |
 |:-------------------------------------------:|:-----------:|:------------------:|
-|    [Print](IntegratedFunctions/Print.md)    |      ✕      |       1.0.0        |
-|     [Read](IntegratedFunctions/Read.md)     |      ✕      |       1.0.0        |
-| [ReadLine](IntegratedFunctions/ReadLine.md) |      ✕      |       1.0.0        |
-|   [Random](IntegratedFunctions/Random.md)   |      ✕      |       1.0.0        |
-|  [RandomF](IntegratedFunctions/RandomF.md)  |      ✕      |       1.0.0        |
+|    [Print](IntegratedFunctions/Print.md)    |      ✔      |         1          |
+|     [Read](IntegratedFunctions/Read.md)     |      ✔      |         1          |
+| [ReadLine](IntegratedFunctions/ReadLine.md) |      ✔      |         1          |
+|   [Random](IntegratedFunctions/Random.md)   |      ✔      |         1          |
+|  [RandomF](IntegratedFunctions/RandomF.md)  |      ✔      |         1          |

@@ -27,14 +27,14 @@ public sealed class VmExecutorTest
     public void TestBeginExecution_OnErrorInScript()
     {
         Script script = new Script("script", [MixedAddChunk()], Constants);
-        Assert.False(new Executor(script).BeginExecution());
+        Assert.False(new Executor(script).ExecuteScript());
     }
 
     [Fact]
     public void TestBeginExecution_OnNoErrorInScript()
     {
         Script script = new Script("script", [IntAddChunk()], Constants);
-        Assert.True(new Executor(script).BeginExecution());
+        Assert.True(new Executor(script).ExecuteScript());
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public sealed class VmExecutorTest
     {
         Script script = new Script("script", [IntAddChunk()], Constants);
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
         Assert.Equal("[1]: `11`\n[2]: `6`\n", executor.DumpMemory());
     }
 

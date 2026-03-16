@@ -3,47 +3,40 @@ using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
-/// <summary>
-///     <c>load $A, $B | load $A, #V | load $A, %H | load $A</c>
-/// </summary>
 internal sealed class LoadInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Load;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Args.Length is 0 or > 2)
+        if (c.Args.Length == 0 || c.Args.Length > 2)
             throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        var memory = vm.GetMemory();
-        var targetSlot = c.Args[0].Value;
+        var destSlot = c.Args[0].Value;
 
-        // Single-argument form: free the slot (equivalent to `free $A`).
         if (c.Args.Length == 1)
         {
-            memory.RemoveSlot(targetSlot);
+            vm.GetMemory().RemoveSlot(destSlot);
             return;
         }
 
-        switch (c.Args[1].Type)
+        var source = c.Args[1];
+        switch (source.Type)
         {
             case InstructionArgumentType.MemoryAddress:
-                var srcVal = memory.GetSlot(c.Args[1].Value);
-                if (srcVal.IsUndefined)
-                    memory.RemoveSlot(targetSlot);
+                var memVal = vm.GetMemory().GetSlot(source.Value);
+                if (memVal.IsUndefined)
+                    vm.GetMemory().RemoveSlot(destSlot);
                 else
-                    memory.SetSlot(targetSlot, srcVal);
+                    vm.GetMemory().SetSlot(destSlot, memVal);
                 break;
 
-            // Decimal and hex constants are both pre-parsed into VMValue by the argument
-            // parser. GetConstantOrThrow propagates any deferred error (e.g. %5.5).
             case InstructionArgumentType.Constant:
             case InstructionArgumentType.HexConstant:
-                var constVal = vm.GetConstantOrThrow(in c, c.Args[1].Value);
-                memory.SetSlot(targetSlot, constVal);
+                vm.GetMemory().SetSlot(destSlot, vm.GetConstant(source.Value));
                 break;
 
             default:
@@ -51,3 +44,4 @@ internal sealed class LoadInstruction : IInstruction
         }
     }
 }
+

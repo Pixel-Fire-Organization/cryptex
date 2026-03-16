@@ -23,7 +23,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(11), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6),  executor.GetValueInMemory(2));
@@ -40,7 +40,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(11.50m), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromFloat(6.25m),  executor.GetValueInMemory(2));
@@ -57,7 +57,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.25m),  executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6),    executor.GetValueInMemory(2));
@@ -74,7 +74,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6),   executor.GetValueInMemory(2));
@@ -92,7 +92,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
@@ -109,7 +109,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));
@@ -126,7 +126,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
@@ -143,7 +143,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));
@@ -160,7 +160,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
@@ -177,7 +177,7 @@ public sealed class AddInstructionTest
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));
@@ -189,12 +189,12 @@ public sealed class AddInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
-            new ScriptInstruction(OpCodes.Add, [ScriptInstructionArgument.DEFAULT])
+            new ScriptInstruction(OpCodes.Add, [ScriptInstructionArgument.Default])
         ]);
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
@@ -206,12 +206,12 @@ public sealed class AddInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(2)]),
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(3)]),
-            new ScriptInstruction(OpCodes.AddF, [ScriptInstructionArgument.DEFAULT])
+            new ScriptInstruction(OpCodes.AddF, [ScriptInstructionArgument.Default])
         ]);
         Script script = new Script("script", [mainChunk], Constants);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
         Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));

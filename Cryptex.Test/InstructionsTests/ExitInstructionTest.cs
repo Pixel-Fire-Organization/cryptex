@@ -14,7 +14,7 @@ public sealed class ExitInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
         Assert.Equal(0, executor.GetExitCode());
     }
 
@@ -28,7 +28,7 @@ public sealed class ExitInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0x7f)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
         Assert.Equal(-1, executor.GetExitCode());
     }
 
@@ -42,7 +42,7 @@ public sealed class ExitInstructionTest
         Script script = new Script("script", [mainChunk]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
         Assert.Equal(-1, executor.GetExitCode());
     }
 }

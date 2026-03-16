@@ -15,7 +15,7 @@ public sealed class NopInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class NopInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public sealed class NopInstructionTest
         Script script = new Script("script", [mainChunk]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
     }
 
     [Fact]
@@ -53,6 +53,6 @@ public sealed class NopInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(10)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
     }
 }

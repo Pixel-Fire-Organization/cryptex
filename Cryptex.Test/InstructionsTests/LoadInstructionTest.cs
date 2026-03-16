@@ -14,7 +14,7 @@ public sealed class LoadInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         VMValue memoryValue = executor.GetValueInMemory(1);
         Assert.False(memoryValue.IsUndefined);
@@ -31,7 +31,7 @@ public sealed class LoadInstructionTest
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(16)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         VMValue memoryValue = executor.GetValueInMemory(1);
         Assert.False(memoryValue.IsUndefined);
@@ -50,7 +50,7 @@ public sealed class LoadInstructionTest
             [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
         VMValue memoryValue1 = executor.GetValueInMemory(1);
         VMValue memoryValue2 = executor.GetValueInMemory(2);
