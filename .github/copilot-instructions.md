@@ -77,6 +77,7 @@ Cryptex is a .NET 8.0 virtual machine (VM) and scripting engine library written 
 - Classes and their members are `sealed` where possible.
 - Instruction classes follow a consistent single-responsibility pattern — one class per opcode variant.
 - All code style rules are enforced via `.editorconfig`.
+- Make comments when absolutely nescessary. Comment only the `WHY` not the `WHAT`.
 
 ### SOLID Design
 

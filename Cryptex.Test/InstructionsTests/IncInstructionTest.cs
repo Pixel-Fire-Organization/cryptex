@@ -8,8 +8,11 @@ public sealed class IncInstructionTest
     [Fact]
     public void TestInc_CorrectValue()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5"), new ScriptInstruction(OpCodes.Inc, "$1") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Inc, [Args.Mem(1)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.BeginExecution());
@@ -18,12 +21,15 @@ public sealed class IncInstructionTest
         Assert.False(memoryValue.IsUndefined);
         Assert.Equal(VMValue.FromInteger(6), memoryValue);
     }
-    
+
     [Fact]
     public void TestInc_Floating()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptInstruction(OpCodes.Load, "$1, #5.5"), new ScriptInstruction(OpCodes.IncF, "$1") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.IncF, [Args.Mem(1)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.BeginExecution());

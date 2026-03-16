@@ -5,7 +5,7 @@ public enum InstructionArgumentType
     /// <summary>No argument / placeholder. Ignored by instructions.</summary>
     Empty = 0,
 
-    /// <summary>A decimal literal constant (<c>#N</c>). Value is an index into the Constants Block.</summary>
+    /// <summary>A decimal literal constant (<c>N</c>). Value is an index into the Constants Block.</summary>
     Constant,
 
     /// <summary>A memory-slot reference (<c>$N</c>). Value is the slot index.</summary>
@@ -14,6 +14,6 @@ public enum InstructionArgumentType
     /// <summary>A jump-target label. Value is the label index in the Jump Block.</summary>
     Label,
 
-    /// <summary>A hexadecimal literal constant (<c>%N</c>). Value is an index into the Constants Block; the stored string is the raw hex digits.</summary>
+    /// <summary>A hexadecimal integer constant. Value is an index into the Constants Block; the stored VMValue is the pre-parsed hex integer.</summary>
     HexConstant
 }

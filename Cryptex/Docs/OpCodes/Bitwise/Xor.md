@@ -8,7 +8,7 @@ xor $A, $B
 
 ## Description
 
-Performs the `xor` operation with the value `$A` and `$B`. Stores the result in `$A`.
+Performs the `Xor` operation with the value `$A` and `$B`. Stores the result in `$A`.
 
 ## Remarks
 

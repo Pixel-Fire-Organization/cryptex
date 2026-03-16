@@ -8,8 +8,26 @@ public sealed class Script
 {
     private string[] m_constants = [];
 
+    public Script(string scriptName, ScriptChunk[] chunks, VMValue[] constants)
+        : this(scriptName, "main", chunks, constants)
+    {
+    }
+
+    public Script(string scriptName, string entryPointName, ScriptChunk[] chunks, VMValue[] constants)
+    {
+        ScriptName = scriptName;
+        EntryPointName = entryPointName;
+
+        Chunks = new ScriptChunk[chunks.Length];
+        for (var i = 0; i < chunks.Length; i++)
+            Chunks[i] = chunks[i];
+
+        m_constants = [];
+        ConstantsBlock = new ConstantsBlock(constants);
+    }
+
     public Script(string scriptName, ScriptChunk[] chunks)
-        : this(scriptName, "main", chunks, [])
+        : this(scriptName, "main", chunks, (string[])[])
     {
     }
 
@@ -19,7 +37,7 @@ public sealed class Script
     }
 
     public Script(string scriptName, string entryPointName, ScriptChunk[] chunks)
-        : this(scriptName, entryPointName, chunks, [])
+        : this(scriptName, entryPointName, chunks, (string[])[])
     {
     }
 
