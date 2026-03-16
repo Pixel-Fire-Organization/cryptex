@@ -3,7 +3,8 @@
 namespace Cryptex.Test;
 
 /// <summary>
-///     Factory helpers for building <see cref="ScriptInstructionArgument" /> values in tests.
+///     Factory helpers for building <see cref="ScriptInstructionArgument" /> values
+///     and assembling <see cref="Script" /> instances in tests.
 /// </summary>
 internal static class Args
 {
@@ -18,5 +19,11 @@ internal static class Args
 
     internal static ScriptInstructionArgument Label(int instructionIndex)
         => new(instructionIndex, InstructionArgumentType.Label);
+
+    internal static Script Build(string name, VMValue[] constants, params ScriptInstruction[] instructions)
+    {
+        var chunk = new ScriptChunk("main", instructions);
+        return new Script(name, [chunk], constants);
+    }
 }
 
