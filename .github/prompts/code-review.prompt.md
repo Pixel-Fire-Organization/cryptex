@@ -34,6 +34,5 @@ Perform a thorough code review of the changes in the current working branch or t
 ### General
 - [ ] Is there any dead code, commented-out code, or debug statements left in?
 - [ ] Are there any new NuGet package additions that need justification?
-- [ ] Does the change require updates to `CryptexScriptInspector/OpCodeDescriptions.cs` or `OpCodeArguments.cs`?
 
 Provide specific, actionable feedback for each issue found, referencing the file name and line number where applicable.

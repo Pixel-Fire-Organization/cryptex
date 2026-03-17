@@ -42,23 +42,22 @@ Use this skill when adding a brand-new opcode/instruction to the Cryptex VM.
      - Early exit: never continue execution after detecting an invalid state.
    - **AOT rules** — do not use `dynamic`, reflection, `Activator.CreateInstance`, or any API annotated `[RequiresDynamicCode]` / `[RequiresUnreferencedCode]`.
 4. **Register the instruction** in `Cryptex/VM/Execution/OpCodesExtensions.cs` — add a `case` to the `GetByCode()` switch that returns `new YourInstruction()`.
-5. **Add opcode metadata** to `CryptexScriptInspector/OpCodeDescriptions.cs` and `CryptexScriptInspector/OpCodeArguments.cs` if the instruction should appear in the GUI inspector.
-6. **Add documentation** in `Cryptex/Docs/OpCodes/<Category>/<Name>.md` following the existing template (Signature, Description, Remarks, Example).
-7. **Update the opcode table** in `Cryptex/Docs/OpCodes/OpCodes.md` — mark `Implemented: ✔` and set the `Since (VM Version)`.
-8. **Write unit tests** in `Cryptex.Test/InstructionsTests/<Name>InstructionTest.cs` covering:
+5. **Add documentation** in `Cryptex/Docs/OpCodes/<Category>/<Name>.md` following the existing template (Signature, Description, Remarks, Example).
+6. **Update the opcode table** in `Cryptex/Docs/OpCodes/OpCodes.md` — mark `Implemented: ✔` and set the `Since (VM Version)`.
+7. **Write unit tests** in `Cryptex.Test/InstructionsTests/<Name>InstructionTest.cs` covering:
    - Correct input values (happy path)
    - Wrong argument types
    - Too few arguments
    - Too many arguments
    - No arguments
    - Any instruction-specific edge cases
-9. **Run the full test suite** to verify no regressions: `dotnet test --configuration Release`.
-10. **Run `TreatWarningsAsErrors` build** — the final gate before merging:
+8. **Run the full test suite** to verify no regressions: `dotnet test --configuration Release`.
+9. **Run `TreatWarningsAsErrors` build** — the final gate before merging:
     ```bash
     dotnet build --configuration Release -p:TreatWarningsAsErrors=true
     ```
     This surfaces AOT-incompatible API usage, nullable warnings, and trim-unsafe calls. All warnings must be resolved.
-11. **Run the linter** to ensure code style compliance: follow `.editorconfig` rules.
+10. **Run the linter** to ensure code style compliance: follow `.editorconfig` rules.
 
 ## Naming Conventions
 
