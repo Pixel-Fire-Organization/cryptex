@@ -57,6 +57,18 @@ public sealed class ScriptValidatorTest
     }
 
     [Fact]
+    public void Validate_NegativeVersion_ReportsInvalidVersion()
+    {
+        var script = new Script("test", -1, "main",
+            [new ScriptChunk("main", [])], []);
+
+        var result = ScriptValidator.Validate(script);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.Code == ScriptValidationErrorCode.InvalidVersion);
+    }
+
+    [Fact]
     public void Validate_MissingEntryPointChunk_ReportsInvalidEntryPoint()
     {
         var script = new Script("test", Executor.VM_VERSION, "nonexistent",
@@ -187,5 +199,94 @@ public sealed class ScriptValidatorTest
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.Code == ScriptValidationErrorCode.CouldNotLoad);
     }
-}
 
+    [Fact]
+    public void Validate_ValidScript_HasNoWarnings()
+    {
+        var result = ScriptValidator.Validate(ValidScript());
+
+        Assert.False(result.HasWarnings);
+        Assert.Empty(result.Warnings);
+    }
+
+    [Fact]
+    public void Validate_TooManyArguments_ReportsArgumentCountMismatch()
+    {
+        // Inc expects exactly 1 argument; supply 2.
+        var script = Args.Build("test", [],
+            new ScriptInstruction(OpCodes.Inc, [Args.Mem(1), Args.Mem(2)]));
+
+        var result = ScriptValidator.Validate(script);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.Code == ScriptValidationErrorCode.ArgumentCountMismatch);
+    }
+
+    [Fact]
+    public void Validate_InstructionError_IncludesChunkNameAndInstructionIndex()
+    {
+        var script = new Script("test", Executor.VM_VERSION, "main",
+            [new ScriptChunk("main", [
+                new ScriptInstruction(OpCodes.Inc, [Args.Mem(1)]), // valid, index 0
+                new ScriptInstruction(OpCodes.Add),                // wrong arg count, index 1
+            ])], []);
+
+        var result = ScriptValidator.Validate(script);
+
+        var error = Assert.Single(result.Errors, e => e.Code == ScriptValidationErrorCode.ArgumentCountMismatch);
+        Assert.Equal("main", error.ChunkName);
+        Assert.Equal(1, error.InstructionIndex);
+    }
+
+    [Fact]
+    public void Validate_MultipleChunks_IsValid()
+    {
+        var script = new Script("test", Executor.VM_VERSION, "main",
+            [
+                new ScriptChunk("main", []),
+                new ScriptChunk("helper", []),
+            ], []);
+
+        var result = ScriptValidator.Validate(script);
+
+        Assert.True(result.IsValid);
+    }
+
+    [Fact]
+    public void Validate_NonMainEntryPoint_IsValid()
+    {
+        var script = new Script("test", Executor.VM_VERSION, "start",
+            [new ScriptChunk("start", [])], []);
+
+        var result = ScriptValidator.Validate(script);
+
+        Assert.True(result.IsValid);
+    }
+
+    [Fact]
+    public void Validate_NoChunks_ReportsInvalidEntryPoint()
+    {
+        var script = new Script("test", Executor.VM_VERSION, "main", [], []);
+
+        var result = ScriptValidator.Validate(script);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.Code == ScriptValidationErrorCode.InvalidEntryPoint);
+    }
+
+    [Fact]
+    public void LoadAndValidate_InvalidScript_ReturnsNullAndExposesErrors()
+    {
+        // Arg is a defined opcode but unsupported in this VM version, so it serialises
+        // fine but fails validation. This verifies the LoadAndValidate overload exposes
+        // the validation result even when it prevents loading.
+        var invalid = Args.Build("test", [], new ScriptInstruction(OpCodes.Arg));
+        var data = ScriptLoader.Save(invalid);
+
+        var loaded = ScriptLoader.LoadAndValidate(data, out var result);
+
+        Assert.Null(loaded);
+        Assert.False(result.IsValid);
+        Assert.NotEmpty(result.Errors);
+    }
+}
