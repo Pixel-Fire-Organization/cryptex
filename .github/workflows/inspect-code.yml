@@ -23,3 +23,4 @@ jobs:
         with:
           solution_name: 'Cryptex'
           reports_path: 'linter-reports'
+          project: 'Cryptex'

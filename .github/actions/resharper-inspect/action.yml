@@ -10,6 +10,10 @@ inputs:
     description: 'Directory to store the reports'
     required: false
     default: 'linter-reports'
+  project:
+    description: 'Semicolon-separated list of project names to inspect (whitelist). Leave empty to inspect all projects.'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
@@ -24,18 +28,27 @@ runs:
 
     - name: Run Linter
       shell: bash
+      env:
+        PROJECT_INPUT: ${{ inputs.project }}
       run: |
         # Use the inputs provided to the action
         dotnet new tool-manifest --force || true
         dotnet tool install JetBrains.ReSharper.GlobalTools
         dotnet tool restore
+
+        # Build the project whitelist flag if provided
+        PROJECT_FLAG=""
+        if [ -n "$PROJECT_INPUT" ]; then
+          PROJECT_FLAG="--project=$PROJECT_INPUT"
+        fi
         
         # Run inspectcode using inputs
         dotnet jb inspectcode ${{ inputs.solution_name }}.sln \
           --profile=".editorconfig" \
           --output="${{ inputs.reports_path }}/jb-${{ github.run_number }}.sarif" \
           --format=Sarif \
-          --properties:Configuration=Release
+          --properties:Configuration=Release \
+          $PROJECT_FLAG
 
     - name: Upload Report to GitHub Security Tab
       uses: github/codeql-action/upload-sarif@v4
