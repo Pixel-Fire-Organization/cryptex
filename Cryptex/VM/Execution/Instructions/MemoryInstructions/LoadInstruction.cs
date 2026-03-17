@@ -5,15 +5,14 @@ namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class LoadInstruction : IInstruction
 {
-    internal LoadInstruction() { }
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
         if (c.Args.Length != 2)
-            throw new VmRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+            throw new VmRuntimeException(ErrorCodes.Vm2002IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
-            throw new VmRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+            throw new VmRuntimeException(ErrorCodes.Vm2003InvalidArgumentTypeSpecifiedForInstruction);
 
         var destSlot = c.Args[0].Value;
 
@@ -33,7 +32,7 @@ internal sealed class LoadInstruction : IInstruction
                 break;
 
             default:
-                throw new VmRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+                throw new VmRuntimeException(ErrorCodes.Vm2003InvalidArgumentTypeSpecifiedForInstruction);
         }
     }
 }

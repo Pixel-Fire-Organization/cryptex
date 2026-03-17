@@ -1,6 +1,5 @@
-﻿namespace Cryptex.VM.Execution.OperationCodes;
+namespace Cryptex.VM.Execution.OperationCodes;
 
-// ReSharper disable UnusedMember.Global
 public enum OpCodes : byte
 {
     //VM opcodes.
@@ -32,10 +31,6 @@ public enum OpCodes : byte
 
     //Function opcodes.
     Arg,
-    Exec,
-    Call,
-    Ret,
-    Res,
 
     //Logic opcodes.
     Cmp,
@@ -58,23 +53,6 @@ public enum OpCodes : byte
     //Memory opcodes.
     Load,
     Free,
-    Reg,
-    UnReg,
-
-    //Array opcodes.
-    ArrAccess,
-    ArrCreate,
-    ArrFree,
-    ArrLen,
-    ArrSet,
-
-    //String opcodes.
-    StrCreate,
-    StrSub,
-    StrAppend,
-    StrFree,
-    StrNum,
-    StrChar,
 
     //Integrated functions.
     Print,

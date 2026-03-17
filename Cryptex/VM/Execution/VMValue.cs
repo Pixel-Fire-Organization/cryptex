@@ -42,21 +42,21 @@ public readonly struct VmValue : IEquatable<VmValue>
     public BigInteger AsInteger()
     {
         if (Kind != VmValueKind.Integer)
-            throw new VmRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
+            throw new VmRuntimeException(ErrorCodes.Vm2011InvalidDataTypeAtSpecifiedLocation);
         return m_intValue;
     }
 
     public decimal AsFloat()
     {
         if (Kind != VmValueKind.Float)
-            throw new VmRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
+            throw new VmRuntimeException(ErrorCodes.Vm2011InvalidDataTypeAtSpecifiedLocation);
         return m_floatValue;
     }
 
     public string AsString()
     {
         if (Kind != VmValueKind.String)
-            throw new VmRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
+            throw new VmRuntimeException(ErrorCodes.Vm2011InvalidDataTypeAtSpecifiedLocation);
         return m_stringValue!;
     }
 

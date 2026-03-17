@@ -35,7 +35,7 @@ public sealed class ReadInstructionTest
         Assert.True(executor.ExecuteScript());
 
         Assert.True(executor.GetValueInMemory(1).IsUndefined);
-        Assert.Equal(VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+        Assert.Equal(VmValue.FromInteger((int)ErrorCodes.Vm2014InvalidInputProvided),
             executor.GetValueInMemory(2));
     }
 

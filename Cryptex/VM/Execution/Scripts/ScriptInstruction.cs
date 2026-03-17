@@ -3,13 +3,11 @@ using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts;
 
-// ReSharper disable UnusedMember.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 [MessagePackObject(true)]
 public struct ScriptInstruction
 {
-    public OpCodes Code { get; set; }
-    public ScriptInstructionArgument[] Args { get; set; }
+    public OpCodes Code { get; init; }
+    public ScriptInstructionArgument[] Args { get; init; }
 
     public ScriptInstruction()
     {

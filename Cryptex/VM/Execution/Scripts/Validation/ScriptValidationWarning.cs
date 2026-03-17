@@ -1,4 +1,4 @@
-﻿namespace Cryptex.VM.Execution.Scripts.Validation;
+namespace Cryptex.VM.Execution.Scripts.Validation;
 
 /// <summary>
 ///     A single non-fatal finding produced by <see cref="ScriptValidator.Validate" />.
@@ -14,7 +14,7 @@ public readonly struct ScriptValidationWarning
     }
 
     public ScriptValidationWarningCode Code { get; }
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public string Message { get; }
-}
 
+    public override string ToString() => $"[{Code}] {Message}";
+}

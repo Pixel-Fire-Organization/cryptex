@@ -1,4 +1,3 @@
-using Cryptex.Exceptions;
 using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts;
@@ -8,8 +7,6 @@ namespace Cryptex.VM.Execution.Scripts;
 ///     Holds the named <see cref="ScriptChunk" /> array, the pre-parsed
 ///     <see cref="ConstantsBlock" />, and execution metadata.
 /// </summary>
-// ReSharper disable UnusedMember.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 [MessagePackObject(true)]
 public sealed class Script
 {
@@ -37,14 +34,14 @@ public sealed class Script
         Chunks = new ScriptChunk[chunks.Length];
         for (var i = 0; i < chunks.Length; i++)
             Chunks[i] = chunks[i];
-        
+
         ConstantsBlock = new ConstantsBlock(constants);
     }
 
-    public int VmVersion { get; set; }
-    public string ScriptName { get; set; }
-    public string EntryPointName { get; set; }
-    public ScriptChunk[] Chunks { get; set; }
+    public int VmVersion { get; init; }
+    public string ScriptName { get; init; }
+    public string EntryPointName { get; init; }
+    public ScriptChunk[] Chunks { get; init; }
 
     [IgnoreMember]
     internal ConstantsBlock ConstantsBlock { get; }
@@ -57,6 +54,6 @@ public sealed class Script
         if (chunk is not null)
             chunk.Execute(vm);
         else
-            throw new VmRuntimeException(ErrorCodes.VM2000_NoChunkFoundToExecute);
+            throw new VmRuntimeException(ErrorCodes.Vm2000NoChunkFoundToExecute);
     }
 }

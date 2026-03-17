@@ -97,15 +97,15 @@ public sealed class BinaryScriptSerializer : IScriptSerializer
 [MessagePackObject(keyAsPropertyName: true, AllowPrivate = true)]
 internal sealed class ScriptBinaryEnvelope
 {
-    public Script? Script { get; set; }
-    public ScriptConstantEntry[] Constants { get; set; } = [];
+    public Script? Script { get; init; }
+    public ScriptConstantEntry[] Constants { get; init; } = [];
 }
 
 [MessagePackObject(keyAsPropertyName: true, AllowPrivate = true)]
 internal sealed class ScriptConstantEntry
 {
     public byte Kind { get; set; }
-    public string Value { get; set; } = "";
+    public string Value { get; init; } = "";
 }
 
 

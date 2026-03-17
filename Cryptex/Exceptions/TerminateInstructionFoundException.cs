@@ -1,4 +1,4 @@
-﻿namespace Cryptex.Exceptions;
+namespace Cryptex.Exceptions;
 
 internal sealed class TerminateInstructionFoundException : Exception
 {
@@ -7,11 +7,6 @@ internal sealed class TerminateInstructionFoundException : Exception
 
     public TerminateInstructionFoundException()
         : base(MESSAGE)
-    {
-    }
-
-    // ReSharper disable once UnusedMember.Global
-    public TerminateInstructionFoundException(Exception? innerException) : base(MESSAGE, innerException)
     {
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Cryptex.VM.Execution.Scripts.Validation;
+namespace Cryptex.VM.Execution.Scripts.Validation;
 
 /// <summary>
 ///     A single validation finding produced by <see cref="ScriptValidator" />.
@@ -16,9 +16,9 @@ public readonly struct ScriptValidationError
     }
 
     public ScriptValidationErrorCode Code { get; }
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public string Message { get; }
     public string ChunkName { get; }
     public int InstructionIndex { get; }
-}
 
+    public override string ToString() => $"[{Code}] {Message} (chunk '{ChunkName}', index {InstructionIndex})";
+}

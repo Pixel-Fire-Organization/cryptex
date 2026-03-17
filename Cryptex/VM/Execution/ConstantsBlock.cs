@@ -24,10 +24,10 @@ public sealed class ConstantsBlock
     ///     a block built from a valid <see cref="Script.ConstantsBlock" /> array.
     /// </summary>
     /// <exception cref="VmRuntimeException">
-    ///     Thrown with <see cref="ErrorCodes.VM2006_ConstantsIndexOutOfRange" /> when
+    ///     Thrown with <see cref="ErrorCodes.Vm2006ConstantsIndexOutOfRange" /> when
     ///     <paramref name="index" /> is out of range.
     /// </exception>
     public VmValue Get(int index) => (uint)index >= (uint)m_values.Length
-        ? throw new VmRuntimeException(ErrorCodes.VM2006_ConstantsIndexOutOfRange)
+        ? throw new VmRuntimeException(ErrorCodes.Vm2006ConstantsIndexOutOfRange)
         : m_values[index];
 }

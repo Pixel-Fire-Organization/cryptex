@@ -109,7 +109,7 @@ public sealed class Executor
     internal ErrorCodes ConsumeError()
     {
         if (!m_hasError)
-            return ErrorCodes.SYS0000_ErrorCodeNotFound;
+            return ErrorCodes.Sys0000ErrorCodeNotFound;
 
         var code = m_errorCode;
         m_hasError = false;

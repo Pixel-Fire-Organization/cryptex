@@ -19,7 +19,7 @@ public sealed class GetErrorInstructionTest
         Assert.True(executor.ExecuteScript());
 
         Assert.Equal(
-            VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+            VmValue.FromInteger((int)ErrorCodes.Vm2014InvalidInputProvided),
             executor.GetValueInMemory(2));
     }
 
@@ -55,10 +55,10 @@ public sealed class GetErrorInstructionTest
         Assert.True(executor.ExecuteScript());
 
         Assert.Equal(
-            VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+            VmValue.FromInteger((int)ErrorCodes.Vm2014InvalidInputProvided),
             executor.GetValueInMemory(2));
         Assert.Equal(
-            VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+            VmValue.FromInteger((int)ErrorCodes.Vm2014InvalidInputProvided),
             executor.GetValueInMemory(4));
     }
 

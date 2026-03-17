@@ -18,7 +18,7 @@ public sealed class ExecutorMemory
     public void SetSlot(int slot, VmValue value)
     {
         if (slot < 0)
-            throw new VmRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
+            throw new VmRuntimeException(ErrorCodes.Vm2007InvalidMemoryLocationSpecifiedAsArgument);
 
         var pageIndex = slot >> PAGE_SHIFT;
         EnsurePage(pageIndex);

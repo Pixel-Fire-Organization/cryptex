@@ -1,4 +1,4 @@
-﻿using Cryptex.VM.Execution.Scripts.Validation;
+using Cryptex.VM.Execution.Scripts.Validation;
 
 namespace Cryptex.VM.Execution.Scripts.Loaders;
 
@@ -65,10 +65,6 @@ public static class ScriptLoader
     public static byte[] Save(Script script, ScriptFormat format = ScriptFormat.Binary)
         => GetSerializer(format).Serialize(script);
 
-    // ReSharper disable once UnusedMember.Global
-    public static void Save(Script script, string path, ScriptFormat format = ScriptFormat.Binary)
-        => File.WriteAllBytes(path, Save(script, format));
-
     private static IScriptSerializer GetSerializer(ScriptFormat format)
     {
         foreach (var serializer in Serializers)
@@ -79,4 +75,3 @@ public static class ScriptLoader
         return new BinaryScriptSerializer();
     }
 }
-
