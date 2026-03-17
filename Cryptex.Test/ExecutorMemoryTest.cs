@@ -1,6 +1,4 @@
-﻿using Cryptex.VM.Execution;
-
-namespace Cryptex.Test;
+﻿namespace Cryptex.Test;
 
 public sealed class ExecutorMemoryTest
 {

@@ -1,6 +1,4 @@
-﻿using Cryptex.VM.Execution.Scripts;
-
-namespace Cryptex.Test;
+﻿namespace Cryptex.Test;
 
 /// <summary>
 ///     Factory helpers for building <see cref="ScriptInstructionArgument" /> values

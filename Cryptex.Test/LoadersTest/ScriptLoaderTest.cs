@@ -96,7 +96,7 @@ public sealed class ScriptLoaderTest
         // Auto-detection ensures binary data is always handled by the binary serializer,
         // even when the caller saves with one format and loads without specifying format.
         var binaryData = ScriptLoader.Save(AddScript(), ScriptFormat.Binary);
-        var jsonData = ScriptLoader.Save(NopScript(), ScriptFormat.Json);
+        var jsonData = ScriptLoader.Save(EmptyScript(), ScriptFormat.Json);
 
         var fromBinary = ScriptLoader.Load(binaryData);
         var fromJson = ScriptLoader.Load(jsonData);

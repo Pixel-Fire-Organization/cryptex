@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
-using Cryptex.VM.Execution;
 using Cryptex.VM.Execution.OperationCodes;
-using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
 
