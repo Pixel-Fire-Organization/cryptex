@@ -74,15 +74,7 @@ public sealed class ScriptComposer
         return this;
     }
 
-    public bool HasChunk(string chunkName)
-    {
-        foreach (var chunk in m_chunks)
-        {
-            if (chunk.ChunkName == chunkName)
-                return true;
-        }
-        return false;
-    }
+    public bool HasChunk(string chunkName) => m_chunks.Any(chunk => chunk.ChunkName == chunkName);
 
     public ScriptComposer AddChunk(ScriptChunk chunk)
     {
@@ -106,6 +98,7 @@ public sealed class ScriptComposer
             m_chunks.RemoveAt(i);
             return this;
         }
+
         return this;
     }
 
@@ -137,4 +130,3 @@ public sealed class ScriptComposer
 
     public Script Build() => new(m_name, m_vmVersion, m_entryPoint, [.. m_chunks], [.. m_constants]);
 }
-
