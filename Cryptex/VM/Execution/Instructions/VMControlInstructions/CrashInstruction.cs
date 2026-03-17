@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class CrashInstruction : IInstruction
 {
+    internal CrashInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Crash;
 
     public void Execute(ScriptInstruction c, Executor vm)

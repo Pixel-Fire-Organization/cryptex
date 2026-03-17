@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class FreeInstruction : IInstruction
 {
+    internal FreeInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Free;
 
     public void Execute(ScriptInstruction c, Executor vm)

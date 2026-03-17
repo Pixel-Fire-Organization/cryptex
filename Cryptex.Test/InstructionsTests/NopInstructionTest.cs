@@ -1,4 +1,5 @@
 ﻿using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
@@ -18,18 +19,6 @@ public sealed class NopInstructionTest
         Assert.False(executor.ExecuteScript());
     }
 
-    [Fact]
-    public void TestNop_HexValue()
-    {
-        // HexConstant type — Nop only accepts Constant, so it fails.
-        ScriptChunk mainChunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Nop, [Args.HexConst(0)])
-        ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
-
-        Executor executor = new Executor(script);
-        Assert.False(executor.ExecuteScript());
-    }
 
     [Fact]
     public void TestNop_MemoryLocation()

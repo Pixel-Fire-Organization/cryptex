@@ -1,4 +1,5 @@
 ﻿using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
@@ -19,17 +20,16 @@ public sealed class ExitInstructionTest
     }
 
     [Fact]
-    public void TestExit_HexExitCode()
+    public void TestExit_NonZeroExitCode()
     {
-        // HexConstant type — Exit only accepts Constant, so it fails.
         ScriptChunk mainChunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Exit, [Args.HexConst(0)])
+            new ScriptInstruction(OpCodes.Exit, [Args.Const(0)])
         ]);
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0x7f)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.ExecuteScript());
-        Assert.Equal(-1, executor.GetExitCode());
+        Assert.True(executor.ExecuteScript());
+        Assert.Equal(0x7f, executor.GetExitCode());
     }
 
     [Fact]

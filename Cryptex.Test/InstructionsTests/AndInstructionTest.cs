@@ -1,4 +1,5 @@
 ﻿using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
@@ -23,22 +24,6 @@ public sealed class AndInstructionTest
 
         Assert.Equal(VMValue.FromInteger(5 & 6), executor.GetValueInMemory(1));
         Assert.Equal(VMValue.FromInteger(6),     executor.GetValueInMemory(2));
-    }
-
-    [Fact]
-    public void TestAnd_MemoryAddressAndHexValue()
-    {
-        // HexConstant type — And only accepts MemoryAddress for the second operand.
-        ScriptChunk mainChunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
-            new ScriptInstruction(OpCodes.And, [Args.Mem(1), Args.HexConst(1)])
-        ]);
-        Script script = new Script("script", [mainChunk], IntConstants);
-
-        Executor executor = new Executor(script);
-        Assert.False(executor.ExecuteScript());
-
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -92,21 +77,6 @@ public sealed class AndInstructionTest
         Assert.Equal(VMValue.FromFloat(6.5m),  executor.GetValueInMemory(2));
     }
 
-    [Fact]
-    public void TestAnd_MemoryAddressAndHexValue_Floating()
-    {
-        // HexConstant type — invalid type, fails immediately.
-        ScriptChunk mainChunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
-            new ScriptInstruction(OpCodes.And, [Args.Mem(1), Args.HexConst(1)])
-        ]);
-        Script script = new Script("script", [mainChunk], IntConstants);
-
-        Executor executor = new Executor(script);
-        Assert.False(executor.ExecuteScript());
-
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
-    }
 
     [Fact]
     public void TestAnd_MemoryAddressAndDecimalValue_Floating()

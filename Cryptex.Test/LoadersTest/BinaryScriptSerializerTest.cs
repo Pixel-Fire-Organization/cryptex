@@ -1,4 +1,5 @@
-﻿using Cryptex.VM.Execution.Scripts.Loaders;
+﻿using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts.Loaders;
 using MessagePack;
 
 namespace Cryptex.Test.LoadersTest;

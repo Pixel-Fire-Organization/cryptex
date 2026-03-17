@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class ExitInstruction : IInstruction
 {
+    internal ExitInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Exit;
 
     public void Execute(ScriptInstruction c, Executor vm)

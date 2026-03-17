@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class JlsInstruction : IInstruction
 {
+    internal JlsInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Jls;
 
     public void Execute(ScriptInstruction c, Executor vm)

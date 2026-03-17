@@ -1,3 +1,5 @@
+using Cryptex.VM.Execution.OperationCodes;
+
 namespace Cryptex.Test.StressTests;
 
 /// <summary>

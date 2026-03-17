@@ -1,4 +1,5 @@
 ﻿using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
@@ -22,11 +23,10 @@ public sealed class LoadInstructionTest
     }
 
     [Fact]
-    public void TestLoad_HexValueToMemoryLocation()
+    public void TestLoad_IntegerConstantToMemoryLocation()
     {
-        // HexConstant type: the pre-parsed value (0x10 = 16) sits in the constants block.
         ScriptChunk mainChunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.HexConst(0)])
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
         ]);
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(16)]);
 

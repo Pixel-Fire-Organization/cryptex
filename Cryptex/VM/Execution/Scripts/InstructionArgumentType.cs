@@ -12,8 +12,5 @@ public enum InstructionArgumentType
     MemoryAddress,
 
     /// <summary>A jump-target label. Value is the label index in the Jump Block.</summary>
-    Label,
-
-    /// <summary>A hexadecimal integer constant. Value is an index into the Constants Block; the stored VMValue is the pre-parsed hex integer.</summary>
-    HexConstant
+    Label
 }

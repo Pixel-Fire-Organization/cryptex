@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class GetErrorInstruction : IInstruction
 {
+    internal GetErrorInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.GetError;
 
     public void Execute(ScriptInstruction c, Executor vm)

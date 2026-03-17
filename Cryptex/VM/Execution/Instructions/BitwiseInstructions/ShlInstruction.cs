@@ -1,11 +1,13 @@
 ﻿using System.Numerics;
 using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class ShlInstruction : IInstruction
 {
+    internal ShlInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Shl;
 
     public void Execute(ScriptInstruction c, Executor vm)

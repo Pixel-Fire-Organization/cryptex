@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.IntegratedFunctionInstructions;
 
 internal sealed class RandomFInstruction : IInstruction
 {
+    internal RandomFInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.RandomF;
 
     public void Execute(ScriptInstruction c, Executor vm)

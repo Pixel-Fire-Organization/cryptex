@@ -1,3 +1,4 @@
+using Cryptex.VM.Execution.OperationCodes;
 using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts;

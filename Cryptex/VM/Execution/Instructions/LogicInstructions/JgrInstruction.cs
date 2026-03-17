@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class JgrInstruction : IInstruction
 {
+    internal JgrInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Jgr;
 
     public void Execute(ScriptInstruction c, Executor vm)

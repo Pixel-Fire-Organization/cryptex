@@ -1,4 +1,4 @@
-﻿namespace Cryptex.VM.Execution;
+﻿namespace Cryptex.VM.Execution.OperationCodes;
 
 public enum OpCodes : byte
 {
@@ -80,5 +80,20 @@ public enum OpCodes : byte
     Read,
     ReadLine,
     Random,
-    RandomF
+    RandomF,
+
+    /// <summary>
+    /// This is the last member of this enum. Used to count it.
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    ///     <item>
+    ///         This is not a real instruction, don't use it in this context.
+    ///     </item>
+    ///     <item>
+    ///         This should always be the last member of this enum.
+    ///     </item>
+    /// </list>
+    /// </remarks>
+    __LAST = byte.MaxValue - 1
 }

@@ -1,4 +1,5 @@
-﻿using Cryptex.VM.Execution.Scripts;
+﻿using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions;
 

@@ -1,4 +1,5 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts;
@@ -29,11 +30,11 @@ public sealed class ScriptChunk
                 return;
 
             var instruction = Instructions[ip];
-            var inst = instruction.Code.GetByCode();
-            if (inst is null)
+            var info = instruction.Code.GetInfo(vm.ScriptVersion);
+            if (info.Instruction is null)
                 throw new VMRuntimeException(ErrorCodes.VM2008_InvalidInstructionFoundInScriptChunk);
 
-            inst.Execute(instruction, vm);
+            info.Instruction.Execute(instruction, vm);
 
             if (vm.TryConsumeJump(out var target))
             {
