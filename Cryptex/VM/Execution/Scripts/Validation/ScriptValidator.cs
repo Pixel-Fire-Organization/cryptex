@@ -1,4 +1,3 @@
-using Cryptex.VM.Execution.Instructions;
 using Cryptex.VM.Execution.OperationCodes;
 
 namespace Cryptex.VM.Execution.Scripts.Validation;
@@ -28,29 +27,23 @@ public static class ScriptValidator
     private static void ValidateVersion(Script script, List<ScriptValidationError> errors,
         List<ScriptValidationWarning> warnings)
     {
-        if (script.VMVersion < 1)
-        {
+        if (script.VmVersion < 1)
             errors.Add(new ScriptValidationError(
                 ScriptValidationErrorCode.InvalidVersion,
-                $"Script has an invalid VM version ({script.VMVersion}). Minimum supported version is 1."));
-        }
-        else if (script.VMVersion > Executor.VM_VERSION)
-        {
+                $"Script has an invalid VM version ({script.VmVersion}). Minimum supported version is 1."));
+        else if (script.VmVersion > Executor.VmVersion)
             warnings.Add(new ScriptValidationWarning(
                 ScriptValidationWarningCode.CompatibilityModeActive,
-                $"Script targets VM version {script.VMVersion}, but the current VM version is {Executor.VM_VERSION}. " +
-                $"The VM will execute in compatibility mode. Behaviour may not be identical to VM version {script.VMVersion}."));
-        }
+                $"Script targets VM version {script.VmVersion}, but the current VM version is {Executor.VmVersion}. " +
+                $"The VM will execute in compatibility mode. Behaviour may not be identical to VM version {script.VmVersion}."));
     }
 
     private static void ValidateEntryPoint(Script script, List<ScriptValidationError> errors)
     {
         if (script.GetChunk(script.EntryPointName) is null)
-        {
             errors.Add(new ScriptValidationError(
                 ScriptValidationErrorCode.InvalidEntryPoint,
                 $"Entry point chunk '{script.EntryPointName}' does not exist in the script."));
-        }
     }
 
     private static void ValidateInstructions(Script script, List<ScriptValidationError> errors)
@@ -74,7 +67,7 @@ public static class ScriptValidator
             return;
         }
 
-        var info = instruction.Code.GetInfo(script.VMVersion);
+        var info = instruction.Code.GetInfo();
         if (!info.IsSupported)
         {
             errors.Add(new ScriptValidationError(
@@ -84,11 +77,11 @@ public static class ScriptValidator
             return;
         }
 
-        if (info.IntroducedInVersion > script.VMVersion)
+        if (info.IntroducedInVersion > script.VmVersion)
         {
             errors.Add(new ScriptValidationError(
                 ScriptValidationErrorCode.UnsupportedOpCode,
-                $"Opcode '{instruction.Code}' at instruction {index} in chunk '{chunkName}' was introduced in VM version {info.IntroducedInVersion}, but script targets version {script.VMVersion}.",
+                $"Opcode '{instruction.Code}' at instruction {index} in chunk '{chunkName}' was introduced in VM version {info.IntroducedInVersion}, but script targets version {script.VmVersion}.",
                 chunkName, index));
             return;
         }
@@ -118,12 +111,10 @@ public static class ScriptValidator
 
             if (arg.Type is InstructionArgumentType.Constant &&
                 (uint)arg.Value >= (uint)script.ConstantsBlock.Count)
-            {
                 errors.Add(new ScriptValidationError(
                     ScriptValidationErrorCode.ConstantsIndexOutOfRange,
                     $"Argument {j} of '{instruction.Code}' at instruction {index} in chunk '{chunkName}' references constant index {arg.Value}, but the constants block has {script.ConstantsBlock.Count} entr{(script.ConstantsBlock.Count == 1 ? "y" : "ies")}.",
                     chunkName, index));
-            }
         }
     }
 

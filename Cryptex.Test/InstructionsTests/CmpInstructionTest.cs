@@ -16,7 +16,7 @@ public sealed class CmpInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(1)])  // 5
         ]);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(99)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(99)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -37,7 +37,7 @@ public sealed class CmpInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(1)])  // 5
         ]);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(6), VMValue.FromInteger(5), VMValue.FromInteger(99)]);
+            [VmValue.FromInteger(6), VmValue.FromInteger(5), VmValue.FromInteger(99)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -58,7 +58,7 @@ public sealed class CmpInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(1)])  // 5
         ]);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(4), VMValue.FromInteger(5), VMValue.FromInteger(99)]);
+            [VmValue.FromInteger(4), VmValue.FromInteger(5), VmValue.FromInteger(99)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -79,7 +79,7 @@ public sealed class CmpInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(1)])
         ]);
         Script script = new Script("script", [chunk],
-            [VMValue.FromFloat(3.14m), VMValue.FromInteger(99)]);
+            [VmValue.FromFloat(3.14m), VmValue.FromInteger(99)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -96,7 +96,7 @@ public sealed class CmpInstructionTest
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Mem(2)])
         ]);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromFloat(5.0m)]);
+            [VmValue.FromInteger(5), VmValue.FromFloat(5.0m)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
@@ -109,7 +109,7 @@ public sealed class CmpInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Cmp,  [Args.Mem(1), Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(5)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

@@ -6,7 +6,7 @@ namespace Cryptex.Test.LoadersTest;
 public sealed class ScriptLoaderTest
 {
     private static Script AddScript() => Args.Build("add_script",
-        [VMValue.FromInteger(3), VMValue.FromInteger(7)],
+        [VmValue.FromInteger(3), VmValue.FromInteger(7)],
         new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
         new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
         new ScriptInstruction(OpCodes.Add, [Args.Mem(1), Args.Mem(2)]));
@@ -49,7 +49,7 @@ public sealed class ScriptLoaderTest
         Assert.Equal(original.ScriptName, loaded.ScriptName);
         var executor = new Executor(loaded);
         Assert.True(executor.ExecuteScript());
-        Assert.Equal(VMValue.FromInteger(10), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(10), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public sealed class ScriptLoaderTest
         Assert.Equal(ScriptFormat.Binary, new BinaryScriptSerializer().Format);
         var executor = new Executor(loaded);
         Assert.True(executor.ExecuteScript());
-        Assert.Equal(VMValue.FromInteger(10), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(10), executor.GetValueInMemory(1));
     }
 
     [Fact]

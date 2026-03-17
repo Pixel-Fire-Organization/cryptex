@@ -1,5 +1,6 @@
 ﻿namespace Cryptex.VM.Execution.OperationCodes;
 
+// ReSharper disable UnusedMember.Global
 public enum OpCodes : byte
 {
     //VM opcodes.
@@ -95,5 +96,5 @@ public enum OpCodes : byte
     ///     </item>
     /// </list>
     /// </remarks>
-    __LAST = byte.MaxValue - 1
+    Last = byte.MaxValue - 1
 }

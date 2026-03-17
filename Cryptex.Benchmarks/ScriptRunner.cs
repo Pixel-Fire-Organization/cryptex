@@ -12,7 +12,7 @@ internal static class ScriptRunner
         return executor.ExecuteScript();
     }
 
-    internal static Script Build(string name, VMValue[] constants, params ScriptInstruction[] instructions)
+    internal static Script Build(string name, VmValue[] constants, params ScriptInstruction[] instructions)
     {
         var chunk = new ScriptChunk("main", instructions);
         return new Script(name, [chunk], constants);

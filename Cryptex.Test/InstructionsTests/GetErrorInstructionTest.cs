@@ -19,7 +19,7 @@ public sealed class GetErrorInstructionTest
         Assert.True(executor.ExecuteScript());
 
         Assert.Equal(
-            VMValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+            VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
             executor.GetValueInMemory(2));
     }
 
@@ -30,12 +30,12 @@ public sealed class GetErrorInstructionTest
             new ScriptInstruction(OpCodes.Load,     [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.GetError, [Args.Mem(2)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(5)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromInteger(0), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -55,10 +55,10 @@ public sealed class GetErrorInstructionTest
         Assert.True(executor.ExecuteScript());
 
         Assert.Equal(
-            VMValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+            VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
             executor.GetValueInMemory(2));
         Assert.Equal(
-            VMValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+            VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
             executor.GetValueInMemory(4));
     }
 
@@ -68,7 +68,7 @@ public sealed class GetErrorInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.GetError, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

@@ -10,7 +10,7 @@ public sealed class ExitInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Exit, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -23,7 +23,7 @@ public sealed class ExitInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Exit, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0x7f)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(0x7f)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());

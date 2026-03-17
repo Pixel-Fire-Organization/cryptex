@@ -5,7 +5,5 @@ namespace Cryptex.VM.Execution.Instructions;
 
 internal interface IInstruction
 {
-    OpCodes OpCode { get; }
-
     void Execute(ScriptInstruction c, Executor vm);
 }

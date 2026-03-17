@@ -10,14 +10,14 @@ public sealed class LoadInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        VMValue memoryValue = executor.GetValueInMemory(1);
+        VmValue memoryValue = executor.GetValueInMemory(1);
         Assert.False(memoryValue.IsUndefined);
-        Assert.Equal(VMValue.FromInteger(5), memoryValue);
+        Assert.Equal(VmValue.FromInteger(5), memoryValue);
     }
 
     [Fact]
@@ -26,14 +26,14 @@ public sealed class LoadInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(16)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(16)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        VMValue memoryValue = executor.GetValueInMemory(1);
+        VmValue memoryValue = executor.GetValueInMemory(1);
         Assert.False(memoryValue.IsUndefined);
-        Assert.Equal(VMValue.FromInteger(16), memoryValue);
+        Assert.Equal(VmValue.FromInteger(16), memoryValue);
     }
 
     [Fact]
@@ -45,16 +45,16 @@ public sealed class LoadInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Mem(2)])
         ]);
         Script script = new Script("script", [mainChunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        VMValue memoryValue1 = executor.GetValueInMemory(1);
-        VMValue memoryValue2 = executor.GetValueInMemory(2);
+        VmValue memoryValue1 = executor.GetValueInMemory(1);
+        VmValue memoryValue2 = executor.GetValueInMemory(2);
         Assert.False(memoryValue1.IsUndefined);
         Assert.False(memoryValue2.IsUndefined);
-        Assert.Equal(VMValue.FromInteger(6), memoryValue1);
-        Assert.Equal(VMValue.FromInteger(6), memoryValue2);
+        Assert.Equal(VmValue.FromInteger(6), memoryValue1);
+        Assert.Equal(VmValue.FromInteger(6), memoryValue2);
     }
 }

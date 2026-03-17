@@ -16,7 +16,7 @@ public sealed class MathStressTest
     {
         const int iterations = 10_000;
         // $1 = 0 (accumulator), $2 = 1 (step), $3 = iterations
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1), VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(1), VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_add", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
@@ -29,7 +29,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(iterations), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(iterations), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class MathStressTest
     public void StressAdd_LargeValues_CorrectResult()
     {
         BigInteger large = BigInteger.Pow(2, 62);
-        VMValue[] constants = [VMValue.FromInteger(large), VMValue.FromInteger(large)];
+        VmValue[] constants = [VmValue.FromInteger(large), VmValue.FromInteger(large)];
 
         Script script = Args.Build("stress_add_large", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -47,7 +47,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(large + large), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(large + large), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public sealed class MathStressTest
     public void StressSub_ManyIterations_ConsistentResult()
     {
         const int iterations = 10_000;
-        VMValue[] constants = [VMValue.FromInteger(iterations), VMValue.FromInteger(1), VMValue.FromInteger(0)];
+        VmValue[] constants = [VmValue.FromInteger(iterations), VmValue.FromInteger(1), VmValue.FromInteger(0)];
 
         Script script = Args.Build("stress_sub", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 10000
@@ -68,7 +68,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public sealed class MathStressTest
     public void StressMul_LargeValues_CorrectResult()
     {
         BigInteger large = BigInteger.Pow(2, 32);
-        VMValue[] constants = [VMValue.FromInteger(large), VMValue.FromInteger(large)];
+        VmValue[] constants = [VmValue.FromInteger(large), VmValue.FromInteger(large)];
 
         Script script = Args.Build("stress_mul_large", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -86,7 +86,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(large * large), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(large * large), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public sealed class MathStressTest
         const int iterations = 1_000;
         // $1 starts at iterations * 2, $2 = 2, loop divides by 2 until result <= 1
         BigInteger start = (BigInteger)iterations * 2;
-        VMValue[] constants = [VMValue.FromInteger(start), VMValue.FromInteger(2), VMValue.FromInteger(1)];
+        VmValue[] constants = [VmValue.FromInteger(start), VmValue.FromInteger(2), VmValue.FromInteger(1)];
 
         Script script = Args.Build("stress_div", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -117,7 +117,7 @@ public sealed class MathStressTest
     public void StressInc_ManyIterations_ConsistentResult()
     {
         const int iterations = 10_000;
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_inc", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
@@ -129,7 +129,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(iterations), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(iterations), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public sealed class MathStressTest
     public void StressDec_ManyIterations_ConsistentResult()
     {
         const int iterations = 10_000;
-        VMValue[] constants = [VMValue.FromInteger(iterations), VMValue.FromInteger(0)];
+        VmValue[] constants = [VmValue.FromInteger(iterations), VmValue.FromInteger(0)];
 
         Script script = Args.Build("stress_dec", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 10000
@@ -149,7 +149,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -158,8 +158,8 @@ public sealed class MathStressTest
     {
         const int modulus = 7;
         const int iterations = 10_000;
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1),
-                                VMValue.FromInteger(modulus), VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(1),
+                                VmValue.FromInteger(modulus), VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_mod", constants,
             new ScriptInstruction(OpCodes.Load,   [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0 (counter)
@@ -176,7 +176,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(iterations % modulus), executor.GetValueInMemory(5));
+        Assert.Equal(VmValue.FromInteger(iterations % modulus), executor.GetValueInMemory(5));
     }
 
     [Fact]
@@ -184,8 +184,8 @@ public sealed class MathStressTest
     public void StressAddF_ManyIterations_ConsistentResult()
     {
         const int iterations = 1_000;
-        VMValue[] constants = [VMValue.FromFloat(0.0m), VMValue.FromFloat(1.0m),
-                                VMValue.FromFloat(iterations)];
+        VmValue[] constants = [VmValue.FromFloat(0.0m), VmValue.FromFloat(1.0m),
+                                VmValue.FromFloat(iterations)];
 
         Script script = Args.Build("stress_addf", constants,
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0.0
@@ -208,8 +208,8 @@ public sealed class MathStressTest
     {
         const int iterations = 10_000;
         const int step = 3;
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(step),
-                                VMValue.FromInteger(iterations * step)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(step),
+                                VmValue.FromInteger(iterations * step)];
 
         Script script = Args.Build("stress_addimm", constants,
             new ScriptInstruction(OpCodes.Load,   [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
@@ -221,7 +221,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(iterations * step), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(iterations * step), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -229,7 +229,7 @@ public sealed class MathStressTest
     public void StressAdd_NegativeValues_ConsistentResult()
     {
         BigInteger large = -BigInteger.Pow(2, 62);
-        VMValue[] constants = [VMValue.FromInteger(large), VMValue.FromInteger(1)];
+        VmValue[] constants = [VmValue.FromInteger(large), VmValue.FromInteger(1)];
 
         Script script = Args.Build("stress_add_negative", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -239,7 +239,7 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(large + 1), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(large + 1), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -248,7 +248,7 @@ public sealed class MathStressTest
     {
         const long value = 1_000_000L;
         const long factor = 1_000L;
-        VMValue[] constants = [VMValue.FromInteger(value), VMValue.FromInteger(factor)];
+        VmValue[] constants = [VmValue.FromInteger(value), VmValue.FromInteger(factor)];
 
         Script script = Args.Build("stress_mulimm_large", constants,
             new ScriptInstruction(OpCodes.Load,   [Args.Mem(1), Args.Const(0)]),
@@ -257,6 +257,6 @@ public sealed class MathStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(value * factor), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(value * factor), executor.GetValueInMemory(1));
     }
 }

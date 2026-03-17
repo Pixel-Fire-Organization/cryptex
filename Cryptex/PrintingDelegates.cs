@@ -1,5 +1,6 @@
 ﻿namespace Cryptex;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 public static class PrintingDelegates
 {
     public static Action<string> WriteMessage { get; set; } = s =>

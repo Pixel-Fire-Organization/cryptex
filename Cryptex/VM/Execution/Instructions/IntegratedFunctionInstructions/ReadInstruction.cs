@@ -1,22 +1,20 @@
 ﻿using System.Numerics;
 using Cryptex.Exceptions;
-using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.IntegratedFunctionInstructions;
 
 internal sealed class ReadInstruction : IInstruction
 {
-    internal ReadInstruction(int scriptVersion) { }
-    public OpCodes OpCode => OpCodes.Read;
+    internal ReadInstruction() { }
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
         if (c.Args.Length != 1)
-            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
-            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         var input = Console.ReadLine() ?? string.Empty;
         if (!BigInteger.TryParse(input, out var value))
@@ -25,7 +23,7 @@ internal sealed class ReadInstruction : IInstruction
             return;
         }
 
-        vm.GetMemory().SetSlot(c.Args[0].Value, VMValue.FromInteger(value));
+        vm.GetMemory().SetSlot(c.Args[0].Value, VmValue.FromInteger(value));
     }
 }
 

@@ -1,13 +1,15 @@
 ﻿namespace Cryptex.Exceptions;
 
-internal sealed class VMRuntimeException : Exception
+// ReSharper disable once UnusedMember.Global
+internal sealed class VmRuntimeException : Exception
 {
-    public VMRuntimeException(ErrorCodes code)
+    public VmRuntimeException(ErrorCodes code)
         : base($"Runtime exception: {(int)code} | {code.ToMessage()}")
     {
     }
 
-    public VMRuntimeException(ErrorCodes code, Exception? innerException)
+    // ReSharper disable once UnusedMember.Global
+    public VmRuntimeException(ErrorCodes code, Exception? innerException)
         : base($"Runtime exception: {(int)code} | {code.ToMessage()}", innerException)
     {
     }

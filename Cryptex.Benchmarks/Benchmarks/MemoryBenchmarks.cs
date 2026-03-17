@@ -8,10 +8,10 @@ namespace Cryptex.Benchmarks.Benchmarks;
 [MemoryDiagnoser]
 public class MemoryBenchmarks
 {
-    private static readonly VMValue[] Constants =
+    private static readonly VmValue[] Constants =
     [
-        VMValue.FromInteger(42),  // const[0]
-        VMValue.FromInteger(99)   // const[1]
+        VmValue.FromInteger(42),  // const[0]
+        VmValue.FromInteger(99)   // const[1]
     ];
 
     private Script m_loadScript      = null!;

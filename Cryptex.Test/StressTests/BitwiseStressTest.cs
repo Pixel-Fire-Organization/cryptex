@@ -13,7 +13,7 @@ public sealed class BitwiseStressTest
     public void StressAnd_AllBitsSet_CorrectResult()
     {
         // 0xFF & 0xFF = 0xFF — both operands all 1s must remain all 1s.
-        VMValue[] constants = [VMValue.FromInteger(0xFF), VMValue.FromInteger(0xFF)];
+        VmValue[] constants = [VmValue.FromInteger(0xFF), VmValue.FromInteger(0xFF)];
 
         Script script = Args.Build("stress_and_allbits", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -23,7 +23,7 @@ public sealed class BitwiseStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0xFF), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0xFF), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -32,8 +32,8 @@ public sealed class BitwiseStressTest
     {
         const int iterations = 10_000;
         // $1 = 0xFFFF, $2 = 0xF0F0 — repeated AND must converge immediately and stay constant.
-        VMValue[] constants = [VMValue.FromInteger(0xFFFF), VMValue.FromInteger(0xF0F0),
-                                VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0xFFFF), VmValue.FromInteger(0xF0F0),
+                                VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_and_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0xFFFF
@@ -49,7 +49,7 @@ public sealed class BitwiseStressTest
         Assert.True(executor.ExecuteScript());
 
         // After repeated AND with the same mask, result is idempotent.
-        Assert.Equal(VMValue.FromInteger(0xF0F0), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0xF0F0), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public sealed class BitwiseStressTest
     public void StressOr_AllZeros_CorrectResult()
     {
         // 0 | 0xFF = 0xFF
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(0xFF)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(0xFF)];
 
         Script script = Args.Build("stress_or_zeros", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -67,7 +67,7 @@ public sealed class BitwiseStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0xFF), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0xFF), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -75,8 +75,8 @@ public sealed class BitwiseStressTest
     public void StressOr_ManyIterations_Idempotent()
     {
         const int iterations = 10_000;
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(0xABCD),
-                                VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(0xABCD),
+                                VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_or_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
@@ -91,7 +91,7 @@ public sealed class BitwiseStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0xABCD), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0xABCD), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -100,8 +100,8 @@ public sealed class BitwiseStressTest
     {
         // XOR with the same value an even number of times returns the original.
         const int iterations = 10_000; // even
-        VMValue[] constants = [VMValue.FromInteger(0x1234), VMValue.FromInteger(0xFFFF),
-                                VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0x1234), VmValue.FromInteger(0xFFFF),
+                                VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_xor_toggle", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0x1234
@@ -117,14 +117,14 @@ public sealed class BitwiseStressTest
         Assert.True(executor.ExecuteScript());
 
         // Even number of XOR with same value → original.
-        Assert.Equal(VMValue.FromInteger(0x1234), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0x1234), executor.GetValueInMemory(1));
     }
 
     [Fact]
     [Trait("Category", "Stress")]
     public void StressNot_DoubleNegation_ReturnsOriginal()
     {
-        VMValue[] constants = [VMValue.FromInteger(0x12345678)];
+        VmValue[] constants = [VmValue.FromInteger(0x12345678)];
 
         Script script = Args.Build("stress_not_double", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -134,7 +134,7 @@ public sealed class BitwiseStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0x12345678), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0x12345678), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -145,9 +145,9 @@ public sealed class BitwiseStressTest
         // SHL requires the shift amount as a Constant arg (not MemoryAddress).
         // Uses a countdown counter ($3) to perform exactly `shifts` iterations.
         const int shifts = 8;
-        VMValue[] constants = [VMValue.FromInteger(1),      // const[0] = 1 (initial value AND shift amount)
-                                VMValue.FromInteger(shifts), // const[1] = 8 (countdown)
-                                VMValue.FromInteger(0)];     // const[2] = 0 (compare target)
+        VmValue[] constants = [VmValue.FromInteger(1),      // const[0] = 1 (initial value AND shift amount)
+                                VmValue.FromInteger(shifts), // const[1] = 8 (countdown)
+                                VmValue.FromInteger(0)];     // const[2] = 0 (compare target)
 
         Script script = Args.Build("stress_shl_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 1
@@ -162,7 +162,7 @@ public sealed class BitwiseStressTest
         Assert.True(executor.ExecuteScript());
 
         // 1 << 8 = 256
-        Assert.Equal(VMValue.FromInteger(1 << shifts), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(1 << shifts), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -172,10 +172,10 @@ public sealed class BitwiseStressTest
         // SHR requires the shift amount as a Constant arg (not MemoryAddress).
         // Uses a countdown counter ($3) to perform exactly `shifts` right-shifts.
         const int shifts = 8;
-        VMValue[] constants = [VMValue.FromInteger(1 << shifts), // const[0] = 256 (initial value)
-                                VMValue.FromInteger(1),           // const[1] = 1 (shift amount)
-                                VMValue.FromInteger(shifts),      // const[2] = 8 (countdown)
-                                VMValue.FromInteger(0)];          // const[3] = 0 (compare target)
+        VmValue[] constants = [VmValue.FromInteger(1 << shifts), // const[0] = 256 (initial value)
+                                VmValue.FromInteger(1),           // const[1] = 1 (shift amount)
+                                VmValue.FromInteger(shifts),      // const[2] = 8 (countdown)
+                                VmValue.FromInteger(0)];          // const[3] = 0 (compare target)
 
         Script script = Args.Build("stress_shr_many", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 256
@@ -190,14 +190,14 @@ public sealed class BitwiseStressTest
         Assert.True(executor.ExecuteScript());
 
         // 256 >> 8 = 1
-        Assert.Equal(VMValue.FromInteger(1), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(1), executor.GetValueInMemory(1));
     }
 
     [Fact]
     [Trait("Category", "Stress")]
     public void StressAnd_ZeroMask_AlwaysZero()
     {
-        VMValue[] constants = [VMValue.FromInteger(0xDEADBEEF), VMValue.FromInteger(0)];
+        VmValue[] constants = [VmValue.FromInteger(0xDEADBEEF), VmValue.FromInteger(0)];
 
         Script script = Args.Build("stress_and_zeromask", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -207,6 +207,6 @@ public sealed class BitwiseStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0), executor.GetValueInMemory(1));
     }
 }

@@ -14,6 +14,7 @@ public readonly struct ScriptValidationWarning
     }
 
     public ScriptValidationWarningCode Code { get; }
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public string Message { get; }
 }
 

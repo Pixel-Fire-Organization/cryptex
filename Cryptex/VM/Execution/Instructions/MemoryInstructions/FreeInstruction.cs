@@ -1,25 +1,23 @@
 ﻿using Cryptex.Exceptions;
-using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class FreeInstruction : IInstruction
 {
-    internal FreeInstruction(int scriptVersion) { }
-    public OpCodes OpCode => OpCodes.Free;
+    internal FreeInstruction() { }
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
         if (c.Args.Length != 1)
-            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
-            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         var removed = vm.GetMemory().RemoveSlot(c.Args[0].Value);
         if (removed.IsUndefined)
-            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
+            throw new VmRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
     }
 }
 

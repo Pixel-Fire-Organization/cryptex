@@ -13,12 +13,12 @@ public sealed class ShlInstructionTest
             new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
         ]);
         Script script = new Script("script", [mainChunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(new BigInteger((long)int.MaxValue + 1))]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(new BigInteger((long)int.MaxValue + 1))]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(5), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -29,12 +29,12 @@ public sealed class ShlInstructionTest
             new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
         ]);
         Script script = new Script("script", [mainChunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(new BigInteger((long)int.MinValue - 1))]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(new BigInteger((long)int.MinValue - 1))]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(5), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -45,12 +45,12 @@ public sealed class ShlInstructionTest
             new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
         ]);
         Script script = new Script("script", [mainChunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(5)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -61,12 +61,12 @@ public sealed class ShlInstructionTest
             new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
         ]);
         Script script = new Script("script", [mainChunk],
-            [VMValue.FromInteger(5), VMValue.FromFloat(5.5m)]);
+            [VmValue.FromInteger(5), VmValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(5), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -77,12 +77,12 @@ public sealed class ShlInstructionTest
             new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
         ]);
         Script script = new Script("script", [mainChunk],
-            [VMValue.FromFloat(5.5m), VMValue.FromInteger(5)]);
+            [VmValue.FromFloat(5.5m), VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(5.5m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(5.5m), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -93,11 +93,11 @@ public sealed class ShlInstructionTest
             new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
         ]);
         Script script = new Script("script", [mainChunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(5)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
     }
 }

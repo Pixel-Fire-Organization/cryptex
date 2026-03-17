@@ -25,7 +25,7 @@ public sealed class JsonScriptSerializerTest
     [Fact]
     public void RoundTrip_PreservesMetadata()
     {
-        var original = new Script("my_script", Executor.VM_VERSION, "entry",
+        var original = new Script("my_script", Executor.VmVersion, "entry",
             [new ScriptChunk("main", [new ScriptInstruction(OpCodes.Nop)])], []);
 
         var loaded = Serializer.Deserialize(Serializer.Serialize(original));
@@ -33,7 +33,7 @@ public sealed class JsonScriptSerializerTest
         Assert.NotNull(loaded);
         Assert.Equal("my_script",          loaded.ScriptName);
         Assert.Equal("entry",              loaded.EntryPointName);
-        Assert.Equal(Executor.VM_VERSION,  loaded.VMVersion);
+        Assert.Equal(Executor.VmVersion,  loaded.VmVersion);
     }
 
     [Fact]

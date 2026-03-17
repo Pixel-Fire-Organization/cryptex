@@ -8,9 +8,9 @@ namespace Cryptex.Benchmarks.Benchmarks;
 [MemoryDiagnoser]
 public class VmControlBenchmarks
 {
-    private static readonly VMValue[] Constants =
+    private static readonly VmValue[] Constants =
     [
-        VMValue.FromInteger(0) // const[0] = 0 — Nop sleep ms and Exit code
+        VmValue.FromInteger(0) // const[0] = 0 — Nop sleep ms and Exit code
     ];
 
     private Script m_nopScript  = null!;

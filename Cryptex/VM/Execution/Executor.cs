@@ -6,7 +6,7 @@ namespace Cryptex.VM.Execution;
 
 public sealed class Executor
 {
-    public static int VM_VERSION { get; } = 1; // This must be changed on each publish. 
+    public static int VmVersion { get; } = 1; // This must be changed on each publish. 
 
     private readonly ExecutorMemory m_memory;
     private readonly Script m_script;
@@ -31,10 +31,7 @@ public sealed class Executor
     ///     The executor will run using the current VM's instruction behaviour and emit a
     ///     warning at the start of execution. See Docs/VM/Compatibility Mode.md for details.
     /// </summary>
-    public bool IsInCompatibilityMode => m_script.VMVersion > VM_VERSION;
-
-    /// <summary>The VM version the loaded script was authored for.</summary>
-    internal int ScriptVersion => m_script.VMVersion;
+    public bool IsInCompatibilityMode => m_script.VmVersion > VmVersion;
 
     public bool ExecuteScript()
     {
@@ -44,7 +41,7 @@ public sealed class Executor
         {
             m_script.Execute(this);
         }
-        catch (VMRuntimeException ex)
+        catch (VmRuntimeException ex)
         {
             PrintingDelegates.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
             m_exitCode = -1;
@@ -72,7 +69,7 @@ public sealed class Executor
         {
             m_script.Execute(this, chunkName);
         }
-        catch (VMRuntimeException ex)
+        catch (VmRuntimeException ex)
         {
             PrintingDelegates.WriteError.Invoke($"Execution of script threw a runtime exception: {ex.Message}");
             return false;
@@ -87,9 +84,9 @@ public sealed class Executor
 
     public BigInteger GetExitCode() => m_exitCode;
 
-    public VMValue GetValueInMemory(int location) => m_memory.GetSlot(location);
+    public VmValue GetValueInMemory(int location) => m_memory.GetSlot(location);
     
-    internal VMValue GetConstant(int index) => m_script.ConstantsBlock.Get(index);
+    internal VmValue GetConstant(int index) => m_script.ConstantsBlock.Get(index);
 
     internal void ExitInstructionCall(BigInteger code)
     {
@@ -108,8 +105,6 @@ public sealed class Executor
         m_hasError = true;
         m_errorCode = code;
     }
-
-    internal bool HasError() => m_hasError;
 
     internal ErrorCodes ConsumeError()
     {
@@ -148,8 +143,8 @@ public sealed class Executor
 
         m_compatibilityWarningEmitted = true;
         PrintingDelegates.WriteWarning(
-            $"Script '{m_script.ScriptName}' targets VM version {m_script.VMVersion}, " +
-            $"but the current VM is version {VM_VERSION}. " +
+            $"Script '{m_script.ScriptName}' targets VM version {m_script.VmVersion}, " +
+            $"but the current VM is version {VmVersion}. " +
             "Running in compatibility mode — instruction behaviour may differ from the target version. " +
             "See Docs/VM/Compatibility Mode.md for details.");
     }

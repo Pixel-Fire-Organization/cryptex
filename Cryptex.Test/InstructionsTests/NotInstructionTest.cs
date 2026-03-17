@@ -11,14 +11,14 @@ public sealed class NotInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Not, [Args.Mem(1)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        VMValue memoryValue1 = executor.GetValueInMemory(1);
+        VmValue memoryValue1 = executor.GetValueInMemory(1);
         Assert.False(memoryValue1.IsUndefined);
-        Assert.Equal(VMValue.FromInteger(~5), memoryValue1);
+        Assert.Equal(VmValue.FromInteger(~5), memoryValue1);
     }
 
     [Fact]
@@ -28,13 +28,13 @@ public sealed class NotInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Not, [Args.Mem(1)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromFloat(5.5m)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        VMValue memoryValue1 = executor.GetValueInMemory(1);
+        VmValue memoryValue1 = executor.GetValueInMemory(1);
         Assert.False(memoryValue1.IsUndefined);
-        Assert.Equal(VMValue.FromFloat(5.5m), memoryValue1);
+        Assert.Equal(VmValue.FromFloat(5.5m), memoryValue1);
     }
 }

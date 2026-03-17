@@ -4,7 +4,7 @@ namespace Cryptex.VM.Execution.Scripts.Validation;
 
 public enum ScriptValidationErrorCode
 {
-    /// <summary>The script's <c>VMVersion</c> field is less than 1 (no such VM version exists).</summary>
+    /// <summary>The script's <c>VmVersion</c> field is less than 1 (no such VM version exists).</summary>
     InvalidVersion,
 
 

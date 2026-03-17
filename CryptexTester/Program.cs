@@ -6,12 +6,12 @@ using Cryptex.VM.Execution.Scripts;
 PrintingDelegates.WriteMessage = Console.WriteLine;
 
 // Constants: [0]=11 (initial sum)  [1]=1 (initial i / inc)  [2]=1000 (limit)  [3]=2 (multiplier)
-VMValue[] constants =
+VmValue[] constants =
 [
-    VMValue.FromInteger(11),
-    VMValue.FromInteger(1),
-    VMValue.FromInteger(1000),
-    VMValue.FromInteger(2),
+    VmValue.FromInteger(11),
+    VmValue.FromInteger(1),
+    VmValue.FromInteger(1000),
+    VmValue.FromInteger(2),
 ];
 
 // Memory: $1 = sum  $2 = i  $3 = limit  $4 = temp (i * 2)

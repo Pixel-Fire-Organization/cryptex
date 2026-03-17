@@ -1,5 +1,6 @@
 ﻿namespace Cryptex;
 
+// ReSharper disable InconsistentNaming
 public enum ErrorCodes
 {
     SYS0000_ErrorCodeNotFound = 0,

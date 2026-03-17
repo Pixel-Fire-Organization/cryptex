@@ -23,7 +23,7 @@ public sealed class CrashInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Crash, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0x7f)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(0x7f)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
@@ -35,7 +35,7 @@ public sealed class CrashInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Crash, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(2000)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(2000)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
@@ -47,7 +47,7 @@ public sealed class CrashInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Crash, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(80000)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(80000)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

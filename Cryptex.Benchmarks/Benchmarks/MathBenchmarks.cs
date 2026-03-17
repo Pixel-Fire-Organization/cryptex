@@ -11,14 +11,14 @@ namespace Cryptex.Benchmarks.Benchmarks;
 public class MathBenchmarks
 {
     // Shared constants for all scripts (int at 0-3, float at 4-5).
-    private static readonly VMValue[] Constants =
+    private static readonly VmValue[] Constants =
     [
-        VMValue.FromInteger(5),   // const[0]
-        VMValue.FromInteger(6),   // const[1]
-        VMValue.FromInteger(3),   // const[2]
-        VMValue.FromInteger(2),   // const[3]
-        VMValue.FromFloat(5.5m),  // const[4]
-        VMValue.FromFloat(6.5m)   // const[5]
+        VmValue.FromInteger(5),   // const[0]
+        VmValue.FromInteger(6),   // const[1]
+        VmValue.FromInteger(3),   // const[2]
+        VmValue.FromInteger(2),   // const[3]
+        VmValue.FromFloat(5.5m),  // const[4]
+        VmValue.FromFloat(6.5m)   // const[5]
     ];
 
     private Script m_addScript    = null!;

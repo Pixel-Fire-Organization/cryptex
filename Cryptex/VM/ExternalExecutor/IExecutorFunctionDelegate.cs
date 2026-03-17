@@ -2,5 +2,5 @@
 
 public interface IExecutorFunctionDelegate
 {
-    object? Execute(object?[]? @params);
+    void Execute(object?[]? @params);
 }

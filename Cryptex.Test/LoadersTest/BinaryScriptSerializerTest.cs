@@ -9,13 +9,13 @@ public sealed class BinaryScriptSerializerTest
     private static readonly BinaryScriptSerializer Serializer = new();
 
     private static Script AddScript() => Args.Build("add_script",
-        [VMValue.FromInteger(5), VMValue.FromInteger(6)],
+        [VmValue.FromInteger(5), VmValue.FromInteger(6)],
         new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
         new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
         new ScriptInstruction(OpCodes.Add,  [Args.Mem(1), Args.Mem(2)]));
 
     private static Script FloatScript() => Args.Build("float_script",
-        [VMValue.FromFloat(5.5m), VMValue.FromFloat(2.5m)],
+        [VmValue.FromFloat(5.5m), VmValue.FromFloat(2.5m)],
         new ScriptInstruction(OpCodes.Load,  [Args.Mem(1), Args.Const(0)]),
         new ScriptInstruction(OpCodes.Load,  [Args.Mem(2), Args.Const(1)]),
         new ScriptInstruction(OpCodes.AddF,  [Args.Mem(1), Args.Mem(2)]));
@@ -41,7 +41,7 @@ public sealed class BinaryScriptSerializerTest
     [Fact]
     public void RoundTrip_PreservesMetadata()
     {
-        var original = new Script("my_script", Executor.VM_VERSION, "entry",
+        var original = new Script("my_script", Executor.VmVersion, "entry",
             [new ScriptChunk("main", [new ScriptInstruction(OpCodes.Nop)])], []);
 
         var loaded = Serializer.Deserialize(Serializer.Serialize(original));
@@ -49,7 +49,7 @@ public sealed class BinaryScriptSerializerTest
         Assert.NotNull(loaded);
         Assert.Equal("my_script",           loaded.ScriptName);
         Assert.Equal("entry",               loaded.EntryPointName);
-        Assert.Equal(Executor.VM_VERSION,   loaded.VMVersion);
+        Assert.Equal(Executor.VmVersion,   loaded.VmVersion);
     }
 
     [Fact]
@@ -89,8 +89,8 @@ public sealed class BinaryScriptSerializerTest
         Assert.NotNull(loaded);
         var executor = new Executor(loaded);
         Assert.True(executor.ExecuteScript());
-        Assert.Equal(VMValue.FromInteger(11), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6),  executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromInteger(11), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6),  executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public sealed class BinaryScriptSerializerTest
         Assert.NotNull(loaded);
         var executor = new Executor(loaded);
         Assert.True(executor.ExecuteScript());
-        Assert.Equal(VMValue.FromFloat(8.0m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(8.0m), executor.GetValueInMemory(1));
     }
 
     [Fact]

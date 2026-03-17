@@ -15,7 +15,7 @@ public sealed class LogicStressTest
     {
         const int iterations = 10_000;
         // const[0]=0 serves as both counter start and Nop sleep-ms (0 ms).
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1), VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(1), VmValue.FromInteger(iterations)];
 
         // Pattern: increment counter, compare; Jeq exits to Nop when done, Jmp loops back.
         Script script = Args.Build("stress_jmp_loop", constants,
@@ -31,7 +31,7 @@ public sealed class LogicStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(iterations), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(iterations), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -39,8 +39,8 @@ public sealed class LogicStressTest
     public void StressJeq_EqualBranch_AlwaysTaken()
     {
         const int iterations = 5_000;
-        VMValue[] constants = [VMValue.FromInteger(42), VMValue.FromInteger(42),
-                                VMValue.FromInteger(0), VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(42), VmValue.FromInteger(42),
+                                VmValue.FromInteger(0), VmValue.FromInteger(iterations)];
 
         // Each iteration: cmp 42 == 42 → jeq taken, accumulate.
         Script script = Args.Build("stress_jeq_always", constants,
@@ -61,7 +61,7 @@ public sealed class LogicStressTest
         Assert.True(executor.ExecuteScript());
 
         // Every iteration should have taken the Jeq branch.
-        Assert.Equal(VMValue.FromInteger(iterations), executor.GetValueInMemory(3));
+        Assert.Equal(VmValue.FromInteger(iterations), executor.GetValueInMemory(3));
     }
 
     [Fact]
@@ -69,8 +69,8 @@ public sealed class LogicStressTest
     public void StressJnq_NotEqualBranch_AlwaysTaken()
     {
         const int iterations = 5_000;
-        VMValue[] constants = [VMValue.FromInteger(1), VMValue.FromInteger(2),
-                                VMValue.FromInteger(0), VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(1), VmValue.FromInteger(2),
+                                VmValue.FromInteger(0), VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_jnq_always", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 1
@@ -89,7 +89,7 @@ public sealed class LogicStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(iterations), executor.GetValueInMemory(3));
+        Assert.Equal(VmValue.FromInteger(iterations), executor.GetValueInMemory(3));
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public sealed class LogicStressTest
     public void StressJls_LessThan_CorrectLoopCount()
     {
         const int limit = 7_500;
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1), VMValue.FromInteger(limit)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(1), VmValue.FromInteger(limit)];
 
         Script script = Args.Build("stress_jls_loop", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
@@ -110,7 +110,7 @@ public sealed class LogicStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(limit), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(limit), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public sealed class LogicStressTest
     public void StressJgr_GreaterThan_CorrectLoopCount()
     {
         const int start = 10_000;
-        VMValue[] constants = [VMValue.FromInteger(start), VMValue.FromInteger(0)];
+        VmValue[] constants = [VmValue.FromInteger(start), VmValue.FromInteger(0)];
 
         Script script = Args.Build("stress_jgr_loop", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = start
@@ -130,7 +130,7 @@ public sealed class LogicStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(0), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(0), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public sealed class LogicStressTest
     public void StressJge_GreaterOrEqual_TerminatesAtZero()
     {
         const int start = 5_000;
-        VMValue[] constants = [VMValue.FromInteger(start), VMValue.FromInteger(0)];
+        VmValue[] constants = [VmValue.FromInteger(start), VmValue.FromInteger(0)];
 
         Script script = Args.Build("stress_jge_loop", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = start
@@ -150,7 +150,7 @@ public sealed class LogicStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(-1), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(-1), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -158,7 +158,7 @@ public sealed class LogicStressTest
     public void StressJle_LessOrEqual_TerminatesAtLimit()
     {
         const int limit = 5_000;
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(limit)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(limit)];
 
         Script script = Args.Build("stress_jle_loop", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
@@ -170,7 +170,7 @@ public sealed class LogicStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(limit + 1), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(limit + 1), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -179,8 +179,8 @@ public sealed class LogicStressTest
     {
         // Tests Equals, Greater, and Less outcomes across separate executions.
         // const[2]=0 is reused as the Nop sleep-ms argument (0ms).
-        VMValue[] constants = [VMValue.FromInteger(5), VMValue.FromInteger(10),
-                                VMValue.FromInteger(0), VMValue.FromInteger(1)];
+        VmValue[] constants = [VmValue.FromInteger(5), VmValue.FromInteger(10),
+                                VmValue.FromInteger(0), VmValue.FromInteger(1)];
 
         // Equals path
         Script scriptEq = Args.Build("cmp_eq", constants,
@@ -196,7 +196,7 @@ public sealed class LogicStressTest
 
         Executor exEq = new Executor(scriptEq);
         Assert.True(exEq.ExecuteScript());
-        Assert.Equal(VMValue.FromInteger(1), exEq.GetValueInMemory(3));
+        Assert.Equal(VmValue.FromInteger(1), exEq.GetValueInMemory(3));
 
         // Less path
         Script scriptLs = Args.Build("cmp_ls", constants,
@@ -212,7 +212,7 @@ public sealed class LogicStressTest
 
         Executor exLs = new Executor(scriptLs);
         Assert.True(exLs.ExecuteScript());
-        Assert.Equal(VMValue.FromInteger(1), exLs.GetValueInMemory(3));
+        Assert.Equal(VmValue.FromInteger(1), exLs.GetValueInMemory(3));
 
         // Greater path
         Script scriptGr = Args.Build("cmp_gr", constants,
@@ -228,6 +228,6 @@ public sealed class LogicStressTest
 
         Executor exGr = new Executor(scriptGr);
         Assert.True(exGr.ExecuteScript());
-        Assert.Equal(VMValue.FromInteger(1), exGr.GetValueInMemory(3));
+        Assert.Equal(VmValue.FromInteger(1), exGr.GetValueInMemory(3));
     }
 }

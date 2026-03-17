@@ -14,7 +14,7 @@ public sealed class MemoryStressTest
     {
         // Fill 100 independent memory slots with the same value and verify each.
         const int slotCount = 100;
-        VMValue[] constants = [VMValue.FromInteger(42)];
+        VmValue[] constants = [VmValue.FromInteger(42)];
 
         var instructions = new List<ScriptInstruction>();
         for (int i = 1; i <= slotCount; i++)
@@ -26,7 +26,7 @@ public sealed class MemoryStressTest
         Assert.True(executor.ExecuteScript());
 
         for (int i = 1; i <= slotCount; i++)
-            Assert.Equal(VMValue.FromInteger(42), executor.GetValueInMemory(i));
+            Assert.Equal(VmValue.FromInteger(42), executor.GetValueInMemory(i));
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public sealed class MemoryStressTest
     public void StressLoad_LargeValue_Consistent()
     {
         System.Numerics.BigInteger large = System.Numerics.BigInteger.Pow(2, 127) - 1;
-        VMValue[] constants = [VMValue.FromInteger(large)];
+        VmValue[] constants = [VmValue.FromInteger(large)];
 
         Script script = Args.Build("stress_load_large", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]));
@@ -42,7 +42,7 @@ public sealed class MemoryStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(large), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(large), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class MemoryStressTest
     {
         // Overwrite the same slot repeatedly via a loop.
         const int iterations = 5_000;
-        VMValue[] constants = [VMValue.FromInteger(0), VMValue.FromInteger(1), VMValue.FromInteger(iterations)];
+        VmValue[] constants = [VmValue.FromInteger(0), VmValue.FromInteger(1), VmValue.FromInteger(iterations)];
 
         Script script = Args.Build("stress_load_overwrite", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),  // 0: $1 = 0
@@ -66,7 +66,7 @@ public sealed class MemoryStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(iterations), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(iterations), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public sealed class MemoryStressTest
     public void StressFree_ThenReload_SlotIsUsable()
     {
         // Load a slot, free it, reload it, and verify the new value is stored correctly.
-        VMValue[] constants = [VMValue.FromInteger(100), VMValue.FromInteger(200)];
+        VmValue[] constants = [VmValue.FromInteger(100), VmValue.FromInteger(200)];
 
         Script script = Args.Build("stress_free_reload", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
@@ -84,7 +84,7 @@ public sealed class MemoryStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(200), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(200), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public sealed class MemoryStressTest
     public void StressFree_ManySlots_ThenReload_AllCorrect()
     {
         const int slotCount = 50;
-        VMValue[] constants = [VMValue.FromInteger(1), VMValue.FromInteger(999)];
+        VmValue[] constants = [VmValue.FromInteger(1), VmValue.FromInteger(999)];
 
         var instructions = new List<ScriptInstruction>();
         for (int i = 1; i <= slotCount; i++)
@@ -108,7 +108,7 @@ public sealed class MemoryStressTest
         Assert.True(executor.ExecuteScript());
 
         for (int i = 1; i <= slotCount; i++)
-            Assert.Equal(VMValue.FromInteger(999), executor.GetValueInMemory(i));
+            Assert.Equal(VmValue.FromInteger(999), executor.GetValueInMemory(i));
     }
 
     [Fact]
@@ -116,7 +116,7 @@ public sealed class MemoryStressTest
     public void StressLoad_NegativeLargeValue_Consistent()
     {
         System.Numerics.BigInteger large = -System.Numerics.BigInteger.Pow(2, 127);
-        VMValue[] constants = [VMValue.FromInteger(large)];
+        VmValue[] constants = [VmValue.FromInteger(large)];
 
         Script script = Args.Build("stress_load_neg_large", constants,
             new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]));
@@ -124,7 +124,7 @@ public sealed class MemoryStressTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(large), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(large), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public sealed class MemoryStressTest
     public void StressLoad_FloatSlots_AllCorrect()
     {
         const int slotCount = 50;
-        VMValue[] constants = [VMValue.FromFloat(3.14159m)];
+        VmValue[] constants = [VmValue.FromFloat(3.14159m)];
 
         var instructions = new List<ScriptInstruction>();
         for (int i = 1; i <= slotCount; i++)
@@ -144,6 +144,6 @@ public sealed class MemoryStressTest
         Assert.True(executor.ExecuteScript());
 
         for (int i = 1; i <= slotCount; i++)
-            Assert.Equal(VMValue.FromFloat(3.14159m), executor.GetValueInMemory(i));
+            Assert.Equal(VmValue.FromFloat(3.14159m), executor.GetValueInMemory(i));
     }
 }

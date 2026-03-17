@@ -13,41 +13,41 @@ public sealed class ExecutorMemory
     private const int PAGE_SHIFT = 10; // log₂(PAGE_SIZE)
     private const int PAGE_MASK = PAGE_SIZE - 1;
 
-    private readonly List<VMValue[]> m_pages = [];
+    private readonly List<VmValue[]> m_pages = [];
     
-    public void SetSlot(int slot, VMValue value)
+    public void SetSlot(int slot, VmValue value)
     {
         if (slot < 0)
-            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
+            throw new VmRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
 
         var pageIndex = slot >> PAGE_SHIFT;
         EnsurePage(pageIndex);
         m_pages[pageIndex][slot & PAGE_MASK] = value;
     }
     
-    public VMValue GetSlot(int slot)
+    public VmValue GetSlot(int slot)
     {
         if (slot < 0)
-            return VMValue.Undefined;
+            return VmValue.Undefined;
 
         var pageIndex = slot >> PAGE_SHIFT;
         return pageIndex < m_pages.Count
             ? m_pages[pageIndex][slot & PAGE_MASK]
-            : VMValue.Undefined;
+            : VmValue.Undefined;
     }
     
-    public VMValue RemoveSlot(int slot)
+    public VmValue RemoveSlot(int slot)
     {
         if (slot < 0)
-            return VMValue.Undefined;
+            return VmValue.Undefined;
 
         var pageIndex = slot >> PAGE_SHIFT;
         if (pageIndex >= m_pages.Count)
-            return VMValue.Undefined;
+            return VmValue.Undefined;
 
         var offset = slot & PAGE_MASK;
         var val = m_pages[pageIndex][offset];
-        m_pages[pageIndex][offset] = VMValue.Undefined;
+        m_pages[pageIndex][offset] = VmValue.Undefined;
         return val;
     }
 
@@ -86,12 +86,11 @@ public sealed class ExecutorMemory
 
     private bool HasAnyValue()
     {
-        for (var p = 0; p < m_pages.Count; p++)
+        foreach (var page in m_pages)
         {
-            var page = m_pages[p];
-            for (var o = 0; o < PAGE_SIZE; o++)
+            foreach (var value in page)
             {
-                if (!page[o].IsUndefined)
+                if (!value.IsUndefined)
                     return true;
             }
         }
@@ -103,7 +102,7 @@ public sealed class ExecutorMemory
     {
         while (m_pages.Count <= pageIndex)
         {
-            m_pages.Add(new VMValue[PAGE_SIZE]);
+            m_pages.Add(new VmValue[PAGE_SIZE]);
         }
     }
 }

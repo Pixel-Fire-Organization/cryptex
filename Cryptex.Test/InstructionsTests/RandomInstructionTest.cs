@@ -40,7 +40,7 @@ public sealed class RandomInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Random, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
@@ -52,7 +52,7 @@ public sealed class RandomInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.RandomF, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

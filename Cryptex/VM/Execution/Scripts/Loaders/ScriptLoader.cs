@@ -65,6 +65,7 @@ public static class ScriptLoader
     public static byte[] Save(Script script, ScriptFormat format = ScriptFormat.Binary)
         => GetSerializer(format).Serialize(script);
 
+    // ReSharper disable once UnusedMember.Global
     public static void Save(Script script, string path, ScriptFormat format = ScriptFormat.Binary)
         => File.WriteAllBytes(path, Save(script, format));
 

@@ -9,11 +9,11 @@ namespace Cryptex.Benchmarks.Benchmarks;
 [MemoryDiagnoser]
 public class LogicBenchmarks
 {
-    private static readonly VMValue[] Constants =
+    private static readonly VmValue[] Constants =
     [
-        VMValue.FromInteger(5),  // const[0]
-        VMValue.FromInteger(10), // const[1]
-        VMValue.FromInteger(0)   // const[2] — Nop sleep ms (0)
+        VmValue.FromInteger(5),  // const[0]
+        VmValue.FromInteger(10), // const[1]
+        VmValue.FromInteger(0)   // const[2] — Nop sleep ms (0)
     ];
 
     private Script m_cmpScript = null!;

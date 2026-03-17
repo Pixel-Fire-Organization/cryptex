@@ -4,6 +4,7 @@ using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 [MessagePackObject(true)]
 public sealed class ScriptChunk
 {
@@ -30,16 +31,16 @@ public sealed class ScriptChunk
                 return;
 
             var instruction = Instructions[ip];
-            var info = instruction.Code.GetInfo(vm.ScriptVersion);
+            var info = instruction.Code.GetInfo();
             if (info.Instruction is null)
-                throw new VMRuntimeException(ErrorCodes.VM2008_InvalidInstructionFoundInScriptChunk);
+                throw new VmRuntimeException(ErrorCodes.VM2008_InvalidInstructionFoundInScriptChunk);
 
             info.Instruction.Execute(instruction, vm);
 
             if (vm.TryConsumeJump(out var target))
             {
                 if ((uint)target >= (uint)Instructions.Length)
-                    throw new VMRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
+                    throw new VmRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
                 ip = target;
             }
             else

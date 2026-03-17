@@ -7,7 +7,7 @@ namespace Cryptex.Test.LoadersTest;
 public sealed class ScriptValidatorTest
 {
     private static Script ValidScript() => Args.Build("valid",
-        [VMValue.FromInteger(5)],
+        [VmValue.FromInteger(5)],
         new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
         new ScriptInstruction(OpCodes.Inc, [Args.Mem(1)]));
 
@@ -34,7 +34,7 @@ public sealed class ScriptValidatorTest
     [Fact]
     public void Validate_VersionTooNew_ReportsCompatibilityModeWarning()
     {
-        var script = new Script("test", Executor.VM_VERSION + 1, "main",
+        var script = new Script("test", Executor.VmVersion + 1, "main",
             [new ScriptChunk("main", [])], []);
 
         var result = ScriptValidator.Validate(script);
@@ -71,7 +71,7 @@ public sealed class ScriptValidatorTest
     [Fact]
     public void Validate_MissingEntryPointChunk_ReportsInvalidEntryPoint()
     {
-        var script = new Script("test", Executor.VM_VERSION, "nonexistent",
+        var script = new Script("test", Executor.VmVersion, "nonexistent",
             [new ScriptChunk("main", [])], []);
 
         var result = ScriptValidator.Validate(script);
@@ -225,7 +225,7 @@ public sealed class ScriptValidatorTest
     [Fact]
     public void Validate_InstructionError_IncludesChunkNameAndInstructionIndex()
     {
-        var script = new Script("test", Executor.VM_VERSION, "main",
+        var script = new Script("test", Executor.VmVersion, "main",
             [new ScriptChunk("main", [
                 new ScriptInstruction(OpCodes.Inc, [Args.Mem(1)]), // valid, index 0
                 new ScriptInstruction(OpCodes.Add),                // wrong arg count, index 1
@@ -241,7 +241,7 @@ public sealed class ScriptValidatorTest
     [Fact]
     public void Validate_MultipleChunks_IsValid()
     {
-        var script = new Script("test", Executor.VM_VERSION, "main",
+        var script = new Script("test", Executor.VmVersion, "main",
             [
                 new ScriptChunk("main", []),
                 new ScriptChunk("helper", []),
@@ -255,7 +255,7 @@ public sealed class ScriptValidatorTest
     [Fact]
     public void Validate_NonMainEntryPoint_IsValid()
     {
-        var script = new Script("test", Executor.VM_VERSION, "start",
+        var script = new Script("test", Executor.VmVersion, "start",
             [new ScriptChunk("start", [])], []);
 
         var result = ScriptValidator.Validate(script);
@@ -266,7 +266,7 @@ public sealed class ScriptValidatorTest
     [Fact]
     public void Validate_NoChunks_ReportsInvalidEntryPoint()
     {
-        var script = new Script("test", Executor.VM_VERSION, "main", [], []);
+        var script = new Script("test", Executor.VmVersion, "main", [], []);
 
         var result = ScriptValidator.Validate(script);
 

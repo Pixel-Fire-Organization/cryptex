@@ -4,10 +4,10 @@ namespace Cryptex.Test.InstructionsTests;
 
 public sealed class AddImmInstructionTest
 {
-    private static readonly VMValue[] Constants =
+    private static readonly VmValue[] Constants =
     [
-        VMValue.FromInteger(10), VMValue.FromInteger(3),
-        VMValue.FromFloat(2.5m)
+        VmValue.FromInteger(10), VmValue.FromInteger(3),
+        VmValue.FromFloat(2.5m)
     ];
 
     [Fact]
@@ -22,7 +22,7 @@ public sealed class AddImmInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(13), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(13), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class AddImmInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(7), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(7), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public sealed class AddImmInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(30), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(30), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public sealed class AddImmInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(3), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(3), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -82,7 +82,7 @@ public sealed class AddImmInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(1), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(1), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public sealed class AddImmInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(2.5m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(2.5m), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public sealed class AddImmInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(10), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(10), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -136,7 +136,7 @@ public sealed class AddImmInstructionTest
             new ScriptInstruction(OpCodes.DivImm, [Args.Mem(1), Args.Const(1)])
         ]);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(10), VMValue.FromInteger(0)]);
+            [VmValue.FromInteger(10), VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

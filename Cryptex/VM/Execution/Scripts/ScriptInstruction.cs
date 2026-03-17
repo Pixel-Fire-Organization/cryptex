@@ -3,6 +3,8 @@ using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts;
 
+// ReSharper disable UnusedMember.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 [MessagePackObject(true)]
 public struct ScriptInstruction
 {

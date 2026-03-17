@@ -1,21 +1,19 @@
 ﻿using Cryptex.Exceptions;
-using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class LoadInstruction : IInstruction
 {
-    internal LoadInstruction(int scriptVersion) { }
-    public OpCodes OpCode => OpCodes.Load;
+    internal LoadInstruction() { }
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
         if (c.Args.Length != 2)
-            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
-            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         var destSlot = c.Args[0].Value;
 
@@ -35,7 +33,7 @@ internal sealed class LoadInstruction : IInstruction
                 break;
 
             default:
-                throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+                throw new VmRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
         }
     }
 }

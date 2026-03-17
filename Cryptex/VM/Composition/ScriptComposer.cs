@@ -3,19 +3,21 @@ using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Composition;
 
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 public sealed class ScriptComposer
 {
     private string m_name;
     private string m_entryPoint;
     private int m_vmVersion;
     private readonly List<ScriptChunk> m_chunks;
-    private readonly List<VMValue> m_constants;
+    private readonly List<VmValue> m_constants;
 
     private ScriptComposer(string name)
     {
         m_name = name;
         m_entryPoint = "main";
-        m_vmVersion = Executor.VM_VERSION;
+        m_vmVersion = Executor.VmVersion;
         m_chunks = [];
         m_constants = [];
     }
@@ -27,7 +29,7 @@ public sealed class ScriptComposer
         var composer = new ScriptComposer(script.ScriptName)
         {
             m_entryPoint = script.EntryPointName,
-            m_vmVersion = script.VMVersion
+            m_vmVersion = script.VmVersion
         };
 
         foreach (var chunk in script.Chunks)
@@ -60,13 +62,13 @@ public sealed class ScriptComposer
 
     public int ConstantCount => m_constants.Count;
 
-    public int AddConstant(VMValue value)
+    public int AddConstant(VmValue value)
     {
         m_constants.Add(value);
         return m_constants.Count - 1;
     }
 
-    public VMValue GetConstant(int index) => m_constants[index];
+    public VmValue GetConstant(int index) => m_constants[index];
 
     public ScriptComposer RemoveConstant(int index)
     {

@@ -7,9 +7,9 @@
 /// </summary>
 public readonly struct ScriptValidationResult
 {
-    private static readonly ScriptValidationError[] s_unloadableErrors =
+    private static readonly ScriptValidationError[] UnloadableErrors =
     [
-        new ScriptValidationError(ScriptValidationErrorCode.CouldNotLoad,
+        new(ScriptValidationErrorCode.CouldNotLoad,
             "The script data could not be deserialized."),
     ];
 
@@ -28,7 +28,7 @@ public readonly struct ScriptValidationResult
     public static ScriptValidationResult Valid { get; } = new([], []);
 
     /// <summary>Returned by <c>LoadAndValidate</c> when the raw data cannot be deserialized at all.</summary>
-    public static ScriptValidationResult Unloadable { get; } = new(s_unloadableErrors, []);
+    public static ScriptValidationResult Unloadable { get; } = new(UnloadableErrors, []);
 }
 
 

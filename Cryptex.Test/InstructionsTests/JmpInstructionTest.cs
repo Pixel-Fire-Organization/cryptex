@@ -13,7 +13,7 @@ public sealed class JmpInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(0)]), // 2 SKIPPED
             new ScriptInstruction(OpCodes.Load, [Args.Mem(3), Args.Const(0)])  // 3
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(5)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -36,7 +36,7 @@ public sealed class JmpInstructionTest
             new ScriptInstruction(OpCodes.Load, [Args.Mem(4), Args.Const(1)])  // 6
         ]);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(99)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(99)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -63,7 +63,7 @@ public sealed class JmpInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Jmp, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

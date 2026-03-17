@@ -5,10 +5,10 @@ namespace Cryptex.Test.InstructionsTests;
 public sealed class AddInstructionTest
 {
     // Shared constants: [0]=5, [1]=6, [2]=5.25, [3]=6.25
-    private static readonly VMValue[] Constants =
+    private static readonly VmValue[] Constants =
     [
-        VMValue.FromInteger(5), VMValue.FromInteger(6),
-        VMValue.FromFloat(5.25m), VMValue.FromFloat(6.25m)
+        VmValue.FromInteger(5), VmValue.FromInteger(6),
+        VmValue.FromFloat(5.25m), VmValue.FromFloat(6.25m)
     ];
 
     [Fact]
@@ -24,8 +24,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(11), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6),  executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromInteger(11), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6),  executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -41,8 +41,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(11.50m), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromFloat(6.25m),  executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromFloat(11.50m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(6.25m),  executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -58,8 +58,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(5.25m),  executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6),    executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromFloat(5.25m),  executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6),    executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -75,8 +75,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6),   executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromFloat(5.25m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6),   executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -93,8 +93,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromInteger(5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -110,8 +110,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromFloat(5.25m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(6.25m), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -127,8 +127,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromInteger(5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -144,8 +144,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromFloat(5.25m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(6.25m), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -161,8 +161,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromInteger(5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -178,8 +178,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromFloat(5.25m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(6.25m), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -195,8 +195,8 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromInteger(6), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromInteger(5), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(6), executor.GetValueInMemory(2));
     }
 
     [Fact]
@@ -212,7 +212,7 @@ public sealed class AddInstructionTest
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromFloat(5.25m), executor.GetValueInMemory(1));
-        Assert.Equal(VMValue.FromFloat(6.25m), executor.GetValueInMemory(2));
+        Assert.Equal(VmValue.FromFloat(5.25m), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromFloat(6.25m), executor.GetValueInMemory(2));
     }
 }

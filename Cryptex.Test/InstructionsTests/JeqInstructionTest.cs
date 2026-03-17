@@ -19,7 +19,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(5, 5, OpCodes.Jeq, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -33,7 +33,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(5, 6, OpCodes.Jeq, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(6), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(6), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -47,7 +47,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(5, 6, OpCodes.Jnq, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(6), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(6), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -61,7 +61,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(5, 5, OpCodes.Jnq, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -74,7 +74,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(4, 5, OpCodes.Jls, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(4), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(4), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -87,7 +87,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(6, 5, OpCodes.Jgr, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(6), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(6), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -100,7 +100,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(6, 5, OpCodes.Jge, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(6), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(6), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -113,7 +113,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(5, 5, OpCodes.Jge, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -126,7 +126,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(4, 5, OpCodes.Jle, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(4), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(4), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -139,7 +139,7 @@ public sealed class JeqInstructionTest
     {
         var chunk = BuildChunk(5, 5, OpCodes.Jle, 5);
         Script script = new Script("script", [chunk],
-            [VMValue.FromInteger(5), VMValue.FromInteger(5), VMValue.FromInteger(1)]);
+            [VmValue.FromInteger(5), VmValue.FromInteger(5), VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -153,7 +153,7 @@ public sealed class JeqInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Jeq, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

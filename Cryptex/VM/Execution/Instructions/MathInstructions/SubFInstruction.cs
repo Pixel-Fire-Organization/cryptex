@@ -1,30 +1,28 @@
 ﻿using Cryptex.Exceptions;
-using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class SubFInstruction : IInstruction
 {
-    internal SubFInstruction(int scriptVersion) { }
-    public OpCodes OpCode => OpCodes.SubF;
+    internal SubFInstruction() { }
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
         if (c.Args.Length != 2)
-            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.MemoryAddress ||
             c.Args[1].Type != InstructionArgumentType.MemoryAddress)
-            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+            throw new VmRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         var aVal = vm.GetMemory().GetSlot(c.Args[0].Value);
         var bVal = vm.GetMemory().GetSlot(c.Args[1].Value);
 
         if (!aVal.IsFloat || !bVal.IsFloat)
-            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
+            throw new VmRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
-        vm.GetMemory().SetSlot(c.Args[0].Value, VMValue.FromFloat(aVal.AsFloat() - bVal.AsFloat()));
+        vm.GetMemory().SetSlot(c.Args[0].Value, VmValue.FromFloat(aVal.AsFloat() - bVal.AsFloat()));
     }
 }
 

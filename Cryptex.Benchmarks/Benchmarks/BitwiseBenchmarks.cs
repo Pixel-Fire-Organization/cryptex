@@ -8,11 +8,11 @@ namespace Cryptex.Benchmarks.Benchmarks;
 [MemoryDiagnoser]
 public class BitwiseBenchmarks
 {
-    private static readonly VMValue[] Constants =
+    private static readonly VmValue[] Constants =
     [
-        VMValue.FromInteger(0xFF00), // const[0]
-        VMValue.FromInteger(0x00FF), // const[1]
-        VMValue.FromInteger(1)       // const[2] — shift amount for Shl/Shr
+        VmValue.FromInteger(0xFF00), // const[0]
+        VmValue.FromInteger(0x00FF), // const[1]
+        VmValue.FromInteger(1)       // const[2] — shift amount for Shl/Shr
     ];
 
     private Script m_andScript  = null!;

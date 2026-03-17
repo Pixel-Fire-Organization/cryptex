@@ -1,5 +1,8 @@
 ﻿namespace Cryptex.VM.ExternalExecutor;
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 public sealed class ExternalExecutor
 {
     private readonly List<ExternalExecutorFunction> m_registeredFunctions;
@@ -10,6 +13,7 @@ public sealed class ExternalExecutor
         m_registeredFunctions = registeredFunctions.ToList();
     }
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public string ReferenceName { get; }
 
     public void Invoke(string functionName, object?[]? @params = null)

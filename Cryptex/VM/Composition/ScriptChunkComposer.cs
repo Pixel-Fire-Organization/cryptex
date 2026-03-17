@@ -1,9 +1,9 @@
-﻿using Cryptex.VM.Execution;
-using Cryptex.VM.Execution.OperationCodes;
+﻿using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Composition;
 
+// ReSharper disable UnusedMember.Global
 public sealed class ScriptChunkComposer
 {
     private string m_name;

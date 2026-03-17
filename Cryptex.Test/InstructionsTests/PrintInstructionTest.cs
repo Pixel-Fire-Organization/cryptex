@@ -14,7 +14,7 @@ public sealed class PrintInstructionTest
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Print, [Args.Mem(1)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(42)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(42)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -33,7 +33,7 @@ public sealed class PrintInstructionTest
             new ScriptInstruction(OpCodes.Load,  [Args.Mem(1), Args.Const(0)]),
             new ScriptInstruction(OpCodes.Print, [Args.Mem(1)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromFloat(3.14m)]);
+        Script script = new Script("script", [chunk], [VmValue.FromFloat(3.14m)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
@@ -60,7 +60,7 @@ public sealed class PrintInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Print, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(1)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(1)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

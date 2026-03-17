@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Numerics;
-using Cryptex.VM.Execution;
 using MessagePack;
 
 namespace Cryptex.VM.Execution.Scripts.Loaders;
@@ -8,7 +7,7 @@ namespace Cryptex.VM.Execution.Scripts.Loaders;
 public sealed class BinaryScriptSerializer : IScriptSerializer
 {
     // Magic header "CRXB" distinguishes the extended format (with constants) from the legacy raw MessagePack.
-    private static ReadOnlySpan<byte> Magic => [0x43, 0x52, 0x58, 0x42];
+    private static ReadOnlySpan<byte> Magic => "CRXB"u8;
 
     public ScriptFormat Format => ScriptFormat.Binary;
 
@@ -62,10 +61,10 @@ public sealed class BinaryScriptSerializer : IScriptSerializer
             if (envelope.Script is null)
                 return null;
 
-            var constants = ReconstructConstants(envelope.Constants ?? []);
+            var constants = ReconstructConstants(envelope.Constants);
             return new Script(
                 envelope.Script.ScriptName,
-                envelope.Script.VMVersion,
+                envelope.Script.VmVersion,
                 envelope.Script.EntryPointName,
                 envelope.Script.Chunks,
                 constants);
@@ -77,18 +76,18 @@ public sealed class BinaryScriptSerializer : IScriptSerializer
         }
     }
 
-    private static VMValue[] ReconstructConstants(ScriptConstantEntry[] entries)
+    private static VmValue[] ReconstructConstants(ScriptConstantEntry[] entries)
     {
-        var result = new VMValue[entries.Length];
+        var result = new VmValue[entries.Length];
         for (var i = 0; i < entries.Length; i++)
         {
             var entry = entries[i];
-            result[i] = (VMValueKind)entry.Kind switch
+            result[i] = (VmValueKind)entry.Kind switch
             {
-                VMValueKind.Integer => VMValue.FromInteger(BigInteger.Parse(entry.Value, CultureInfo.InvariantCulture)),
-                VMValueKind.Float   => VMValue.FromFloat(decimal.Parse(entry.Value, CultureInfo.InvariantCulture)),
-                VMValueKind.String  => VMValue.FromString(entry.Value),
-                _                   => VMValue.Undefined
+                VmValueKind.Integer => VmValue.FromInteger(BigInteger.Parse(entry.Value, CultureInfo.InvariantCulture)),
+                VmValueKind.Float   => VmValue.FromFloat(decimal.Parse(entry.Value, CultureInfo.InvariantCulture)),
+                VmValueKind.String  => VmValue.FromString(entry.Value),
+                _                   => VmValue.Undefined
             };
         }
         return result;

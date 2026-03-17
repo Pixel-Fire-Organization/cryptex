@@ -17,7 +17,7 @@ public sealed class ReadInstructionTest
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());
 
-        Assert.Equal(VMValue.FromInteger(42), executor.GetValueInMemory(1));
+        Assert.Equal(VmValue.FromInteger(42), executor.GetValueInMemory(1));
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class ReadInstructionTest
         Assert.True(executor.ExecuteScript());
 
         Assert.True(executor.GetValueInMemory(1).IsUndefined);
-        Assert.Equal(VMValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
+        Assert.Equal(VmValue.FromInteger((int)ErrorCodes.VM2014_InvalidInputProvided),
             executor.GetValueInMemory(2));
     }
 
@@ -45,7 +45,7 @@ public sealed class ReadInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Read, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
@@ -75,7 +75,7 @@ public sealed class ReadInstructionTest
         ScriptChunk chunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.ReadLine, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [chunk], [VMValue.FromInteger(0)]);
+        Script script = new Script("script", [chunk], [VmValue.FromInteger(0)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());

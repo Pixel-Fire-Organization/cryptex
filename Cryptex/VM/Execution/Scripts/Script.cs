@@ -8,29 +8,31 @@ namespace Cryptex.VM.Execution.Scripts;
 ///     Holds the named <see cref="ScriptChunk" /> array, the pre-parsed
 ///     <see cref="ConstantsBlock" />, and execution metadata.
 /// </summary>
+// ReSharper disable UnusedMember.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 [MessagePackObject(true)]
 public sealed class Script
 {
     public Script()
-        : this("DEFAULT_SCRIPT", Executor.VM_VERSION, "main", [], [])
+        : this("DEFAULT_SCRIPT", Executor.VmVersion, "main", [], [])
     {
     }
 
     public Script(string scriptName, ScriptChunk[] chunks)
-        : this(scriptName, Executor.VM_VERSION, "main", chunks, [])
+        : this(scriptName, Executor.VmVersion, "main", chunks, [])
     {
     }
 
-    public Script(string scriptName, ScriptChunk[] chunks, VMValue[] constants)
-        : this(scriptName, Executor.VM_VERSION, "main", chunks, constants)
+    public Script(string scriptName, ScriptChunk[] chunks, VmValue[] constants)
+        : this(scriptName, Executor.VmVersion, "main", chunks, constants)
     {
     }
 
-    public Script(string scriptName, int vmVersion, string entryPointName, ScriptChunk[] chunks, VMValue[] constants)
+    public Script(string scriptName, int vmVersion, string entryPointName, ScriptChunk[] chunks, VmValue[] constants)
     {
         ScriptName = scriptName;
         EntryPointName = entryPointName;
-        VMVersion = vmVersion;
+        VmVersion = vmVersion;
 
         Chunks = new ScriptChunk[chunks.Length];
         for (var i = 0; i < chunks.Length; i++)
@@ -39,7 +41,7 @@ public sealed class Script
         ConstantsBlock = new ConstantsBlock(constants);
     }
 
-    public int VMVersion { get; set; }
+    public int VmVersion { get; set; }
     public string ScriptName { get; set; }
     public string EntryPointName { get; set; }
     public ScriptChunk[] Chunks { get; set; }
@@ -55,6 +57,6 @@ public sealed class Script
         if (chunk is not null)
             chunk.Execute(vm);
         else
-            throw new VMRuntimeException(ErrorCodes.VM2000_NoChunkFoundToExecute);
+            throw new VmRuntimeException(ErrorCodes.VM2000_NoChunkFoundToExecute);
     }
 }

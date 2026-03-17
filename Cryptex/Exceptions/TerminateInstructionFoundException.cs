@@ -10,6 +10,7 @@ internal sealed class TerminateInstructionFoundException : Exception
     {
     }
 
+    // ReSharper disable once UnusedMember.Global
     public TerminateInstructionFoundException(Exception? innerException) : base(MESSAGE, innerException)
     {
     }

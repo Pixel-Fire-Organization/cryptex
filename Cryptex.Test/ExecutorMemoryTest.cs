@@ -6,9 +6,9 @@ public sealed class ExecutorMemoryTest
     public void TestGetSlot_ValidSlot()
     {
         ExecutorMemory memory = new ExecutorMemory();
-        memory.SetSlot(0, VMValue.FromInteger(0)); // write any value first
+        memory.SetSlot(0, VmValue.FromInteger(0)); // write any value first
         // Overwrite with a known integer to match original "abc" intent (slot exists).
-        memory.SetSlot(0, VMValue.FromInteger(42));
+        memory.SetSlot(0, VmValue.FromInteger(42));
 
         Assert.False(memory.GetSlot(0).IsUndefined);
     }
@@ -17,7 +17,7 @@ public sealed class ExecutorMemoryTest
     public void TestGetSlot_InvalidSlot()
     {
         ExecutorMemory memory = new ExecutorMemory();
-        memory.SetSlot(0, VMValue.FromInteger(42));
+        memory.SetSlot(0, VmValue.FromInteger(42));
 
         Assert.True(memory.GetSlot(1).IsUndefined);
     }
@@ -26,17 +26,17 @@ public sealed class ExecutorMemoryTest
     public void TestSetSlot()
     {
         ExecutorMemory memory = new ExecutorMemory();
-        memory.SetSlot(0, VMValue.FromInteger(42));
+        memory.SetSlot(0, VmValue.FromInteger(42));
 
         Assert.False(memory.GetSlot(0).IsUndefined);
-        Assert.Equal(VMValue.FromInteger(42), memory.GetSlot(0));
+        Assert.Equal(VmValue.FromInteger(42), memory.GetSlot(0));
     }
 
     [Fact]
     public void TestRemoveSlot_InvalidSlot()
     {
         ExecutorMemory memory = new ExecutorMemory();
-        memory.SetSlot(0, VMValue.FromInteger(42));
+        memory.SetSlot(0, VmValue.FromInteger(42));
 
         Assert.True(memory.RemoveSlot(1).IsUndefined);
     }
@@ -45,20 +45,20 @@ public sealed class ExecutorMemoryTest
     public void TestRemoveSlot_ValidSlot()
     {
         ExecutorMemory memory = new ExecutorMemory();
-        memory.SetSlot(0, VMValue.FromInteger(42));
+        memory.SetSlot(0, VmValue.FromInteger(42));
 
-        VMValue removed = memory.RemoveSlot(0);
+        VmValue removed = memory.RemoveSlot(0);
         Assert.False(removed.IsUndefined);
-        Assert.Equal(VMValue.FromInteger(42), removed);
+        Assert.Equal(VmValue.FromInteger(42), removed);
     }
 
     [Fact]
     public void TestDumpMemory()
     {
         ExecutorMemory memory = new ExecutorMemory();
-        memory.SetSlot(0, VMValue.FromInteger(0));   // "0" — represents "abc" slot presence
-        memory.SetSlot(1, VMValue.FromInteger(1));
-        memory.SetSlot(2, VMValue.FromInteger(2));
+        memory.SetSlot(0, VmValue.FromInteger(0));   // "0" — represents "abc" slot presence
+        memory.SetSlot(1, VmValue.FromInteger(1));
+        memory.SetSlot(2, VmValue.FromInteger(2));
 
         string dump = memory.DumpMemory();
         Assert.Contains("[0]:", dump);

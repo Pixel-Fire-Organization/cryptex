@@ -11,7 +11,7 @@ public sealed class NopInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Nop, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromFloat(5.5m)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
         Assert.False(executor.ExecuteScript());
@@ -37,7 +37,7 @@ public sealed class NopInstructionTest
         ScriptChunk mainChunk = new ScriptChunk("main", [
             new ScriptInstruction(OpCodes.Nop, [Args.Const(0)])
         ]);
-        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(10)]);
+        Script script = new Script("script", [mainChunk], [VmValue.FromInteger(10)]);
 
         Executor executor = new Executor(script);
         Assert.True(executor.ExecuteScript());

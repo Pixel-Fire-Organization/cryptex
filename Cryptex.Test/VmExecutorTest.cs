@@ -5,8 +5,8 @@ namespace Cryptex.Test;
 public sealed class VmExecutorTest
 {
     // Constants: [0]=5 (int), [1]=6 (int), [2]=6.25 (float)
-    private static readonly VMValue[] Constants =
-        [VMValue.FromInteger(5), VMValue.FromInteger(6), VMValue.FromFloat(6.25m)];
+    private static readonly VmValue[] Constants =
+        [VmValue.FromInteger(5), VmValue.FromInteger(6), VmValue.FromFloat(6.25m)];
 
     // A chunk that adds two integers — succeeds.
     private static ScriptChunk IntAddChunk() => new ScriptChunk("main", [
@@ -76,7 +76,7 @@ public sealed class VmExecutorTest
     [Fact]
     public void IsInCompatibilityMode_WhenScriptVersionIsNewer_ReturnsTrue()
     {
-        var script = new Script("compat", Executor.VM_VERSION + 1, "main",
+        var script = new Script("compat", Executor.VmVersion + 1, "main",
             [IntAddChunk()], Constants);
         var executor = new Executor(script);
 
@@ -94,7 +94,7 @@ public sealed class VmExecutorTest
     [Fact]
     public void IsInCompatibilityMode_WhenScriptVersionIsOlder_ReturnsFalse()
     {
-        var script = new Script("legacy", Executor.VM_VERSION - 1 < 1 ? 1 : Executor.VM_VERSION - 1,
+        var script = new Script("legacy", Executor.VmVersion - 1 < 1 ? 1 : Executor.VmVersion - 1,
             "main", [IntAddChunk()], Constants);
 
         Assert.False(new Executor(script).IsInCompatibilityMode);
@@ -103,7 +103,7 @@ public sealed class VmExecutorTest
     [Fact]
     public void ExecuteScript_NewerVersionScript_SucceedsInCompatibilityMode()
     {
-        var script = new Script("compat", Executor.VM_VERSION + 1, "main",
+        var script = new Script("compat", Executor.VmVersion + 1, "main",
             [IntAddChunk()], Constants);
         var executor = new Executor(script);
 
