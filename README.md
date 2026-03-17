@@ -7,25 +7,26 @@ A .NET virtual machine and scripting engine library.
 
 ## Overview
 
-Cryptex is a .NET 8.0 virtual machine library that provides a full instruction set for integer and floating-point arithmetic, bitwise operations, conditional jumps, and memory management. Scripts are serialized with [MessagePack](https://github.com/MessagePack-CSharp/MessagePack-CSharp) and executed by a lightweight stack-less VM.
+Cryptex is a .NET virtual machine library that provides a full instruction set for integer and floating-point arithmetic, bitwise operations,
+conditional jumps, and memory management. Scripts are serialized with [MessagePack](https://github.com/MessagePack-CSharp/MessagePack-CSharp) and
+executed by a lightweight stack-less VM.
 
 ## Projects
 
-| Project | Description |
-|---------|-------------|
-| `Cryptex` | Core VM library — instruction set, executor, memory model |
-| `Cryptex.Test` | xUnit unit and stress tests |
-| `Cryptex.Benchmarks` | BenchmarkDotNet benchmarks for every instruction |
-| `CryptexTester` | Console app for manual testing |
-| `CryptexScriptInspector` | WPF GUI for script inspection (Windows only) |
+| Project              | Description                                               |
+|----------------------|-----------------------------------------------------------|
+| `Cryptex`            | Core VM library — instruction set, executor, memory model |
+| `Cryptex.Test`       | xUnit unit and stress tests                               |
+| `Cryptex.Benchmarks` | BenchmarkDotNet benchmarks for every instruction          |
+| `CryptexTester`      | Console app for manual testing                            |
 
 ## CI / Workflows
 
-| Workflow | Trigger | What it does |
-|----------|---------|--------------|
-| [.NET Core Build](.github/workflows/dotnet-build.yml) | Push | Restore → Build → Unit tests |
-| [Stress Tests & Benchmarks](.github/workflows/stress-and-benchmark.yml) | Push | Stress tests + BenchmarkDotNet benchmarks; results uploaded as artifacts |
-| [Publish](.github/workflows/publish-cryptex-lib.yml) | Manual | AOT publish for win-x64, linux-x64, osx-arm64, osx-x64 |
+| Workflow                                                                | Trigger | What it does                                                             |
+|-------------------------------------------------------------------------|---------|--------------------------------------------------------------------------|
+| [.NET Core Build](.github/workflows/dotnet-build.yml)                   | Push    | Restore → Build → Unit tests                                             |
+| [Stress Tests & Benchmarks](.github/workflows/stress-and-benchmark.yml) | Push    | Stress tests + BenchmarkDotNet benchmarks; results uploaded as artifacts |
+| [Publish](.github/workflows/publish-cryptex-lib.yml)                    | Manual  | AOT publish for win-x64, linux-x64, osx-arm64, osx-x64                   |
 
 ## Stress Tests
 

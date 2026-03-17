@@ -12,24 +12,24 @@ Follow these conventions precisely when writing or modifying C# code in this rep
 
 ## Language and SDK
 
-- Target framework: `net8.0` (core library and tests), `net8.0-windows` (WPF inspector).
+- Target framework: `net10.0` (core library and tests).
 - Build SDK: .NET 10.0 (see CI configuration).
-- Language version: C# 12 (latest features enabled via SDK default).
+- Language version: C# 14 (latest features enabled via SDK default).
 - Nullable reference types **must** be enabled (`#nullable enable` or project-level `<Nullable>enable</Nullable>`).
 - Implicit usings are enabled; do not add redundant `using` directives that are already globally imported.
 
 ## Naming Conventions
 
-| Symbol | Convention | Example |
-|--------|-----------|---------|
-| Private instance field | `m_camelCase` | `m_script`, `m_memory`, `m_VMExited` |
-| Private static field | `s_camelCase` | `s_instance` |
-| Internal/public constant | `UPPER_SNAKE_CASE` | `MAX_FUNCTION_ARGS` |
-| Public property | `PascalCase` | `ExitCode`, `DumpMemory()` |
-| Public method | `PascalCase` | `BeginExecution()`, `GetValueInMemory()` |
-| Private method | `PascalCase` | `ParseArguments()` |
-| Type parameter | `T` or `T<Descriptor>` | `TValue` |
-| Namespace | `Cryptex.<Layer>.<Sublayer>` | `Cryptex.VM.Execution.Instructions.MathInstructions` |
+| Symbol                   | Convention                   | Example                                              |
+|--------------------------|------------------------------|------------------------------------------------------|
+| Private instance field   | `m_camelCase`                | `m_script`, `m_memory`, `m_VMExited`                 |
+| Private static field     | `s_camelCase`                | `s_instance`                                         |
+| Internal/public constant | `UPPER_SNAKE_CASE`           | `MAX_FUNCTION_ARGS`                                  |
+| Public property          | `PascalCase`                 | `ExitCode`, `DumpMemory()`                           |
+| Public method            | `PascalCase`                 | `BeginExecution()`, `GetValueInMemory()`             |
+| Private method           | `PascalCase`                 | `ParseArguments()`                                   |
+| Type parameter           | `T` or `T<Descriptor>`       | `TValue`                                             |
+| Namespace                | `Cryptex.<Layer>.<Sublayer>` | `Cryptex.VM.Execution.Instructions.MathInstructions` |
 
 ## Class Design
 
@@ -64,13 +64,13 @@ Follow these conventions precisely when writing or modifying C# code in this rep
 
 Every C# class in this repository must follow SOLID:
 
-| Principle | Rule |
-|-----------|------|
-| **Single Responsibility** | Each class has exactly one reason to change. Instruction classes encapsulate exactly one opcode's behaviour. |
-| **Open/Closed** | Add new behaviour via new classes; never modify an existing instruction class to handle an unrelated opcode. |
-| **Liskov Substitution** | Every `IInstruction` implementation must be fully substitutable — the executor never down-casts or type-checks instances. |
-| **Interface Segregation** | `IInstruction` is intentionally minimal (`OpCode` + `Execute`). Do not add methods that only some instructions need. |
-| **Dependency Inversion** | Instructions depend on `Executor` (the abstraction); never reach into concrete internal state directly. |
+| Principle                 | Rule                                                                                                                      |
+|---------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| **Single Responsibility** | Each class has exactly one reason to change. Instruction classes encapsulate exactly one opcode's behaviour.              |
+| **Open/Closed**           | Add new behaviour via new classes; never modify an existing instruction class to handle an unrelated opcode.              |
+| **Liskov Substitution**   | Every `IInstruction` implementation must be fully substitutable — the executor never down-casts or type-checks instances. |
+| **Interface Segregation** | `IInstruction` is intentionally minimal (`OpCode` + `Execute`). Do not add methods that only some instructions need.      |
+| **Dependency Inversion**  | Instructions depend on `Executor` (the abstraction); never reach into concrete internal state directly.                   |
 
 ## AOT Compatibility
 
