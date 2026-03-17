@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class LoadInstruction : IInstruction
 {
-    internal LoadInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Load;
+    public int ScriptVersion { get; }
+
+    internal LoadInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

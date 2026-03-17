@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class JleInstruction : IInstruction
 {
-    internal JleInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Jle;
+    public int ScriptVersion { get; }
+
+    internal JleInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class JlsInstruction : IInstruction
 {
-    internal JlsInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Jls;
+    public int ScriptVersion { get; }
+
+    internal JlsInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
@@ -24,4 +26,3 @@ internal sealed class JlsInstruction : IInstruction
             vm.RequestJump(c.Args[0].Value);
     }
 }
-

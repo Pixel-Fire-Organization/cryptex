@@ -6,11 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class TermInstruction : IInstruction
 {
-    internal TermInstruction(int scriptVersion)
-    {
-    }
-
     public OpCodes OpCode => OpCodes.Term;
+    public int ScriptVersion { get; }
+
+    internal TermInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
         => throw new TerminateInstructionFoundException();

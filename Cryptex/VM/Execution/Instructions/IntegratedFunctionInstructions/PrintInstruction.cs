@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.IntegratedFunctionInstructions;
 
 internal sealed class PrintInstruction : IInstruction
 {
-    internal PrintInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Print;
+    public int ScriptVersion { get; }
+
+    internal PrintInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

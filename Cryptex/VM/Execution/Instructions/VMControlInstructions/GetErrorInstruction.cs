@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class GetErrorInstruction : IInstruction
 {
-    internal GetErrorInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.GetError;
+    public int ScriptVersion { get; }
+
+    internal GetErrorInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

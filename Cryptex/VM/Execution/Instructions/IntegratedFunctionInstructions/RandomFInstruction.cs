@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.IntegratedFunctionInstructions;
 
 internal sealed class RandomFInstruction : IInstruction
 {
-    internal RandomFInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.RandomF;
+    public int ScriptVersion { get; }
+
+    internal RandomFInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

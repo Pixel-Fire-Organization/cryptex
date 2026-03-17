@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class ExitInstruction : IInstruction
 {
-    internal ExitInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Exit;
+    public int ScriptVersion { get; }
+
+    internal ExitInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class NotInstruction : IInstruction
 {
-    internal NotInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Not;
+    public int ScriptVersion { get; }
+
+    internal NotInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

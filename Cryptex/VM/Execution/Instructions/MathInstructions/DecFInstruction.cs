@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class DecFInstruction : IInstruction
 {
-    internal DecFInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.DecF;
+    public int ScriptVersion { get; }
+
+    internal DecFInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

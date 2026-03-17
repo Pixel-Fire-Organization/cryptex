@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class OrInstruction : IInstruction
 {
-    internal OrInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Or;
+    public int ScriptVersion { get; }
+
+    internal OrInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

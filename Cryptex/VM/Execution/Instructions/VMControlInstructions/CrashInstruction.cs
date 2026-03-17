@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class CrashInstruction : IInstruction
 {
-    internal CrashInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Crash;
+    public int ScriptVersion { get; }
+
+    internal CrashInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

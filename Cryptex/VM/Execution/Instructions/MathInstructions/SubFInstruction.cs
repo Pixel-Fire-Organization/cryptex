@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class SubFInstruction : IInstruction
 {
-    internal SubFInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.SubF;
+    public int ScriptVersion { get; }
+
+    internal SubFInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

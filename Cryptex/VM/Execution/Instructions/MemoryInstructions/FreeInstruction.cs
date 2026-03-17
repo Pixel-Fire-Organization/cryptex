@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class FreeInstruction : IInstruction
 {
-    internal FreeInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Free;
+    public int ScriptVersion { get; }
+
+    internal FreeInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

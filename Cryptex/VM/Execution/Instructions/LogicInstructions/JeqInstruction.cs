@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class JeqInstruction : IInstruction
 {
-    internal JeqInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Jeq;
+    public int ScriptVersion { get; }
+
+    internal JeqInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

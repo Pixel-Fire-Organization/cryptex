@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class ModInstruction : IInstruction
 {
-    internal ModInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Mod;
+    public int ScriptVersion { get; }
+
+    internal ModInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

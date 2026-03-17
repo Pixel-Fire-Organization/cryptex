@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class JnqInstruction : IInstruction
 {
-    internal JnqInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Jnq;
+    public int ScriptVersion { get; }
+
+    internal JnqInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

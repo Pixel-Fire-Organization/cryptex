@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.IntegratedFunctionInstructions;
 
 internal sealed class ReadLineInstruction : IInstruction
 {
-    internal ReadLineInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.ReadLine;
+    public int ScriptVersion { get; }
+
+    internal ReadLineInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

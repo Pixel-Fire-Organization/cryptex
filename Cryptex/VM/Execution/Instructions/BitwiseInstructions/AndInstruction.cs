@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class AndInstruction : IInstruction
 {
-    internal AndInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.And;
+    public int ScriptVersion { get; }
+
+    internal AndInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

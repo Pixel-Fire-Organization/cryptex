@@ -7,8 +7,10 @@ namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class ShlInstruction : IInstruction
 {
-    internal ShlInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Shl;
+    public int ScriptVersion { get; }
+
+    internal ShlInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

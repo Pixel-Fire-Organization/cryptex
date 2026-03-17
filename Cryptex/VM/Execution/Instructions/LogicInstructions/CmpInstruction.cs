@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class CmpInstruction : IInstruction
 {
-    internal CmpInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Cmp;
+    public int ScriptVersion { get; }
+
+    internal CmpInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

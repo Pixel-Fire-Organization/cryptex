@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class NopInstruction : IInstruction
 {
-    internal NopInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Nop;
+    public int ScriptVersion { get; }
+
+    internal NopInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

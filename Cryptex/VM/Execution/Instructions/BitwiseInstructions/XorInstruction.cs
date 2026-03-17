@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class XorInstruction : IInstruction
 {
-    internal XorInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Xor;
+    public int ScriptVersion { get; }
+
+    internal XorInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {

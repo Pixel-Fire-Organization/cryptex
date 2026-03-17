@@ -6,8 +6,10 @@ namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class MulFInstruction : IInstruction
 {
-    internal MulFInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.MulF;
+    public int ScriptVersion { get; }
+
+    internal MulFInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
