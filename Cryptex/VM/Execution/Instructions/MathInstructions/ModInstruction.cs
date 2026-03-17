@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class ModInstruction : IInstruction
 {
+    internal ModInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Mod;
 
     public void Execute(ScriptInstruction c, Executor vm)

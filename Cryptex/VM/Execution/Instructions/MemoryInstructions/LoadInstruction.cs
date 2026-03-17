@@ -1,27 +1,23 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class LoadInstruction : IInstruction
 {
+    internal LoadInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Load;
 
     public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Args.Length == 0 || c.Args.Length > 2)
+        if (c.Args.Length != 2)
             throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
         if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
         var destSlot = c.Args[0].Value;
-
-        if (c.Args.Length == 1)
-        {
-            vm.GetMemory().RemoveSlot(destSlot);
-            return;
-        }
 
         var source = c.Args[1];
         switch (source.Type)
@@ -35,7 +31,6 @@ internal sealed class LoadInstruction : IInstruction
                 break;
 
             case InstructionArgumentType.Constant:
-            case InstructionArgumentType.HexConstant:
                 vm.GetMemory().SetSlot(destSlot, vm.GetConstant(source.Value));
                 break;
 

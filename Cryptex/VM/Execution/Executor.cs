@@ -18,6 +18,7 @@ public sealed class Executor
     private ErrorCodes m_errorCode;
     private bool m_jumpPending;
     private int m_jumpTarget;
+    private bool m_compatibilityWarningEmitted;
 
     public Executor(Script script)
     {
@@ -25,8 +26,20 @@ public sealed class Executor
         m_memory = new ExecutorMemory();
     }
 
+    /// <summary>
+    ///     <c>true</c> when the loaded script targets a VM version newer than this runtime.
+    ///     The executor will run using the current VM's instruction behaviour and emit a
+    ///     warning at the start of execution. See Docs/VM/Compatibility Mode.md for details.
+    /// </summary>
+    public bool IsInCompatibilityMode => m_script.VMVersion > VM_VERSION;
+
+    /// <summary>The VM version the loaded script was authored for.</summary>
+    internal int ScriptVersion => m_script.VMVersion;
+
     public bool ExecuteScript()
     {
+        WarnIfInCompatibilityMode();
+
         try
         {
             m_script.Execute(this);
@@ -50,6 +63,8 @@ public sealed class Executor
 
     public bool ExecuteChunk(string chunkName = "main")
     {
+        WarnIfInCompatibilityMode();
+
         if (m_script.GetChunk(chunkName) is null)
             return false;
 
@@ -124,5 +139,18 @@ public sealed class Executor
         target = m_jumpTarget;
         m_jumpPending = false;
         return true;
+    }
+
+    private void WarnIfInCompatibilityMode()
+    {
+        if (!IsInCompatibilityMode || m_compatibilityWarningEmitted)
+            return;
+
+        m_compatibilityWarningEmitted = true;
+        PrintingDelegates.WriteWarning(
+            $"Script '{m_script.ScriptName}' targets VM version {m_script.VMVersion}, " +
+            $"but the current VM is version {VM_VERSION}. " +
+            "Running in compatibility mode — instruction behaviour may differ from the target version. " +
+            "See Docs/VM/Compatibility Mode.md for details.");
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class NotInstruction : IInstruction
 {
+    internal NotInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Not;
 
     public void Execute(ScriptInstruction c, Executor vm)

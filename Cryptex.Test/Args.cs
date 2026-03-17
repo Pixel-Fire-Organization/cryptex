@@ -14,9 +14,6 @@ internal static class Args
     internal static ScriptInstructionArgument Const(int index)
         => new(index, InstructionArgumentType.Constant);
 
-    internal static ScriptInstructionArgument HexConst(int index)
-        => new(index, InstructionArgumentType.HexConstant);
-
     internal static ScriptInstructionArgument Label(int instructionIndex)
         => new(instructionIndex, InstructionArgumentType.Label);
 

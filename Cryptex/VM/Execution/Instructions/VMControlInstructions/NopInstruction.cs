@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class NopInstruction : IInstruction
 {
+    internal NopInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Nop;
 
     public void Execute(ScriptInstruction c, Executor vm)

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Frozen;
 
 using Cryptex.VM.Execution;
-
+using Cryptex.VM.Execution.OperationCodes;
 using MaterialDesignThemes.Wpf;
 
 namespace CryptexScriptInspector;

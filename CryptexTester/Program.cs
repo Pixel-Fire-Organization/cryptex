@@ -1,5 +1,6 @@
 ﻿using Cryptex;
 using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 PrintingDelegates.WriteMessage = Console.WriteLine;

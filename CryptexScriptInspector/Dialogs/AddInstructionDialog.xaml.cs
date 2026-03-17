@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 
 using Cryptex.VM.Execution;
-
+using Cryptex.VM.Execution.OperationCodes;
 using CryptexScriptInspector.Controls;
 
 using MaterialDesignThemes.Wpf;

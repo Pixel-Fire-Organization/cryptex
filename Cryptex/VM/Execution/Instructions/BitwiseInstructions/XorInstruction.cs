@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class XorInstruction : IInstruction
 {
+    internal XorInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Xor;
 
     public void Execute(ScriptInstruction c, Executor vm)

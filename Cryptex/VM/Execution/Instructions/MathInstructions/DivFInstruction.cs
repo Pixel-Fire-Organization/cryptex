@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MathInstructions;
 
 internal sealed class DivFInstruction : IInstruction
 {
+    internal DivFInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.DivF;
 
     public void Execute(ScriptInstruction c, Executor vm)

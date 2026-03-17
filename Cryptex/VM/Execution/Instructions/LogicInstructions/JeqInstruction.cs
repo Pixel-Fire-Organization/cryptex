@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.LogicInstructions;
 
 internal sealed class JeqInstruction : IInstruction
 {
+    internal JeqInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Jeq;
 
     public void Execute(ScriptInstruction c, Executor vm)

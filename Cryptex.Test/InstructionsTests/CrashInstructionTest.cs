@@ -1,4 +1,5 @@
 ﻿using Cryptex.VM.Execution;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.Test.InstructionsTests;
@@ -19,11 +20,10 @@ public sealed class CrashInstructionTest
     }
 
     [Fact]
-    public void TestCrash_HexValue()
+    public void TestCrash_UnknownErrorCode()
     {
-        // HexConstant type — Crash only accepts Constant, so it fails.
         ScriptChunk mainChunk = new ScriptChunk("main", [
-            new ScriptInstruction(OpCodes.Crash, [Args.HexConst(0)])
+            new ScriptInstruction(OpCodes.Crash, [Args.Const(0)])
         ]);
         Script script = new Script("script", [mainChunk], [VMValue.FromInteger(0x7f)]);
 

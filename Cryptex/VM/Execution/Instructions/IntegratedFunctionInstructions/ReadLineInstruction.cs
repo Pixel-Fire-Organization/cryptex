@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.IntegratedFunctionInstructions;
 
 internal sealed class ReadLineInstruction : IInstruction
 {
+    internal ReadLineInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.ReadLine;
 
     public void Execute(ScriptInstruction c, Executor vm)

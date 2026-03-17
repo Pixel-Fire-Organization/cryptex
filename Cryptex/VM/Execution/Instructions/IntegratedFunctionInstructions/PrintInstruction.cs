@@ -1,10 +1,12 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
 using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.IntegratedFunctionInstructions;
 
 internal sealed class PrintInstruction : IInstruction
 {
+    internal PrintInstruction(int scriptVersion) { }
     public OpCodes OpCode => OpCodes.Print;
 
     public void Execute(ScriptInstruction c, Executor vm)
