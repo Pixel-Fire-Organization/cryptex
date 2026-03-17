@@ -1,0 +1,35 @@
+﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
+
+namespace Cryptex.VM.Execution.Instructions.MathInstructions;
+
+internal sealed class DivFInstruction : IInstruction
+{
+    public OpCodes OpCode => OpCodes.DivF;
+    public int ScriptVersion { get; }
+
+    internal DivFInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
+
+    public void Execute(ScriptInstruction c, Executor vm)
+    {
+        if (c.Args.Length != 2)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
+
+        if (c.Args[0].Type != InstructionArgumentType.MemoryAddress ||
+            c.Args[1].Type != InstructionArgumentType.MemoryAddress)
+            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+
+        var aVal = vm.GetMemory().GetSlot(c.Args[0].Value);
+        var bVal = vm.GetMemory().GetSlot(c.Args[1].Value);
+
+        if (!aVal.IsFloat || !bVal.IsFloat)
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
+
+        if (bVal.AsFloat() == 0m)
+            throw new VMRuntimeException(ErrorCodes.VM2015_DivisionByZero);
+
+        vm.GetMemory().SetSlot(c.Args[0].Value, VMValue.FromFloat(aVal.AsFloat() / bVal.AsFloat()));
+    }
+}
+

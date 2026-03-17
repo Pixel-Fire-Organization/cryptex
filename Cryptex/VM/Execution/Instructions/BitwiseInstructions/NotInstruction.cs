@@ -1,37 +1,29 @@
-﻿using System.Numerics;
-
-using Cryptex.Exceptions;
-using Cryptex.VM.Execution.DataTypes;
+﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.BitwiseInstructions;
 
 internal sealed class NotInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Not;
+    public int ScriptVersion { get; }
 
-    public void Execute(ScriptChunkOpCode c, Executor vm)
+    internal NotInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
+
+    public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Code != OpCode)
-            throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
+        if (c.Args.Length != 1)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
-        var args = CryptexDataConverter.SplitInstructionArguments(c.Args, 1);
-
-        //ARG1
-
-        string argument1 = args[0];
-        if (!argument1.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX))
+        if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        int location1 = CryptexDataConverter.ParseArgumentToMemoryLocation(argument1);
-        if (!CryptexDataConverter.IsValidMemoryLocation(vm.GetMemory(), location1) ||
-            CryptexDataConverter.GetDataTypeAtMemoryLocation(vm.GetMemory(), location1) != DataTypes.DataTypes.Number)
-            throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
-        
-        if (CryptexDataConverter.GetMemoryValueAsInteger(vm.GetMemory(), location1) is null)
+        var val = vm.GetMemory().GetSlot(c.Args[0].Value);
+        if (!val.IsInteger)
             throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
-        BigInteger valueToOperate = CryptexDataConverter.GetMemoryValueAsInteger(vm.GetMemory(), location1) ?? 0;
-
-        vm.GetMemory().SetSlot(location1, (~valueToOperate).ToString());
+        vm.GetMemory().SetSlot(c.Args[0].Value, VMValue.FromInteger(~val.AsInteger()));
     }
 }
+

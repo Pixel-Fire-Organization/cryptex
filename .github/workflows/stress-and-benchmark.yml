@@ -1,0 +1,175 @@
+name: Stress Tests and Benchmarks
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      update_baseline:
+        description: 'Commit current results as the new benchmark baseline'
+        type: boolean
+        default: false
+
+jobs:
+  stress-tests:
+    name: Stress Tests
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache dotnet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-dotnet-
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run stress tests
+        run: dotnet test --no-build --configuration Release --filter "Category=Stress" --logger "console;verbosity=normal"
+
+  benchmarks:
+    name: Benchmarks
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache dotnet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-dotnet-
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build benchmarks (Release)
+        run: dotnet build Cryptex.Benchmarks/Cryptex.Benchmarks.csproj --no-restore --configuration Release
+
+      - name: Run benchmarks
+        env:
+          CI: "true"
+        run: |
+          dotnet run --project Cryptex.Benchmarks --configuration Release --no-build \
+            -- --filter '*' --exporters json markdown
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Compare against baseline (± 10 % threshold)
+        run: |
+          python3 - << 'PYEOF'
+          import json, sys, glob, os
+
+          THRESHOLD    = 0.10
+          BASELINE     = ".github/benchmarks/baseline.json"
+          CURRENT_OUT  = ".github/benchmarks/current.json"
+
+          # Collect current means from BenchmarkDotNet JSON output.
+          result_files = glob.glob("BenchmarkDotNet.Artifacts/results/*report-full*.json")
+          if not result_files:
+              print("No benchmark result files found — skipping comparison.")
+              sys.exit(0)
+
+          current = {}
+          for path in result_files:
+              with open(path) as f:
+                  data = json.load(f)
+              for bench in data.get("Benchmarks", []):
+                  stats = bench.get("Statistics")
+                  if stats:
+                      name = bench.get("FullName", "Unknown")
+                      current[name] = stats.get("Mean", 0)
+
+          # Always write the current results so the update-baseline step can commit them.
+          os.makedirs(os.path.dirname(CURRENT_OUT), exist_ok=True)
+          with open(CURRENT_OUT, "w") as f:
+              json.dump(current, f, indent=2, sort_keys=True)
+
+          # Load baseline; skip comparison if it is empty.
+          if not os.path.exists(BASELINE):
+              print("No baseline file found — skipping comparison.")
+              sys.exit(0)
+
+          with open(BASELINE) as f:
+              baseline = json.load(f)
+
+          if not baseline:
+              print("Baseline is empty — skipping comparison (run with update_baseline=true to populate).")
+              sys.exit(0)
+
+          failed = []
+          for name, mean in current.items():
+              if name not in baseline:
+                  print(f"  NEW  {name}: mean={mean:.0f} ns (not in baseline)")
+                  continue
+              base = baseline[name]
+              if base <= 0:
+                  continue
+              diff = (mean - base) / base
+              sign = "+" if diff >= 0 else ""
+              print(f"  {sign}{diff:.2%}  {name}  (baseline={base:.0f} ns, current={mean:.0f} ns)")
+              if abs(diff) >= THRESHOLD:
+                  failed.append((name, base, mean, diff))
+
+          if failed:
+              print(f"\nFAILED: {len(failed)} benchmark(s) deviated >= {THRESHOLD:.0%} from baseline:")
+              for name, base, curr, diff in failed:
+                  sign = "+" if diff >= 0 else ""
+                  print(f"  {sign}{diff:.2%}  {name}  (baseline={base:.0f} ns, current={curr:.0f} ns)")
+              sys.exit(1)
+          else:
+              print(f"\nAll benchmarks are within {THRESHOLD:.0%} of the stored baseline.")
+          PYEOF
+
+      - name: Update baseline
+        if: ${{ github.event_name == 'workflow_dispatch' && fromJSON(github.event.inputs.update_baseline || 'false') }}
+        run: |
+          cp .github/benchmarks/current.json .github/benchmarks/baseline.json
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/benchmarks/baseline.json
+          if git diff --staged --quiet; then
+            echo "Baseline unchanged — no commit needed."
+          else
+            git commit -m "ci: update benchmark baseline [skip ci]"
+            git push
+          fi
+
+      - name: Write results to job summary
+        if: always()
+        run: |
+          echo "## Benchmark Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          for md in BenchmarkDotNet.Artifacts/results/*.md; do
+            [ -f "$md" ] && cat "$md" >> "$GITHUB_STEP_SUMMARY" && echo "" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+      - name: Upload benchmark artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.run_number }}
+          path: BenchmarkDotNet.Artifacts/results/
+          retention-days: 90

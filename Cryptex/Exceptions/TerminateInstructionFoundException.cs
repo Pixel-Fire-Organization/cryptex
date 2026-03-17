@@ -2,11 +2,15 @@
 
 internal sealed class TerminateInstructionFoundException : Exception
 {
-    private const string MESSAGE = 
+    private const string MESSAGE =
         "A `term` instruction found! This indicates that the code chunk currently executing is corrupted!";
 
     public TerminateInstructionFoundException()
-        : base(MESSAGE) { }
+        : base(MESSAGE)
+    {
+    }
 
-    public TerminateInstructionFoundException(Exception? innerException) : base(MESSAGE, innerException) { }
+    public TerminateInstructionFoundException(Exception? innerException) : base(MESSAGE, innerException)
+    {
+    }
 }

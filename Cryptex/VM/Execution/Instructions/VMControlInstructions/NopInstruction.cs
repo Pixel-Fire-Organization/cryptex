@@ -1,41 +1,33 @@
-﻿using System.Numerics;
-
-using Cryptex.Exceptions;
-using Cryptex.VM.Execution.DataTypes;
+﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class NopInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Nop;
+    public int ScriptVersion { get; }
 
-    public void Execute(ScriptChunkOpCode c, Executor vm)
+    internal NopInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
+
+    public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Code != OpCode)
-            throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
+        if (c.Args.Length != 1)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
-        string[] args = CryptexDataConverter.SplitInstructionArguments(c.Args, 1);
-
-        //ARG1
-
-        string argument = args[0];
-        if (!argument.StartsWith(IInstruction.DECIMAL_VALUE_PREFIX))
+        if (c.Args[0].Type != InstructionArgumentType.Constant)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        string arg = argument.Remove(0, 1);
-        if (!CryptexDataConverter.IsIntegerNumber(arg))
-            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+        var ms = vm.GetConstant(c.Args[0].Value);
+        if (!ms.IsInteger)
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
-        BigInteger time = CryptexDataConverter.GetIntegerNumber(arg);
-        
-        if (time < int.MinValue)
-            time = int.MinValue;
-        else if (time > int.MaxValue)
-            time = int.MaxValue;
+        var msValue = ms.AsInteger();
+        if (msValue < 0 || msValue > int.MaxValue)
+            throw new VMRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
 
-        if (time < 0)
-            time = BigInteger.Abs(time);
-
-        Thread.Sleep((int)time);
+        Thread.Sleep((int)msValue);
     }
 }
+

@@ -1,16 +1,16 @@
 ﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class TermInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Term;
+    public int ScriptVersion { get; }
 
-    public void Execute(ScriptChunkOpCode c, Executor vm)
-    {
-        if (c.Code != OpCode)
-            throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
+    internal TermInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
 
-        throw new TerminateInstructionFoundException();
-    }
+    public void Execute(ScriptInstruction c, Executor vm)
+        => throw new TerminateInstructionFoundException();
 }

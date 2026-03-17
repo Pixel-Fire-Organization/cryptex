@@ -1,4 +1,5 @@
-﻿using Cryptex.VM.Execution;
+﻿using System.Numerics;
+using Cryptex.VM.Execution.OperationCodes;
 
 namespace Cryptex.Test.InstructionsTests;
 
@@ -7,84 +8,96 @@ public sealed class ShlInstructionTest
     [Fact]
     public void TestShl_BigShiftingFactor()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Shl, $"$1, #{(long)int.MaxValue + 1}") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(new BigInteger((long)int.MaxValue + 1))]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
-        string? memoryValue1 = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue1);
-        Assert.Equal("5", memoryValue1);
+        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
 
     [Fact]
     public void TestShl_SmallShiftingFactor()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Shl, $"$1, #{(long)int.MinValue - 1}") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(new BigInteger((long)int.MinValue - 1))]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
-        string? memoryValue1 = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue1);
-        Assert.Equal("5", memoryValue1);
+        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
 
     [Fact]
     public void TestShl_CorrectShiftingFactor()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Shl, $"$1, #5") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
-        string? memoryValue1 = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue1);
-        Assert.Equal((5 << 5).ToString(), memoryValue1);
+        Assert.Equal(VMValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
     }
 
     [Fact]
     public void TestShl_FloatingShiftingFactor()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Shl, $"$1, #5.5") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromFloat(5.5m)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
-        string? memoryValue1 = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue1);
-        Assert.Equal("5", memoryValue1);
+        Assert.Equal(VMValue.FromInteger(5), executor.GetValueInMemory(1));
     }
 
     [Fact]
     public void TestShl_FloatingValue()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5.5"), new ScriptChunkOpCode(OpCodes.Shl, $"$1, #5") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromFloat(5.5m), VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.False(executor.BeginExecution());
+        Assert.False(executor.ExecuteScript());
 
-        string? memoryValue1 = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue1);
-        Assert.Equal("5.5", memoryValue1);
+        Assert.Equal(VMValue.FromFloat(5.5m), executor.GetValueInMemory(1));
     }
 
     [Fact]
     public void TestShl_CorrectValue()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Shl, $"$1, #5") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Shl, [Args.Mem(1), Args.Const(1)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
-        string? memoryValue1 = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue1);
-        Assert.Equal((5 << 5).ToString(), memoryValue1);
+        Assert.Equal(VMValue.FromInteger(5 << 5), executor.GetValueInMemory(1));
     }
 }

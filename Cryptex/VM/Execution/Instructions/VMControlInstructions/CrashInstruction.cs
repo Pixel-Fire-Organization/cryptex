@@ -1,36 +1,37 @@
-﻿using System.Numerics;
-
-using Cryptex.Exceptions;
-using Cryptex.VM.Execution.DataTypes;
+﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class CrashInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Crash;
+    public int ScriptVersion { get; }
 
-    public void Execute(ScriptChunkOpCode c, Executor vm)
+    internal CrashInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
+
+    public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Code != OpCode)
-            throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
+        if (c.Args.Length != 1)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
-        string[] args = CryptexDataConverter.SplitInstructionArguments(c.Args, 1);
-
-        //ARG1
-
-        string argument = args[0];
-        if (!argument.StartsWith(IInstruction.DECIMAL_VALUE_PREFIX))
+        if (c.Args[0].Type != InstructionArgumentType.Constant)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        string arg = argument.Remove(0, 1);
-        if (!CryptexDataConverter.IsIntegerNumber(arg))
-            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+        var raw = vm.GetConstant(c.Args[0].Value);
+        if (!raw.IsInteger)
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
-        BigInteger code = CryptexDataConverter.GetIntegerNumber(arg);
-
-        if (!Enum.TryParse(code.ToString(), true, out ErrorCodes eCode))
+        var codeValue = raw.AsInteger();
+        if (codeValue < int.MinValue || codeValue > int.MaxValue)
             throw new VMRuntimeException(ErrorCodes.VM2012_InstructionArgumentIsOutOfRange);
 
-        throw new VMRuntimeException(eCode);
+        var code = (ErrorCodes)(int)codeValue;
+        if (string.IsNullOrEmpty(code.ToMessage()))
+            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+
+        throw new VMRuntimeException(code);
     }
 }
+

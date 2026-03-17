@@ -1,4 +1,4 @@
-﻿using Cryptex.VM.Execution;
+﻿using Cryptex.VM.Execution.OperationCodes;
 
 namespace Cryptex.Test.InstructionsTests;
 
@@ -7,45 +7,54 @@ public sealed class LoadInstructionTest
     [Fact]
     public void TestLoad_ValueToMemoryLocation()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(5)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
-        string? memoryValue = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue);
-        Assert.Equal("5", memoryValue);
+        VMValue memoryValue = executor.GetValueInMemory(1);
+        Assert.False(memoryValue.IsUndefined);
+        Assert.Equal(VMValue.FromInteger(5), memoryValue);
     }
 
     [Fact]
-    public void TestLoad_HexValueToMemoryLocation()
+    public void TestLoad_IntegerConstantToMemoryLocation()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, %10") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)])
+        ]);
+        Script script = new Script("script", [mainChunk], [VMValue.FromInteger(16)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
-        string? memoryValue = executor.GetValueInMemory(1);
-        Assert.NotNull(memoryValue);
-        Assert.Equal("16", memoryValue);
+        VMValue memoryValue = executor.GetValueInMemory(1);
+        Assert.False(memoryValue.IsUndefined);
+        Assert.Equal(VMValue.FromInteger(16), memoryValue);
     }
 
     [Fact]
     public void TestLoad_SetMemoryLocation1ToMemoryLocation2Value()
     {
-        ScriptChunk mainChunk = new ScriptChunk("main", new[] { new ScriptChunkOpCode(OpCodes.Load, "$1, #5"), new ScriptChunkOpCode(OpCodes.Load, "$2, #6"), new ScriptChunkOpCode(OpCodes.Load, "$1, $2") });
-        Script      script    = new Script("script", new[] { mainChunk });
+        ScriptChunk mainChunk = new ScriptChunk("main", [
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Const(0)]),
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(2), Args.Const(1)]),
+            new ScriptInstruction(OpCodes.Load, [Args.Mem(1), Args.Mem(2)])
+        ]);
+        Script script = new Script("script", [mainChunk],
+            [VMValue.FromInteger(5), VMValue.FromInteger(6)]);
 
         Executor executor = new Executor(script);
-        Assert.True(executor.BeginExecution());
+        Assert.True(executor.ExecuteScript());
 
-        string? memoryValue1 = executor.GetValueInMemory(1);
-        string? memoryValue2 = executor.GetValueInMemory(2);
-        Assert.NotNull(memoryValue1);
-        Assert.NotNull(memoryValue2);
-        Assert.Equal("6", memoryValue1);
-        Assert.Equal("6", memoryValue2);
+        VMValue memoryValue1 = executor.GetValueInMemory(1);
+        VMValue memoryValue2 = executor.GetValueInMemory(2);
+        Assert.False(memoryValue1.IsUndefined);
+        Assert.False(memoryValue2.IsUndefined);
+        Assert.Equal(VMValue.FromInteger(6), memoryValue1);
+        Assert.Equal(VMValue.FromInteger(6), memoryValue2);
     }
 }

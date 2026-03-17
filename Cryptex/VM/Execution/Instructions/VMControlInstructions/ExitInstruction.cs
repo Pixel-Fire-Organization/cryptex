@@ -1,32 +1,29 @@
-﻿using System.Numerics;
-
-using Cryptex.Exceptions;
-using Cryptex.VM.Execution.DataTypes;
+﻿using Cryptex.Exceptions;
+using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.VMControlInstructions;
 
 internal sealed class ExitInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Exit;
+    public int ScriptVersion { get; }
 
-    public void Execute(ScriptChunkOpCode c, Executor vm)
+    internal ExitInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
+
+    public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Code != OpCode)
-            throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
+        if (c.Args.Length != 1)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
-        string[] args = CryptexDataConverter.SplitInstructionArguments(c.Args, 1);
-
-        //ARG1
-
-        string argument = args[0];
-        if (!argument.StartsWith(IInstruction.DECIMAL_VALUE_PREFIX))
+        if (c.Args[0].Type != InstructionArgumentType.Constant)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        string arg = argument.Remove(0, 1);
-        if (!CryptexDataConverter.IsIntegerNumber(arg))
-            throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
+        var code = vm.GetConstant(c.Args[0].Value);
+        if (!code.IsInteger)
+            throw new VMRuntimeException(ErrorCodes.VM2011_InvalidDataTypeAtSpecifiedLocation);
 
-        BigInteger exitCode = CryptexDataConverter.GetIntegerNumber(arg);
-        vm.ExitInstructionCall(exitCode);
+        vm.ExitInstructionCall(code.AsInteger());
     }
 }
+

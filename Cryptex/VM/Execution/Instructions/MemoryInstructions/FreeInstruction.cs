@@ -1,30 +1,27 @@
 ﻿using Cryptex.Exceptions;
-using Cryptex.VM.Execution.DataTypes;
+using Cryptex.VM.Execution.OperationCodes;
+using Cryptex.VM.Execution.Scripts;
 
 namespace Cryptex.VM.Execution.Instructions.MemoryInstructions;
 
 internal sealed class FreeInstruction : IInstruction
 {
     public OpCodes OpCode => OpCodes.Free;
+    public int ScriptVersion { get; }
 
-    public void Execute(ScriptChunkOpCode c, Executor vm)
+    internal FreeInstruction(int scriptVersion) => ScriptVersion = scriptVersion;
+
+    public void Execute(ScriptInstruction c, Executor vm)
     {
-        if (c.Code != OpCode)
-            throw new VMRuntimeException(ErrorCodes.VM2001_WrongOpCodePassedForScriptOpCode);
+        if (c.Args.Length != 1)
+            throw new VMRuntimeException(ErrorCodes.VM2002_IncorrectAmountOfArgumentsSuppliedToInstruction);
 
-        string[] args = CryptexDataConverter.SplitInstructionArguments(c.Args, 1);
-
-        //ARG1
-
-        string argument1 = args[0];
-        if (!argument1.StartsWith(IInstruction.MEMORY_ADDRESS_PREFIX))
+        if (c.Args[0].Type != InstructionArgumentType.MemoryAddress)
             throw new VMRuntimeException(ErrorCodes.VM2003_InvalidArgumentTypeSpecifiedForInstruction);
 
-        int location1 = CryptexDataConverter.ParseArgumentToMemoryLocation(argument1);
-        
-        if(!CryptexDataConverter.IsValidMemoryLocation(vm.GetMemory(), location1))
+        var removed = vm.GetMemory().RemoveSlot(c.Args[0].Value);
+        if (removed.IsUndefined)
             throw new VMRuntimeException(ErrorCodes.VM2007_InvalidMemoryLocationSpecifiedAsArgument);
-
-        vm.GetMemory().RemoveSlot(location1);
     }
 }
+
